@@ -1,0 +1,36 @@
+name: iOS
+on: workflow_dispatch
+jobs:
+  Build:
+    runs-on: macos-latest
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      # - name: Setup XCode
+        # uses: maxim-lobanov/setup-xcode@master
+        # with:
+          # xcode-version: "14.3.1"
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: latest
+
+      - name: Install Libraries
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hmm --quiet
+          haxelib run hmm install --quiet
+
+      - name: Compile
+        run: haxelib run lime build ios -final
+
+      # - name: Upload Artifact
+        # if: ${{ success() }}
+        # uses: actions/upload-artifact@main
+        # with:
+          # name: androidBuild-${{ matrix.storage-type }}
+          # path: export/release/android/bin/app/build/outputs/apk/release/*.apk
+          # if-no-files-found: error
