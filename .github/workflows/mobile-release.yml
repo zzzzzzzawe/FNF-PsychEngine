@@ -131,6 +131,7 @@ jobs:
         run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-MEDIA.apk
         
       - name: Download iOS Build
+        uses: actions/download-artifact@main
         with:
            name: iOSBuild
            path: /home/runner
