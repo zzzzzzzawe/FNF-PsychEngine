@@ -8,10 +8,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      # - name: Setup XCode
-        # uses: maxim-lobanov/setup-xcode@master
-        # with:
-          # xcode-version: "14.3.1"
+      - name: Setup XCode
+        uses: maxim-lobanov/setup-xcode@master
+        with:
+          xcode-version: "14.3.1"
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
