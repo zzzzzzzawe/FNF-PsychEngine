@@ -22,6 +22,9 @@ jobs:
       - name: Compile
         run: haxelib run lime build ios -final
 
+      - name: Check Code Signing
+        run: cd export/release/ios/build/Release-iphoneos && codesign -dv *.app
+
       - name: Make Ipa
         run: |
           cd export/release/ios/build/Release-iphoneos
