@@ -25,7 +25,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -final
+        run: haxelib run lime build ios -debug
 
       # - name: Upload Artifact
         # if: ${{ success() }}
