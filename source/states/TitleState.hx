@@ -86,7 +86,7 @@ class TitleState extends MusicBeatState
         try {
         	#end
 		Mods.pushGlobalMods();
-            #if (mobile && EXTERNAL || MEDIA)
+            #if (android && EXTERNAL || MEDIA)
         } catch (e:Dynamic) {
             FlxG.stage.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/.PsychEngine" #else "/storage/emulated/0/Android/media/com.shadowmario.psychengine" #end + "\nPress OK to close the game", "Error!");
             Sys.exit(1);
