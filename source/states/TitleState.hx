@@ -82,7 +82,7 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if LUA_ALLOWED
-        	#if (mobile && EXTERNAL || MEDIA)
+        	#if (android && EXTERNAL || MEDIA)
         try {
         	#end
 		Mods.pushGlobalMods();
@@ -180,7 +180,7 @@ class TitleState extends MusicBeatState
 		#elseif CHARTING
 		MusicBeatState.switchState(new ChartingState());
 		#else
-		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
+		if(SUtil.filesExists() && FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			controls.isInSubstate = false; //idfk what's wrong
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
