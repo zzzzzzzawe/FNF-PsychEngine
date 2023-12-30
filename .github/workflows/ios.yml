@@ -29,9 +29,9 @@ jobs:
 
       - name: Make Ipa
         run: |
-          cd export/release/ios/bin/build/Release-iphoneos
+          cd /Users/runner/work/FNF-PsychEngine-Mobile/FNF-PsychEngine-Mobile/export/release/ios/bin/build/Release-iphoneos
           mkdir Payload
-          mv *.app Payload
+          mv PsychEngine.app Payload
           zip -c PsychEngine.ipa Payload
 
       - name: Upload Artifact
@@ -39,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: iOSBuild
-          path: export/release/ios/bin/build/Release-iphoneos/*.ipa
+          path: /Users/runner/work/FNF-PsychEngine-Mobile/FNF-PsychEngine-Mobile/export/release/ios/bin/build/Release-iphoneos/*.ipa
           if-no-files-found: error
