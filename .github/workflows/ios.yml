@@ -27,7 +27,7 @@ jobs:
           cd export/release/ios/build/Release-iphoneos
           mkdir Payload
           mv *.app Payload
-          zip -c PsychEngine.ipa Payload
+          zip -r -c PsychEngine.ipa Payload
 
       - name: Upload Artifact
         if: ${{ success() }}
