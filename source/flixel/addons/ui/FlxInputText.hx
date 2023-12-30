@@ -313,7 +313,8 @@ class FlxInputText extends FlxText
 			}
 			else
 			{
-				hasFocus = FlxG.stage.window.textInputEnabled = false;
+				//hasFocus = FlxG.stage.window.textInputEnabled = false;
+				hasFocus = false;
 				if (hadFocus && focusLost != null)
 					focusLost();
 			}
