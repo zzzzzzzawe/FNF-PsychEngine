@@ -65,7 +65,9 @@ class Main extends Sprite
 		var path = #if android Path.addTrailingSlash(SUtil.getStorageDirectory()) #else SUtil.getStorageDirectory() #end;
 		Sys.setCwd(path);
 		#end
-
+		#if (android && EXTERNAL || MEDIA)
+		SUtil.doPermissionsShit();
+		#end
 		SUtil.uncaughtErrorHandler();
 
 		#if windows
