@@ -4,6 +4,7 @@ package backend;
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
+import android.Permissions;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
@@ -49,8 +50,10 @@ class SUtil
 			case EXTERNAL_OBB:
 				daPath = Context.getObbDir();
             case EXTERNAL:
+				doPermissionsShit();
 				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
 			case MEDIA:
+				doPermissionsShit();
 				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
 		}
 		#elseif ios
@@ -251,6 +254,17 @@ class SUtil
 			return false;
 		else
 			return true;
+	}
+	#end
+	#if android
+	public static function doPermissionsShit(){
+		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
+			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
+			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
+			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', '');
+		}
 	}
 	#end
 }
