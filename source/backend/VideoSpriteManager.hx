@@ -1,10 +1,14 @@
 package backend;
 
 #if VIDEOS_ALLOWED 
+#if hxCodec
 #if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideoSprite as VideoSprite;
 #elseif (hxCodec >= "2.6.1") import hxcodec.VideoSprite;
 #elseif (hxCodec == "2.6.0") import VideoSprite;
 #else import vlc.MP4Sprite as VideoSprite; #end
+#elseif hxvlc
+import hxvlc.flixel.FlxVideoSprite as VideoSprite;
+#end
 #end
 import states.PlayState;
 import haxe.extern.EitherType;
@@ -21,9 +25,21 @@ class VideoSpriteManager extends VideoSprite {
     public var paused(default, set):Bool = false;
     public var onVideoEnd:FlxSignal;
     public var onVideoStart:FlxSignal;
+
+    var daX:Dynamic;
+    var daY:Dynamic;
     
-    public function new(x:Float, y:Float #if (hxCodec < "2.6.0"), width:Float = 1280, height:Float = 720, autoScale:Bool = true #end){
-        super(x, y #if (hxCodec < "2.6.0"), width, height, autoScale #end);
+    public function new(x:Float = 0, y:Float = 0 #if (hxCodec < "2.6.0" && hxCodec), width:Float = 1280, height:Float = 720, autoScale:Bool = true #end){
+
+        #if hxvlc
+        daX = Std.int(x); // not my fault X and Y are int in hxvlc
+        daY = Std.int(y);
+        #elseif hxCodec
+        daX = x;
+        daY = y;
+        #end
+
+        super(daX, daY #if (hxCodec < "2.6.0" && hxCodec), width, height, autoScale #end);
         if(onPlayState)
             PlayState.instance.videoSprites.push(this); 
         
@@ -34,7 +50,7 @@ class VideoSpriteManager extends VideoSprite {
             destroy();
         });
         onVideoStart = new FlxSignal();
-        #if (hxCodec >= "3.0.0")
+        #if (hxCodec >= "3.0.0" || hxvlc)
         onVideoEnd.add(destroy);
         bitmap.onOpening.add(function(){
             onVideoStart.dispatch();
@@ -42,7 +58,7 @@ class VideoSpriteManager extends VideoSprite {
         bitmap.onEndReached.add(function(){
             onVideoEnd.dispatch();
         });
-        #else
+        #elseif (hxCodec < "3.0.0" && hxCodec)
         openingCallback = function(){
             onVideoStart.dispatch();
         };
@@ -52,11 +68,16 @@ class VideoSpriteManager extends VideoSprite {
         #end
     }
     
-     public function startVideo(path:String, loop:Bool = false) {
-        #if (hxCodec >= "3.0.0")
+     public function startVideo(path:String, #if hxCodec loop:Bool = false #elseif hxvlc loops:Int = 0, ?options:Array<String> #end) {
+        #if (hxCodec >= "3.0.0" && hxCodec)
         play(path, loop);
-        #else
+        #elseif (hxCodec < "3.0.0" && hxCodec)
         playVideo(path, loop, false);
+        #elseif hxvlc
+        load(path, loops, options);
+        new FlxTimer().start(0.001, function(tmr:FlxTimer) {
+            play();
+        });
         #end
         if(onPlayState)
             playbackRate = PlayState.instance.playbackRate;
@@ -64,18 +85,18 @@ class VideoSpriteManager extends VideoSprite {
 
     @:noCompletion
     private function set_paused(shouldPause:Bool){
-        #if (hxCodec >= "3.0.0")
+        #if (hxCodec >= "3.0.0" || hxvlc)
         var parentResume = resume;
         var parentPause = pause;
-        #else
+        #elseif(hxCodec < "3.0.0" && hxCodec)
         var parentResume = bitmap.resume;
         var parentPause = bitmap.pause;
         #end
 
         if(shouldPause){
-            #if (hxCodec >= "3.0.0")
+            #if (hxCodec >= "3.0.0" || hxvlc)
             pause();
-            #else
+            #elseif (hxCodec < "3.0.0" && hxCodec)
             bitmap.pause();
             #end
     
@@ -87,9 +108,9 @@ class VideoSpriteManager extends VideoSprite {
                     FlxG.signals.focusLost.remove(parentPause);
             }
         } else {
-            #if (hxCodec >= "3.0.0")
+            #if (hxCodec >= "3.0.0" || hxvlc)
             resume();
-            #else
+            #elseif (hxCodec < "3.0.0" && hxCodec)
             bitmap.resume();
             #end
 
@@ -119,7 +140,7 @@ class VideoSpriteManager extends VideoSprite {
 
     public function altDestroy() {
         super.destroy();
-        #if (hxCodec < "3.0.0")
+        #if (hxCodec < "3.0.0" && hxCodec)
         bitmap.finishCallback = null;
         bitmap.onEndReached();
         #end

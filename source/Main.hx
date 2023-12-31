@@ -15,6 +15,7 @@ import openfl.display.StageScaleMode;
 import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
+import openfl.events.KeyboardEvent;
 #if hl
 import hl.Api;
 #end
@@ -139,6 +140,10 @@ class Main extends Sprite
 		Lib.current.stage.window.setIcon(icon);
 		#end
 
+		#if desktop
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, toggelFullScreen);
+		#end
+
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
@@ -167,5 +172,10 @@ class Main extends Sprite
 		        sprite.__cacheBitmap = null;
 			sprite.__cacheBitmapData = null;
 		}
+	}
+
+	function toggelFullScreen(event:KeyboardEvent){
+		if(Controls.instance.justReleased('fullscreen'))
+			FlxG.fullscreen = !FlxG.fullscreen;
 	}
 }
