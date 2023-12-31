@@ -21,10 +21,10 @@ using StringTools;
 enum StorageType
 {
 	//DATA;
-        EXTERNAL;
+    EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
-        MEDIA;
+    MEDIA;
 }
 
 /**
@@ -50,10 +50,8 @@ class SUtil
 			case EXTERNAL_OBB:
 				daPath = Context.getObbDir();
             case EXTERNAL:
-				doPermissionsShit();
 				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
 			case MEDIA:
-				doPermissionsShit();
 				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
 		}
 		#elseif ios
