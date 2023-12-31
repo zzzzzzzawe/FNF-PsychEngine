@@ -141,7 +141,7 @@ class Main extends Sprite
 		#end
 
 		#if desktop
-		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, toggelFullScreen);
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, toggleFullScreen);
 		#end
 
 		#if html5
@@ -174,7 +174,7 @@ class Main extends Sprite
 		}
 	}
 
-	function toggelFullScreen(event:KeyboardEvent){
+	function toggleFullScreen(event:KeyboardEvent){
 		if(Controls.instance.justReleased('fullscreen'))
 			FlxG.fullscreen = !FlxG.fullscreen;
 	}
