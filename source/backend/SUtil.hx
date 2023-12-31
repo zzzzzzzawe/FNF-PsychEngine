@@ -70,9 +70,6 @@ class SUtil
 			{
 				Permissions.requestPermissions([Permissions.WRITE_EXTERNAL_STORAGE, Permissions.READ_EXTERNAL_STORAGE]);
 
-				/**
-				 * Basically for now we can't force the app to stop while its requesting a android permission, so this makes the app to stop while its requesting the specific permission
-				 */
 				Lib.application.window.alert('If you accepted the permissions you are all good!' + "\nIf you didn't then expect a crash"
 					+ '\nPress Ok to see what happens',
 					'Permissions?');
