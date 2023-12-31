@@ -75,7 +75,7 @@ class CopyState extends MusicBeatState {
         if(shouldCopy){
             if(copyLoop.finished && canUpdate){
                 if(failedFiles.length > 0)
-                    FlxG.stage.window.alert(failedFiles, 'Failed To Copy $failedFiles File.');
+                    FlxG.stage.window.alert(failedFiles, 'Failed To Copy ${failedFiles.length} File.');
                 TitleState.ignoreCopy = true;
                 canUpdate = false;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -104,7 +104,7 @@ class CopyState extends MusicBeatState {
                     if(filesToCopy.contains(file))
                         File.saveBytes(file, getFileBytes(getFile(file)));
                     else if(filesToCreate.contains(file))
-                        saveContent(file, CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join(''));
+                        createContentFromInternal(file);
                 } else {
                     failedFiles += getFile(file) + "(File Dosen't exist)\n";
                 }
@@ -136,18 +136,19 @@ class CopyState extends MusicBeatState {
 			return file;
 	}
 
-    public static function saveContent(file:String = 'assets/file.txt', fileData:String = 'doing this while fortnite servers rape me mentally') {
+    public static inline function createContentFromInternal(file:String = 'assets/file.txt') {
         var directory = Path.directory(file);
         var fileName = Path.withoutDirectory(file);
-        trace('--- $fileName got passed and is beign created instead of copied ---');
         try {
-            if(fileData == null)
-                fileData = '';
+            var fileDataArr = CoolUtil.listFromString(LimeAssets.getText(getFile(file)));
+            if(fileDataArr == null)
+                fileDataArr = [''];
+            var fileDataStr:String = fileDataArr.join('\n');
             if(!FileSystem.exists(directory))
                 SUtil.mkDirs(directory);
-            File.saveContent(Path.join([directory, fileName]), fileData);
+            File.saveContent(Path.join([directory, fileName]), fileDataStr);
         } catch(error:Dynamic) {
-            trace('failed to create $fileName, generated error:\n$error');
+            trace('failed to create $fileName, error:\n$error');
         }
     }
 
