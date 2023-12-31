@@ -3,55 +3,44 @@
 */
 package mobile.states;
 
-import openfl.system.System;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Assets as LimeAssets;
 import flixel.addons.util.FlxAsyncLoop;
 import openfl.utils.ByteArray;
-import states.MainMenuState;
+import openfl.system.System;
 import states.TitleState;
+import haxe.io.Path;
 #if (target.threaded)
 import sys.thread.Thread;
 #end
-import haxe.io.Path;
 
 class CopyState extends MusicBeatState {
     public static var filesToCopy:Array<String>;
+    public static var filesToCreate:Array<String>;
+    public static var allFiles:Array<String>;
+    public static var maxLoopTimes:Int = 0;
     public var loadingImage:FlxSprite;
     public var bottomBG:FlxSprite;
     public var loadedText:FlxText;
     public var copyLoop:FlxAsyncLoop;
     var loopTimes:Int = 0;
-    var maxLoopTimes:Int = 0;
-    var failedFiles:Int = 0;
-    var failedFilesStr:String = '';
+    var failedFiles:String = '';
     var shouldCopy:Bool = false;
+    var canUpdate:Bool = true;
+    static final textFilesExtensions:Array<String> = [
+        'txt',
+        'xml',
+        'lua',
+        'hx',
+        'json',
+        'frag',
+        'vert'
+    ];
     
     override function create() {
-        if(!SUtil.filesExists()){
+        checkExistingFiles();
+        if(maxLoopTimes > 0){
             shouldCopy = true;
-            filesToCopy = LimeAssets.list();
-            // removes unwanted paths
-            var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
-            var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
-            var allAsset = assets.concat(mods);
-            filesToCopy = allAsset;
-            maxLoopTimes = filesToCopy.length;
-
-            // removes already existing assets
-            for(file in filesToCopy){
-                if(FileSystem.exists(file)){
-                    filesToCopy.remove(file);
-                    trace('removed $file from the list');
-                    --maxLoopTimes;
-                }
-            }
-
-            if(maxLoopTimes <= 0){
-                TitleState.ignoreCopy = true;
-                FlxG.switchState(new TitleState());
-            }
-    
             FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
             "Notice!");
@@ -84,12 +73,19 @@ class CopyState extends MusicBeatState {
 
     override function update(elapsed:Float) {
         if(shouldCopy){
-            if(copyLoop.finished){
-                if(failedFiles > 0)
-                    FlxG.stage.window.alert(failedFilesStr, 'Failed To Copy $failedFiles File.');
+            if(copyLoop.finished && canUpdate){
+                if(failedFiles.length > 0)
+                    FlxG.stage.window.alert(failedFiles, 'Failed To Copy $failedFiles File.');
                 TitleState.ignoreCopy = true;
-                FlxG.switchState(new TitleState());
-                System.gc();
+                canUpdate = false;
+				FlxG.sound.play(Paths.sound('confirmMenu'));
+                var black = new FlxSprite(0,0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+                black.alpha = 0;
+                FlxTween.tween(black, {alpha: 1}, 0.6, {
+                    onComplete: function(twn:FlxTween) {
+                        FlxG.switchState(new TitleState());
+                        System.gc();
+                    }, ease: FlxEase.linear});
             }
             loadedText.text = '$loopTimes/$maxLoopTimes';
         }
@@ -97,27 +93,23 @@ class CopyState extends MusicBeatState {
     }
 
     public function copyAsset() {
-        var file = filesToCopy[loopTimes];
+        var file = allFiles[loopTimes];
 	    ++loopTimes; 
 		if(!FileSystem.exists(file)) {
 			var directory = Path.directory(file);
 		    if(!FileSystem.exists(directory))
 					SUtil.mkDirs(directory);
             try {
-                if(getFileBytes(getFile(file)).length == 0 && (Path.extension(file) == 'txt' || Path.extension(file) == 'lua' || Path.extension(file) == 'json' || Path.extension(file) == 'hx' || Path.extension(file) == 'xml'))
-                    saveContent(file, CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join(''));
-                else
-                    if(LimeAssets.exists(getFile(file)))
+                if(LimeAssets.exists(getFile(file))){
+                    if(filesToCopy.contains(file))
                         File.saveBytes(file, getFileBytes(getFile(file)));
-                    else {
-                        --loopTimes;
-                        ++failedFiles;
-                        failedFilesStr += getFile(file) + "(File Dosen't exist)\n";
-                    }
-            }catch(e:Dynamic){
-                --loopTimes;
-                ++failedFiles;
-                failedFilesStr += '${getFile(file)}($e)\n';
+                    else if(filesToCreate.contains(file))
+                        saveContent(file, CoolUtil.listFromString(LimeAssets.getText(getFile(file))).join(''));
+                } else {
+                    failedFiles += getFile(file) + "(File Dosen't exist)\n";
+                }
+            } catch(e:Dynamic) {
+                failedFiles += '${getFile(file)}($e)\n';
             }
 		}
 	}
@@ -157,5 +149,35 @@ class CopyState extends MusicBeatState {
         } catch(error:Dynamic) {
             trace('failed to create $fileName, generated error:\n$error');
         }
+    }
+
+    public static function checkExistingFiles():Bool{
+        filesToCopy = LimeAssets.list();
+        // removes unwanted paths
+        var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
+        var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
+        filesToCopy = assets.concat(mods);
+        filesToCreate = filesToCopy.filter(folder -> textFilesExtensions.contains(Path.extension(folder)));
+
+        // removes the files that should be created from the filesToCopy list
+        for(file in filesToCopy){
+            if(filesToCreate.contains(file))
+                filesToCopy.remove(file);
+        }
+        
+        // removes already existing assets
+        for(file in filesToCopy){
+            if(FileSystem.exists(file)){
+                filesToCopy.remove(file);
+            }
+        }
+        
+        allFiles = filesToCopy.concat(filesToCreate);
+        maxLoopTimes = allFiles.length;
+        
+        if(maxLoopTimes > 0)
+            return false;
+        else
+            return true;
     }
 }

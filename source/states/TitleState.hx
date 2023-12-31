@@ -95,7 +95,7 @@ class TitleState extends MusicBeatState
 		#end
 
 		#if mobile
-		if(!SUtil.filesExists() && !ignoreCopy)
+		if(!CopyState.checkExistingFiles() && !ignoreCopy)
 			FlxG.switchState(new CopyState());
 		#end
 
