@@ -65,7 +65,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D officialBuild -final
+        run: haxelib run lime build ios -D NOVIDEO -D officialBuild -final
 
       # - name: Check Code Signing
         # run: cd export/release/ios/build/Release-iphoneos && codesign -dv *.app
