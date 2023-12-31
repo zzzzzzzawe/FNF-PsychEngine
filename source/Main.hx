@@ -53,9 +53,9 @@ class Main extends Sprite
 	{
 		Lib.current.addChild(new Main());
 		#if cpp
-                cpp.NativeGc.enable(true);
-                cpp.NativeGc.run(true);
-                #end
+        cpp.NativeGc.enable(true);
+        cpp.NativeGc.run(true);
+        #end
 	}
 
 	public function new()
@@ -118,8 +118,6 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-
-		#if (android && EXTERNAL || MEDIA) SUtil.checkPermissions(); #end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
