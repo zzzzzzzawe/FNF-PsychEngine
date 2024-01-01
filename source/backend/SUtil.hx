@@ -155,9 +155,9 @@ class SUtil
 		catch (e:Dynamic)
 		{
 			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
+			Toast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
 			#else
-			LimeLogger.println("Error!\nClouldn't save the crash dump because:\n" + e);
+			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
 			#end
 		}
 		#end
