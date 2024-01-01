@@ -145,14 +145,12 @@ class CopyState extends MusicBeatState {
         var directory = Path.directory(file);
         var fileName = Path.withoutDirectory(file);
         try {
-            var fileDataStr:String = LimeAssets.getText(getFile(file));
-            if(fileDataStr == null)
-                fileDataStr = '';
-            if(Path.extension(file) == "json")
-                fileDataStr = Json.stringify(fileDataStr, "\t");
+            var fileData:String = LimeAssets.getText(getFile(file));
+            if(fileData == null)
+                fileData = '';
             if(!FileSystem.exists(directory))
                 SUtil.mkDirs(directory);
-            File.saveContent(Path.join([directory, fileName]), fileDataStr);
+            File.saveContent(Path.join([directory, fileName]), fileData);
         } catch(error:Dynamic) {
             trace('failed to create $fileName, error:\n$error');
         }
