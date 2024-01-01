@@ -10,6 +10,7 @@ import openfl.utils.ByteArray;
 import openfl.system.System;
 import states.TitleState;
 import haxe.io.Path;
+import haxe.Json;
 #if (target.threaded)
 import sys.thread.Thread;
 #end
@@ -144,10 +145,11 @@ class CopyState extends MusicBeatState {
         var directory = Path.directory(file);
         var fileName = Path.withoutDirectory(file);
         try {
-            var fileDataArr = CoolUtil.listFromString(LimeAssets.getText(getFile(file)));
-            if(fileDataArr == null)
-                fileDataArr = [''];
-            var fileDataStr:String = fileDataArr.join('\n');
+            var fileDataStr:String = LimeAssets.getText(getFile(file));
+            if(fileDataStr == null)
+                fileDataStr = '';
+            if(Path.extension(file) == "json")
+                fileDataStr = Json.stringify(fileDataStr, "\t");
             if(!FileSystem.exists(directory))
                 SUtil.mkDirs(directory);
             File.saveContent(Path.join([directory, fileName]), fileDataStr);
