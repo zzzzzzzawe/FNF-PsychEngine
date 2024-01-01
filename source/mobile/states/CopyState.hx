@@ -25,7 +25,7 @@ class CopyState extends MusicBeatState {
     public var loadedText:FlxText;
     public var copyLoop:FlxAsyncLoop;
     var loopTimes:Int = 0;
-    var failedFiles:String = '';
+    var failedFiles:Array<String>;
     var shouldCopy:Bool = false;
     var canUpdate:Bool = true;
     static final textFilesExtensions:Array<String> = [
@@ -76,10 +76,10 @@ class CopyState extends MusicBeatState {
         if(shouldCopy){
             if(copyLoop.finished && canUpdate){
                 if(failedFiles.length > 0){
-                    FlxG.stage.window.alert(failedFiles, 'Failed To Copy ${failedFiles.length} File.');
+                    FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
                     if(!FileSystem.exists('logs'))
                         FileSystem.createDirectory('logs');
-                    File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles);
+                    File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
                 }
                 canUpdate = false;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -111,10 +111,10 @@ class CopyState extends MusicBeatState {
                     else if(filesToCreate.contains(file))
                         createContentFromInternal(file);
                 } else {
-                    failedFiles += getFile(file) + "(File Dosen't exist)\n";
+                    failedFiles.push('${getFile(file)} (File Dosen\'t Exist)');
                 }
-            } catch(e:Dynamic) {
-                failedFiles += '${getFile(file)}($e)\n';
+            } catch(err:Dynamic) {
+                failedFiles.push('${getFile(file)} ($err)');
             }
 		}
 	}
