@@ -63,7 +63,7 @@ class CopyState extends MusicBeatState {
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
-        } else{
+        } else {
             TitleState.ignoreCopy = true;
             MusicBeatState.switchState(new TitleState());
         }
@@ -74,18 +74,22 @@ class CopyState extends MusicBeatState {
     override function update(elapsed:Float) {
         if(shouldCopy){
             if(copyLoop.finished && canUpdate){
-                if(failedFiles.length > 0)
+                if(failedFiles.length > 0){
                     FlxG.stage.window.alert(failedFiles, 'Failed To Copy ${failedFiles.length} File.');
-                TitleState.ignoreCopy = true;
+                    if(!FileSystem.exists('logs'))
+                        FileSystem.createDirectory('logs');
+                    File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles);
+                }
                 canUpdate = false;
 				FlxG.sound.play(Paths.sound('confirmMenu'));
                 var black = new FlxSprite(0,0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
                 black.alpha = 0;
-                FlxTween.tween(black, {alpha: 1}, 0.6, {
+                FlxTween.tween(black, {alpha: 1}, 0.8, {
                     onComplete: function(twn:FlxTween) {
-                        FlxG.switchState(new TitleState());
                         System.gc();
-                    }, ease: FlxEase.linear});
+                        TitleState.ignoreCopy = true;
+                        MusicBeatState.switchState(new TitleState());
+                    }, ease: FlxEase.linear, startDelay: 0.3});
             }
             loadedText.text = '$loopTimes/$maxLoopTimes';
         }
@@ -94,7 +98,7 @@ class CopyState extends MusicBeatState {
 
     public function copyAsset() {
         var file = allFiles[loopTimes];
-	    ++loopTimes; 
+	    loopTimes++; 
 		if(!FileSystem.exists(file)) {
 			var directory = Path.directory(file);
 		    if(!FileSystem.exists(directory))
@@ -160,7 +164,7 @@ class CopyState extends MusicBeatState {
         filesToCopy = assets.concat(mods);
         filesToCreate = filesToCopy.filter(folder -> textFilesExtensions.contains(Path.extension(folder)));
 
-        // removes the files that should be created from the filesToCopy list
+        // removes the files that should be created from the filesToCopy Array
         for(file in filesToCopy){
             if(filesToCreate.contains(file))
                 filesToCopy.remove(file);
@@ -170,6 +174,12 @@ class CopyState extends MusicBeatState {
         for(file in filesToCopy){
             if(FileSystem.exists(file)){
                 filesToCopy.remove(file);
+            }
+        }
+
+        for(file in filesToCreate){
+            if(FileSystem.exists(file)){
+                filesToCreate.remove(file);
             }
         }
         
