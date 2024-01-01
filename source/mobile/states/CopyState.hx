@@ -158,32 +158,26 @@ class CopyState extends MusicBeatState {
 
     public static function checkExistingFiles():Bool{
         filesToCopy = LimeAssets.list();
-        // removes unwanted paths
+        // removes unwanted assets
         var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
         var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
         filesToCopy = assets.concat(mods);
-        filesToCreate = filesToCopy.filter(folder -> textFilesExtensions.contains(Path.extension(folder)));
-
-        // removes the files that should be created from the filesToCopy Array
-        for(file in filesToCopy){
-            if(filesToCreate.contains(file))
-                filesToCopy.remove(file);
-        }
-        
-        // removes already existing assets
-        for(file in filesToCopy){
-            if(FileSystem.exists(file)){
-                filesToCopy.remove(file);
-            }
-        }
+        filesToCreate = filesToCopy.filter(file -> textFilesExtensions.contains(Path.extension(file)));
 
         for(file in filesToCreate){
-            if(FileSystem.exists(file)){
+            if(filesToCopy.contains(file))
+                filesToCopy.remove(file);
+            if(FileSystem.exists(file))
                 filesToCreate.remove(file);
-            }
+        }
+        
+        for(file in filesToCopy){
+            if(FileSystem.exists(file))
+                filesToCopy.remove(file);
         }
         
         allFiles = filesToCopy.concat(filesToCreate);
+        trace(allFiles);
         maxLoopTimes = allFiles.length;
         
         if(maxLoopTimes > 0)
