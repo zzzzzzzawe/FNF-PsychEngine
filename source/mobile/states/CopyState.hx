@@ -17,9 +17,7 @@ import sys.thread.Thread;
 #end
 
 class CopyState extends MusicBeatState {
-    public static var filesToCopy:Array<String> = [];
-    public static var filesToCreate:Array<String> = [];
-    public static var allFiles:Array<String> = [];
+    public static var locatedFiles:Array<String> = [];
     public static var maxLoopTimes:Int = 0;
     public static var to:String = '';
     public var loadingImage:FlxSprite;
@@ -41,10 +39,8 @@ class CopyState extends MusicBeatState {
     ];
     
     override function create() {
-        allFiles = [];
+        locatedFiles = [];
         maxLoopTimes = 0;
-        filesToCopy = [];
-        filesToCreate = [];
         checkExistingFiles();
         if(maxLoopTimes > 0){
             shouldCopy = true;
@@ -66,7 +62,10 @@ class CopyState extends MusicBeatState {
             add(loadedText);
     
             #if (target.threaded) Thread.create(() -> {#end
-            copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, 17);
+            var ticks:Int = 25;
+            if(maxLoopTimes <= 25)
+                ticks = 1;
+            copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
             add(copyLoop);
             copyLoop.start();
             #if (target.threaded) }); #end
@@ -82,6 +81,8 @@ class CopyState extends MusicBeatState {
     override function update(elapsed:Float) {
         if(shouldCopy){
             if(copyLoop.finished && canUpdate){
+                if(!checkExistingFiles())
+                    FlxG.resetState();
                 if(failedFiles.length > 0){
                     FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
                     if(!FileSystem.exists('logs'))
@@ -107,7 +108,7 @@ class CopyState extends MusicBeatState {
     }
 
     public function copyAsset() {
-        var file = allFiles[loopTimes];
+        var file = locatedFiles[loopTimes];
         var toFile = Path.join([to, file]);
 	    loopTimes++; 
 		if(!FileSystem.exists(toFile)) {
@@ -116,10 +117,10 @@ class CopyState extends MusicBeatState {
 					SUtil.mkDirs(directory);
             try {
                 if(LimeAssets.exists(getFile(file))){
-                    if(filesToCopy.contains(file))
-                        File.saveBytes(toFile, getFileBytes(getFile(file)));
-                    else if(filesToCreate.contains(file))
+                    if(textFilesExtensions.contains(Path.extension(file)))
                         createContentFromInternal(file);
+                    else
+                        File.saveBytes(toFile, getFileBytes(getFile(file)));
                 } else {
                     failedFiles.push(getFile(file) + " (File Dosen't Exist)");
                 }
@@ -165,40 +166,24 @@ class CopyState extends MusicBeatState {
     }
 
     public static function checkExistingFiles():Bool{
-        filesToCopy = LimeAssets.list();
+        locatedFiles = LimeAssets.list();
         // removes unwanted assets
-        var assets = filesToCopy.filter(folder -> folder.startsWith('assets/'));
-        var mods = filesToCopy.filter(folder -> folder.startsWith('mods/'));
-        filesToCopy = assets.concat(mods);
-        filesToCreate = filesToCopy.filter(file -> textFilesExtensions.contains(Path.extension(file)));
-        var filesToRemove:Array<Array<String>> = [[], []];
-        for(file in filesToCreate){
-            if(filesToCopy.contains(file))
-                filesToRemove[0].push(file);
+        var assets = locatedFiles.filter(folder -> folder.startsWith('assets/'));
+        var mods = locatedFiles.filter(folder -> folder.startsWith('mods/'));
+        locatedFiles = assets.concat(mods);
 
+        var filesToRemove:Array<String> = [];
+        for(file in locatedFiles){
             var toFile = Path.join([to, file]);
             if(FileSystem.exists(toFile)){
-                filesToRemove[1].push(file);
-            }
-        }
-        for(file in filesToCopy){
-            var toFile = Path.join([to, file]);
-            if(FileSystem.exists(toFile)){
-                filesToRemove[0].push(file);
+                filesToRemove.push(file);
             }
         }
 
-        for(arr in filesToRemove){
-            for(file in arr){
-                if(filesToCopy.contains(file))
-                    filesToCopy.remove(file);
-                if(filesToCreate.contains(file))
-                    filesToCreate.remove(file);
-            }
-        }
+        for(file in filesToRemove)
+            locatedFiles.remove(file);
 
-        allFiles = filesToCopy.concat(filesToCreate);
-        maxLoopTimes = allFiles.length;
+        maxLoopTimes = locatedFiles.length;
         
         if(maxLoopTimes > 0)
             return false;
