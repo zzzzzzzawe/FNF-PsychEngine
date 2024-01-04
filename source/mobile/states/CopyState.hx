@@ -48,8 +48,11 @@ class CopyState extends MusicBeatState {
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
             "Notice!");
 
+            add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d));
+
             loadingImage = new FlxSprite(0, 0, Paths.image('funkin'));
-            loadingImage.scale.set(0.8, 0.8);
+            loadingImage.setGraphicSize(0, FlxG.height);
+            loadingImage.updateHitbox();
             loadingImage.screenCenter();
             add(loadingImage);
 

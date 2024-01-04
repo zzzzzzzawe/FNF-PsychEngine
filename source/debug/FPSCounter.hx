@@ -71,7 +71,7 @@ class FPSCounter extends TextField
 		text = 
 		'FPS: $currentFPS' + 
 		'\nMemory: ${FlxStringUtil.formatBytes(memoryMegas)}' +
-		'\nPlatform: ${LimeSystem.platformLabel}';
+		'\nOS: ${LimeSystem.platformName + ' - ' + LimeSystem.platformVersion}';
 
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
