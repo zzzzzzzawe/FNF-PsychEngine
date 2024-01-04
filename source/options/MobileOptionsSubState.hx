@@ -1,5 +1,5 @@
 package options;
-import lime.system.System;
+
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	public function new()
@@ -7,16 +7,18 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		title = 'Mobile Options';
 		rpcTitle = 'Mobile Options Menu'; //for Discord Rich Presence, fuck it
 
-		var option:Option = new Option('Allow Phone ScreenSaver',
+		#if mobile
+		var option:Option = new Option('Allow Phone Screensaver',
 		'If checked, the phone will sleep after going inactive for few seconds',
 		'screensaver',
 		'bool');
 		option.onChange = () -> {
-			System.allowScreenTimeout = curOption.getValue();
+			lime.system.System.allowScreenTimeout = curOption.getValue();
 		};
 		addOption(option);
-
-        #if !web
+		#end
+			
+		#if !web
 		var option:Option = new Option('Hitbox Position', //Name
 			'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.', //Description
 			'hitbox2', //Save data variable name
@@ -30,7 +32,6 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		["NONE", "ONE", "TWO"]); //Variable type
 		addOption(option);
 		#end
-
 
 		var option:Option = new Option('Dynamic Controls Color',
 		'If checked, the mobile controls color will be set to the notes color in your settings.\n(have effect during gameplay only)',
