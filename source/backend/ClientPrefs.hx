@@ -11,6 +11,7 @@ import states.TitleState;
 	public var hitbox2:Bool = true; // hitbox extra button position option
 	public var dynamicColors:Bool = true; // yes cause its cool -Karim
 	public var controlsAlpha:Float = #if (mobile || mobileC) 0.6 #else 0.001 #end;
+	public var screensaver:Bool = false;
 	public var popUpRating:Bool = true;
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;

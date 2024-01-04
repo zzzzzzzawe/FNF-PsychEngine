@@ -159,6 +159,10 @@ class Main extends Sprite
 		DiscordClient.prepare();
 		#end
 
+		#if mobile
+		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver;
+		#end
+
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
 		     if (FlxG.cameras != null) {
