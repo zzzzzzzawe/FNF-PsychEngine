@@ -134,7 +134,11 @@ class Main extends Sprite
 		Achievements.load();
 
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
+		#if !mobile
 		addChild(fpsVar);
+		#else
+		FlxG.game.addChild(fpsVar);
+		#end
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if(fpsVar != null) {
@@ -165,6 +169,12 @@ class Main extends Sprite
 
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
+		#if mobile
+		final scale:Float = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
+
+		if (fpsVar != null)
+			fpsVar.scaleX = fpsVar.scaleY = (scale > 1 ? scale : 1);
+		#end
 		     if (FlxG.cameras != null) {
 			   for (cam in FlxG.cameras.list) {
 				if (cam != null && cam.filters != null)
