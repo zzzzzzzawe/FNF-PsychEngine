@@ -90,8 +90,8 @@
 	<!--Psych stuff needed-->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
-	<!--<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/> -->
-	<haxelib name="hxvlc" if="VIDEOS_ALLOWED"/>
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" unless="usehxvlc"/>
+	<haxelib name="hxvlc" if="VIDEOS_ALLOWED usehxvlc" unless="hxCodec"/>
 	<haxelib name="hxdiscord_rpc" if="desktop" unless="hl"/>
 	<haxelib name="flxanimate" unless="web"/>
 	<haxelib name="tjson"/>
