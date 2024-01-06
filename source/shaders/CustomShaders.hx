@@ -7,8 +7,6 @@ import openfl.display.Shader;
 import openfl.display.ShaderInput;
 import openfl.Lib;
 
-using StringTools;
-
 typedef ShaderEffect =
 {
 	var shader:Dynamic;
