@@ -541,7 +541,7 @@ class VCRDistortionShader extends FlxShader // https://www.shadertoy.com/view/ld
     	float vignette = (1.-vigAmt*(uv.y-.5)*(uv.y-.5))*(1.-vigAmt*(uv.x-.5)*(uv.x-.5));
 
       if(vignetteOn)
-    	 video *= vignette;
+    	 video *= float(vignette);
 
 
       gl_FragColor = mix(video,vec4(noise(uv * 75.)),.05);
