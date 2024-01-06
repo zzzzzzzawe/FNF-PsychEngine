@@ -289,37 +289,17 @@ class Grain extends FlxShader
 	@:glFragmentSource('
 		#pragma header
 
-		/*
-		Film Grain post-process shader v1.1
-		Martins Upitis (martinsh) devlog-martinsh.blogspot.com
-		2013
-
-		--------------------------
-		This work is licensed under a Creative Commons Attribution 3.0 Unported License.
-		So you are free to share, modify and adapt it for your needs, and even use it for commercial use.
-		I would also love to hear about a project you are using it.
-
-		Have fun,
-		Martins
-		--------------------------
-
-		Perlin noise shader by toneburst:
-		http://machinesdontcare.wordpress.com/2009/06/25/3d-perlin-noise-sphere-vertex-shader-sourcecode/
-		*/
 		uniform float uTime;
 
 		const float permTexUnit = 1.0/256.0;        // Perm texture texel-size
 		const float permTexUnitHalf = 0.5/256.0;    // Half perm texture texel-size
 
-		float width = openfl_TextureSize.x;
-		float height = openfl_TextureSize.y;
-
 		const float grainamount = 0.05; //grain amount
 		bool colored = false; //colored noise?
-		uniform float coloramount = 0.6;
-		uniform float grainsize = 1.6; //grain particle size (1.5 - 2.5)
-		uniform float lumamount = 1.0;
-	uniform bool lockAlpha = false;
+		uniform float coloramount;
+		uniform float grainsize; //grain particle size (1.5 - 2.5)
+		uniform float lumamount;
+	        uniform bool lockAlpha;
 
 		//a random texture generator, but you can also use a pre-computed perturbation texture
 	
@@ -330,8 +310,6 @@ class Grain extends FlxShader
 			float noiseR =  fract(noise)*2.0-1.0;
 			float noiseG =  fract(noise*1.2154)*2.0-1.0;
 			float noiseB =  fract(noise * 1.3453) * 2.0 - 1.0;
-			
-				
 			float noiseA =  (fract(noise * 1.3647) * 2.0 - 1.0);
 
 			return vec4(noiseR,noiseG,noiseB,noiseA);
@@ -401,6 +379,8 @@ class Grain extends FlxShader
 
 		void main()
 		{
+                        float width = openfl_TextureSize.x;  // Calculate width within main()
+                        float height = openfl_TextureSize.y;
 			vec2 texCoord = openfl_TextureCoordv.st;
 
 			vec3 rotOffset = vec3(1.425,3.892,5.835); //rotation offset values
@@ -427,7 +407,7 @@ class Grain extends FlxShader
 			noise = mix(noise,vec3(0.0),pow(lum,4.0));
 			col = col+noise*grainamount;
 
-				const float bitch = 1.0;
+				float bitch = 1.0;
 			vec4 texColor = texture2D(bitmap, openfl_TextureCoordv);
 				if (lockAlpha) bitch = texColor.a;
 			gl_FragColor =  vec4(col,bitch);
