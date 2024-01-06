@@ -427,7 +427,7 @@ class Grain extends FlxShader
 			noise = mix(noise,vec3(0.0),pow(lum,4.0));
 			col = col+noise*grainamount;
 
-				float bitch = 1.0;
+				const float bitch = 1.0;
 			vec4 texColor = texture2D(bitmap, openfl_TextureCoordv);
 				if (lockAlpha) bitch = texColor.a;
 			gl_FragColor =  vec4(col,bitch);
