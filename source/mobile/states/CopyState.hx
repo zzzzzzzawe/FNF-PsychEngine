@@ -188,9 +188,6 @@ class CopyState extends MusicBeatState {
 
         maxLoopTimes = locatedFiles.length;
         
-        if(maxLoopTimes > 0)
-            return false;
-        else
-            return true;
+        return (maxLoopTimes < 0);
     }
 }
