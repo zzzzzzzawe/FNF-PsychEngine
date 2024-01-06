@@ -119,7 +119,7 @@ class Scanline extends FlxShader
 	@:glFragmentSource('
 		#pragma header
 		const float scale = 1.0;
-	uniform bool lockAlpha = false;
+	uniform bool lockAlpha;
 		void main()
 		{
 			if (mod(floor(openfl_TextureCoordv.y * openfl_TextureSize.y / scale), 2.0) == 0.0 ){
