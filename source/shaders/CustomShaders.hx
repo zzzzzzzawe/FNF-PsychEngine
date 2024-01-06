@@ -154,50 +154,16 @@ class Tiltshift extends FlxShader
 {
 	@:glFragmentSource('
 		#pragma header
-
-		// Modified version of a tilt shift shader from Martin Jonasson (http://grapefrukt.com/)
-		// Read http://notes.underscorediscovery.com/ for context on shaders and this file
-		// License : MIT
-		 
-			/*
-				Take note that blurring in a single pass (the two for loops below) is more expensive than separating
-				the x and the y blur into different passes. This was used where bleeding edge performance
-				was not crucial and is to illustrate a point. 
-		 
-				The reason two passes is cheaper? 
-				   texture2D is a fairly high cost call, sampling a texture.
-		 
-				   So, in a single pass, like below, there are 3 steps, per x and y. 
-		 
-				   That means a total of 9 "taps", it touches the texture to sample 9 times.
-		 
-				   Now imagine we apply this to some geometry, that is equal to 16 pixels on screen (tiny)
-				   (16 * 16) * 9 = 2304 samples taken, for width * height number of pixels, * 9 taps
-				   Now, if you split them up, it becomes 3 for x, and 3 for y, a total of 6 taps
-				   (16 * 16) * 6 = 1536 samples
-			
-				   That\'s on a *tiny* sprite, let\'s scale that up to 128x128 sprite...
-				   (128 * 128) * 9 = 147,456
-				   (128 * 128) * 6 =  98,304
-		 
-				   That\'s 33.33..% cheaper for splitting them up.
-				   That\'s with 3 steps, with higher steps (more taps per pass...)
-		 
-				   A really smooth, 6 steps, 6*6 = 36 taps for one pass, 12 taps for two pass
-				   You will notice, the curve is not linear, at 12 steps it\'s 144 vs 24 taps
-				   It becomes orders of magnitude slower to do single pass!
-				   Therefore, you split them up into two passes, one for x, one for y.
-			*/
 		 
 		// I am hardcoding the constants like a jerk
 			
-		uniform float bluramount  = 1.0;
-		uniform float center      = 1.0;
-		const float stepSize    = 0.004;
-		const float steps       = 3.0;
+		uniform float bluramount;
+		uniform float center;
+		const float stepSize = 0.004;
+		const float steps = 3.0;
 		 
-		const float minOffs     = (float(steps-1.0)) / -2.0;
-		const float maxOffs     = (float(steps-1.0)) / +2.0;
+		const float minOffs = (float(steps-1.0)) / -2.0;
+		const float maxOffs = (float(steps-1.0)) / +2.0;
 		 
 		void main() {
 			float amount;
@@ -612,10 +578,10 @@ class ThreeDShader extends FlxShader
 {
 	@:glFragmentSource('
 	#pragma header
-	uniform float xrot = 0.0;
-	uniform float yrot = 0.0;
-	uniform float zrot = 0.0;
-	uniform float dept = 0.0;
+	uniform float xrot;
+	uniform float yrot;
+	uniform float zrot;
+	uniform float dept;
 	float alph = 0;
 float plane( in vec3 norm, in vec3 po, in vec3 ro, in vec3 rd ) {
     float de = dot(norm, rd);
@@ -704,8 +670,6 @@ class FuckingTriangleEffect extends Effect
 class FuckingTriangle extends FlxShader
 {
 	@:glFragmentSource('
-	
-	
 			#pragma header
 			
 			const vec3 vertices[18] = vec3[18] (
@@ -768,19 +732,15 @@ class FuckingTriangle extends FlxShader
 			return flixel_texture2D(bitmap, uv);
 		}
 
-
 		const float fov  = 70.0;
 		const float near = 0.1;
 		const float far  = 10.;
 
 		const vec3 cameraPos = vec3(0., 0.3, 2.);
 
-			uniform float rotX = -25.;
-			uniform float rotY = 45.;
-		vec4 pixel(in vec2 ndc, in float aspect, inout float depth, in int vertexIndex) {
-
-			
-			
+			uniform float rotX;
+			uniform float rotY;
+		        vec4 pixel(in vec2 ndc, in float aspect, inout float depth, in int vertexIndex) {
 
 			mat4 proj  = perspective(fov, aspect, near, far);
 			mat4 view  = translate(-cameraPos);
@@ -861,8 +821,8 @@ class BloomShader extends FlxShader
 	
 	#pragma header
 	
-	uniform float intensity = 0.35;
-	uniform float blurSize = 1.0/512.0;
+	uniform float intensity;
+	uniform float blurSize;
 	void main()
 	{
 		vec4 sum = vec4(0);
