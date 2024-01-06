@@ -376,11 +376,6 @@ class ShaderFunctions
                         PlayState.instance.addShaderToCamera(camera, new InvertColorsEffect(lockAlpha));
 
                 });
-                funk.set("addGreyscaleEffect", function(camera:String) { //for dem funkies
-
-                        PlayState.instance.addShaderToCamera(camera, new GreyscaleEffect());
-
-                });
                 funk.set("addGrayscaleEffect", function(camera:String) { //for dem funkies
 
                         PlayState.instance.addShaderToCamera(camera, new GreyscaleEffect());
