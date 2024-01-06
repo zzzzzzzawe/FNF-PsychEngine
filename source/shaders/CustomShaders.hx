@@ -293,8 +293,6 @@ class Grain extends FlxShader
 
 		const float permTexUnit = 1.0/256.0;        // Perm texture texel-size
 		const float permTexUnitHalf = 0.5/256.0;    // Half perm texture texel-size
-                const float width = openfl_TextureSize.x;
-                const float height = openfl_TextureSize.y;
 
 		const float grainamount = 0.05; //grain amount
 		bool colored = false; //colored noise?
@@ -371,7 +369,7 @@ class Grain extends FlxShader
 		//2d coordinate orientation thing
 		vec2 coordRot(in vec2 tc, in float angle)
 		{
-			float aspect = width/height;
+			float aspect = openfl_TextureSize.x/openfl_TextureSize.y;
 			float rotX = ((tc.x*2.0-1.0)*aspect*cos(angle)) - ((tc.y*2.0-1.0)*sin(angle));
 			float rotY = ((tc.y*2.0-1.0)*cos(angle)) + ((tc.x*2.0-1.0)*aspect*sin(angle));
 			rotX = ((rotX/aspect)*0.5+0.5);
@@ -385,14 +383,14 @@ class Grain extends FlxShader
 
 			vec3 rotOffset = vec3(1.425,3.892,5.835); //rotation offset values
 			vec2 rotCoordsR = coordRot(texCoord, uTime + rotOffset.x);
-			vec3 noise = vec3(pnoise3D(vec3(rotCoordsR*vec2(width/grainsize,height/grainsize),0.0)));
+			vec3 noise = vec3(pnoise3D(vec3(rotCoordsR*vec2(openfl_TextureSize.x/grainsize,openfl_TextureSize.y/grainsize),0.0)));
 
 			if (colored)
 			{
 				vec2 rotCoordsG = coordRot(texCoord, uTime + rotOffset.y);
 				vec2 rotCoordsB = coordRot(texCoord, uTime + rotOffset.z);
-				noise.g = mix(noise.r,pnoise3D(vec3(rotCoordsG*vec2(width/grainsize,height/grainsize),1.0)),coloramount);
-				noise.b = mix(noise.r,pnoise3D(vec3(rotCoordsB*vec2(width/grainsize,height/grainsize),2.0)),coloramount);
+				noise.g = mix(noise.r,pnoise3D(vec3(rotCoordsG*vec2(openfl_TextureSize.x/grainsize,openfl_TextureSize.y/grainsize),1.0)),coloramount);
+				noise.b = mix(noise.r,pnoise3D(vec3(rotCoordsB*vec2(openfl_TextureSize.x/grainsize,openfl_TextureSize.y/grainsize),2.0)),coloramount);
 			}
 
 			vec3 col = texture2D(bitmap, openfl_TextureCoordv).rgb;
