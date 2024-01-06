@@ -65,7 +65,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D officialBuild -final
+        run: haxelib run lime build ios -D NOVIDEO -D officialBuild -final
 
       # - name: Check Code Signing
         # run: cd export/release/ios/build/Release-iphoneos && codesign -dv *.app
@@ -142,7 +142,7 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           automatic_release_tag: "0.7.2h"
-          title: "0.7.2h Android Release"
+          title: "0.7.2h"
           files: |
             /home/runner/*.apk
             /home/runner/*.zip

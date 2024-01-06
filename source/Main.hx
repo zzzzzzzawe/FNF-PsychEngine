@@ -15,6 +15,7 @@ import openfl.display.StageScaleMode;
 import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
+import openfl.events.KeyboardEvent;
 #if hl
 import hl.Api;
 #end
@@ -51,6 +52,10 @@ class Main extends Sprite
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
+		#if cpp
+        cpp.NativeGc.enable(true);
+        cpp.NativeGc.run(true);
+        #end
 	}
 
 	public function new()
@@ -60,7 +65,9 @@ class Main extends Sprite
 		var path = #if android Path.addTrailingSlash(SUtil.getStorageDirectory()) #else SUtil.getStorageDirectory() #end;
 		Sys.setCwd(path);
 		#end
-
+		#if (android && EXTERNAL || MEDIA)
+		SUtil.doPermissionsShit();
+		#end
 		SUtil.uncaughtErrorHandler();
 
 		#if windows
@@ -127,7 +134,7 @@ class Main extends Sprite
 		Achievements.load();
 
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
-		addChild(fpsVar);
+		FlxG.game.addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if(fpsVar != null) {
@@ -139,6 +146,10 @@ class Main extends Sprite
 		Lib.current.stage.window.setIcon(icon);
 		#end
 
+		#if desktop
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, toggleFullScreen);
+		#end
+
 		#if html5
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
@@ -148,8 +159,18 @@ class Main extends Sprite
 		DiscordClient.prepare();
 		#end
 
+		#if mobile
+		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver;
+		#end
+
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
+
+		final scale:Float = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
+
+		if (fpsVar != null)
+			fpsVar.scaleX = fpsVar.scaleY = (scale > 1 ? scale : 1);
+
 		     if (FlxG.cameras != null) {
 			   for (cam in FlxG.cameras.list) {
 				if (cam != null && cam.filters != null)
@@ -167,5 +188,10 @@ class Main extends Sprite
 		        sprite.__cacheBitmap = null;
 			sprite.__cacheBitmapData = null;
 		}
+	}
+
+	function toggleFullScreen(event:KeyboardEvent){
+		if(Controls.instance.justReleased('fullscreen'))
+			FlxG.fullscreen = !FlxG.fullscreen;
 	}
 }
