@@ -1507,7 +1507,7 @@ class PlayState extends MusicBeatState
 	}
 
 	#if CUSTOM_SHADERS_ALLOWED
-	public function addShaderToObject(obj:String, effect:Dynamic) {
+	public function addShaderToObject(obj:String, effect:ShaderFilter) {
 		if(obj == '') {
 			@:privateAccess
 			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
@@ -1520,10 +1520,10 @@ class PlayState extends MusicBeatState
 			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
 		} else {
 			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
-			if(camera == null || ((obj.toLowerCase() != 'camgame' || obj.toLowerCase() != 'game') && camera == camGame)) {
+			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
 				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
 					var gameObject = Reflect.field(this, obj);
-					gameObject.shader = effect;
+					gameObject.shader = cast effect.shader;
 					return;
 				}
 				var luaObject:FlxSprite = getLuaObject(obj);
@@ -1531,7 +1531,7 @@ class PlayState extends MusicBeatState
 					addTextToDebug('add shader function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
 					return;
 				}
-				luaObject.shader = effect;
+				luaObject.shader = cast effect.shader;
 				return;
 			}
 			var curCamFilters:Array<BitmapFilter> = camera.filters;
@@ -1563,15 +1563,17 @@ class PlayState extends MusicBeatState
 	public function clearObjectShaders(obj:String) {
 		if(obj == '') {
 			var shadersToRemove = [];
-			if(FlxG.game.filters.length > 0) {
-				for(shader in FlxG.game.filters)
-					shadersToRemove.push(shader);
-				for(shader in shadersToRemove)
-					FlxG.game.filters.remove(shader);
+			@:privateAccess{
+				if(FlxG.game._filters.length > 0) {
+					for(shader in FlxG.game._filters)
+						shadersToRemove.push(shader);
+					for(shader in shadersToRemove)
+						FlxG.game._filters.remove(shader);
+				}
 			}
 		} else {
 			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
-			if(camera == null || ((obj.toLowerCase() != 'camgame' || obj.toLowerCase() != 'game') && camera == camGame)) {
+			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
 				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
 					var gameObject = Reflect.field(this, obj);
 					gameObject.shader = null;
