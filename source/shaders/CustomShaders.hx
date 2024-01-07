@@ -546,12 +546,10 @@ class VCRDistortionShader extends FlxShader // https://www.shadertoy.com/view/ld
 
       gl_FragColor = mix(video,vec4(noise(uv * 75.)), vec4(0.05));
 
-      if(curUV.x<0 || curUV.x>1 || curUV.y<0 || curUV.y>1){
-        gl_FragColor = vec4(0,0,0,0);
+      if (curUV.x < 0.0 || curUV.x > 1.0 || curUV.y < 0.0 || curUV.y > 1.0) {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
       }
-
-    }
-  ')
+    }')
 	public function new()
 	{
 		super();
