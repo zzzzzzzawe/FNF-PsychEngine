@@ -421,9 +421,10 @@ class Paths
 		{
 			var folder:String = '';
 			if(path == 'songs') folder = 'songs:';
+			//trace(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library));
 
-			trace(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library));
-			currentTrackedSounds.set(gottenPath, Assets.getSound(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library)));
+			var retKey:String = (path != null) ? '$path/$key' : key;
+			currentTrackedSounds.set(gottenPath, Assets.getSound(folder + getPath('$retKey.$SOUND_EXT', SOUND, library)));
 		}
 		#end
 		localTrackedAssets.push(gottenPath);
