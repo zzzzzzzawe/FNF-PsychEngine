@@ -1,5 +1,6 @@
 package states;
 
+import openfl.filters.ShaderFilter;
 import backend.Highscore;
 import backend.StageData;
 import backend.WeekData;
@@ -34,9 +35,9 @@ import substates.GameOverSubstate;
 
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
-import openfl.filters.ShaderFilter;
+#end
+#if CUSTOM_SHADERS_ALLOWED
 import openfl.filters.BitmapFilter;
-import openfl.display.Shader;
 import shaders.CustomShaders;
 #end
 
@@ -110,13 +111,10 @@ class PlayState extends MusicBeatState
 	public var modchartTexts:Map<String, FlxText> = new Map<String, FlxText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	#end
+	public var modchartShader:Map<String, Dynamic> = new Map<String, Dynamic>(); // idfk i can't make it ShaderFilter
 
-	#if !flash
-	public var shader_chromatic_abberation:ChromaticAberrationEffect;
+	#if CUSTOM_SHADERS_ALLOWED
 	public var shaderUpdates:Array<Float->Void> = [];
-	public var camGameShaders:Array<ShaderEffect> = [];
-	public var camHUDShaders:Array<ShaderEffect> = [];
-	public var camOtherShaders:Array<ShaderEffect> = [];
 	#end
 
 	public var BF_X:Float = 770;
@@ -1508,118 +1506,74 @@ class PlayState extends MusicBeatState
 		callOnScripts('onEventPushed', [subEvent.event, subEvent.value1 != null ? subEvent.value1 : '', subEvent.value2 != null ? subEvent.value2 : '', subEvent.strumTime]);
 	}
 
-    #if !flash
-   public function addShaderToCamera(cam:String,effect:Dynamic){//STOLE FROM ANDROMEDA
+	#if CUSTOM_SHADERS_ALLOWED
+	public function addShaderToCamera(cam:String, effect:Dynamic) {
+		if(cam == '') {
+			var curCamFilters:Array<BitmapFilter> = FlxG.game.filters;
+			if(curCamFilters == null || curCamFilters.length == 0){
+				FlxG.game.filters = [effect];
+				return;
+			}
+			curCamFilters.push(effect);
+			FlxG.game.filters = curCamFilters;
+			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
+		} else {
+			var camera:FlxCamera = LuaUtils.cameraFromString(cam);
+			if(camera == null) {
+				addTextToDebug('shader add function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
+				return;
+			}
+			var curCamFilters:Array<BitmapFilter> = camera.filters;
+			if(curCamFilters == null || curCamFilters.length == 0){
+				camera.filters = [effect];
+				return;
+			}
+			curCamFilters.push(effect);
+			camera.filters = curCamFilters;
+			camera.filtersEnabled = ClientPrefs.data.shaders;
+		}
+	}
 
-
-
-		switch(cam.toLowerCase()) {
-			case 'camhud' | 'hud':
-					camHUDShaders.push(effect);
-					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-					for(i in camHUDShaders){
-					  newCamEffects.push(new ShaderFilter(i.shader));
-					}
-					camHUD.filters = newCamEffects;
-			case 'camother' | 'other':
-					camOtherShaders.push(effect);
-					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-					for(i in camOtherShaders){
-					  newCamEffects.push(new ShaderFilter(i.shader));
-					}
-					camOther.filters = newCamEffects;
-			case 'camgame' | 'game':
-					camGameShaders.push(effect);
-					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
-					for(i in camGameShaders){
-					  newCamEffects.push(new ShaderFilter(i.shader));
-					}
-					camGame.filters = newCamEffects;
-			default:
-				#if LUA_ALLOWED
-				if(modchartSprites.exists(cam)) {
-					Reflect.setProperty(modchartSprites.get(cam),"shader",effect.shader);
-				} else if(modchartTexts.exists(cam)) {
-					Reflect.setProperty(modchartTexts.get(cam),"shader",effect.shader);
-				} else {
-					#end
-					var OBJ = Reflect.getProperty(PlayState.instance,cam);
-					Reflect.setProperty(OBJ,"shader", effect.shader);
-				#if LUA_ALLOWED
-				}
-				#end
-
-
-
+	public function removeShaderFromCamera(cam:String, effect:Dynamic) {
+		var camera:Dynamic;
+		if(cam == '')
+			camera = FlxG.game;
+		else
+			camera = LuaUtils.cameraFromString(cam);
+		if(camera == null) {
+			addTextToDebug('shader remove function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
+			return;
 		}
 
+		if(camera.filters.contains(effect))
+			camera.filters.remove(effect);
+	}
 
-
-
-  }
-
-  public function removeShaderFromCamera(cam:String,effect:ShaderEffect){
-
-
-		switch(cam.toLowerCase()) {
-			case 'camhud' | 'hud': 
-    camHUDShaders.remove(effect);
-    var newCamEffects:Array<BitmapFilter>=[];
-    for(i in camHUDShaders){
-      newCamEffects.push(new ShaderFilter(i.shader));
-    }
-    camHUD.filters = newCamEffects;
-			case 'camother' | 'other': 
-					camOtherShaders.remove(effect);
-					var newCamEffects:Array<BitmapFilter>=[];
-					for(i in camOtherShaders){
-					  newCamEffects.push(new ShaderFilter(i.shader));
-					}
-					camOther.filters = newCamEffects;
-			default:
-				#if LUA_ALLOWED
-				if(modchartSprites.exists(cam)) {
-					Reflect.setProperty(modchartSprites.get(cam),"shader",null);
-				} else if(modchartTexts.exists(cam)) {
-					Reflect.setProperty(modchartTexts.get(cam),"shader",null);
-				} else {
-					#end
-					var OBJ = Reflect.getProperty(PlayState.instance,cam);
-					Reflect.setProperty(OBJ,"shader", null);
-				#if LUA_ALLOWED
-				}
-				#end
-
+	public function clearCameraShaders(cam:String) {
+		if(cam == '') {
+			var shadersToRemove = [];
+			if(FlxG.game.filters.length > 0) {
+				for(shader in FlxG.game.filters)
+					shadersToRemove.push(shader);
+				for(shader in shadersToRemove)
+					FlxG.game.filters.remove(shader);
+			}
+		} else {
+			var camera:FlxCamera = LuaUtils.cameraFromString(cam);
+			if(camera == null) {
+				addTextToDebug('camera shaders clear function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
+				return;
+			}
+			var shadersToRemove = [];
+			if(camera.filters.length > 0){
+				for(shader in camera.filters)
+					shadersToRemove.push(shader);
+				for(shader in shadersToRemove)
+					camera.filters.remove(shader);
+			}
 		}
-
-
-  }
-
-
-
-  public function clearShaderFromCamera(cam:String){
-
-
-		switch(cam.toLowerCase()) {
-			case 'camhud' | 'hud': 
-				camHUDShaders = [];
-				var newCamEffects:Array<BitmapFilter>=[];
-				camHUD.filters = newCamEffects;
-			case 'camother' | 'other': 
-				camOtherShaders = [];
-				var newCamEffects:Array<BitmapFilter>=[];
-				camOther.filters = newCamEffects;
-			case 'camgame' | 'game': 
-				camGameShaders = [];
-				var newCamEffects:Array<BitmapFilter>=[];
-				camGame.filters = newCamEffects;
-			default: 
-				camGameShaders = [];
-				var newCamEffects:Array<BitmapFilter>=[];
-				camGame.filters = newCamEffects;
-		}
-}
-        #end
+	}
+    #end
 
 	public var skipArrowStartTween:Bool = false; //for lua
 	private function generateStaticArrows(player:Int):Void
@@ -1978,10 +1932,9 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraX', camFollow.x);
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
-		#if !flash
-                for (i in shaderUpdates){
-			i(elapsed);
-		}
+		#if CUSTOM_SHADERS_ALLOWED
+        for (shaderUpdate in shaderUpdates)
+			shaderUpdate(elapsed);
         #end
 		callOnScripts('onUpdatePost', [elapsed]);
     }
