@@ -110,6 +110,9 @@ class PlayState extends MusicBeatState
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, FlxText> = new Map<String, FlxText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
+	#if VIDEOS_ALLOWED
+	public var modchartVideoSprites:Map<String, VideoSpriteManager> = new Map<String, VideoSpriteManager>();
+	#end
 	#end
 
 	#if !flash
@@ -269,7 +272,9 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED public var videoSprites:Array<VideoSpriteManager> = []; #end
+	#if VIDEOS_ALLOWED
+	public var video:VideoManager;
+	#end
 
 	public var luaVirtualPad:FlxVirtualPad;
 
@@ -855,10 +860,11 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
+	public function getLuaObject(tag:String, text:Bool=true, videoSprites:Bool=true):Dynamic {
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
+		if(videoSprites && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		if(variables.exists(tag)) return variables.get(tag);
 		#end
 		return null;
@@ -878,7 +884,7 @@ class PlayState extends MusicBeatState
 	{
 		#if VIDEOS_ALLOWED
 		var filepath:String = Paths.video(name);
-		var video:VideoManager = new VideoManager();
+		video = new VideoManager();
 		inCutscene = true;
 
 		if(#if MODS_ALLOWED !FileSystem.exists(filepath) #else !Assets.exists(filepath) #end) {
@@ -1709,10 +1715,9 @@ class PlayState extends MusicBeatState
 			#end
 
 			#if VIDEOS_ALLOWED
-			if(videoSprites.length > 0)
-			for(video in videoSprites)
+			for(video in modchartVideoSprites)
 				if(video.exists)
-				video.paused = false;
+					video.paused = false;
 			#end
 
 			paused = false;
@@ -2023,10 +2028,9 @@ class PlayState extends MusicBeatState
 		paused = true;
 
 		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0)
-			for(video in videoSprites)
-				if(video.exists)
-					video.paused = true;
+		for(video in modchartVideoSprites)
+			if(video.exists)
+				video.paused = true;
 		#end
 		
 		if(FlxG.sound.music != null) {
@@ -2102,10 +2106,10 @@ class PlayState extends MusicBeatState
 				#end
 
 				#if VIDEOS_ALLOWED
-				// i assume it's better removing the thing on gameover
-				if(videoSprites.length > 0)
-					for(video in videoSprites)
-						removeVideoSprite(video);
+				for(video in modchartVideoSprites){
+					remove(video, true);
+					video.altDestroy();
+				}
 				#end
 
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollow.x, camFollow.y));
@@ -3185,20 +3189,6 @@ class PlayState extends MusicBeatState
 		notes.remove(note, true);
 		note.destroy();
 	}
-
-	#if VIDEOS_ALLOWED
-	public function removeVideoSprite(video:VideoSpriteManager):Void {
-		if(members.contains(video))
-			remove(video, true);
-		else {
-			forEachOfType(FlxSpriteGroup, function(group:FlxSpriteGroup){
-				if(group.members.contains(video))
-					group.remove(video, true);
-			});
-		}
-		video.altDestroy();
-	}
-	#end
 
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(note != null) {

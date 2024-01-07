@@ -20,7 +20,6 @@ import haxe.io.Path;
 
 class VideoSpriteManager extends VideoSprite {
     
-    var onPlayState(get, never):Bool;
     public var playbackRate(get, set):EitherType<Single, Float>;
     public var paused(default, set):Bool = false;
     public var onVideoEnd:FlxSignal;
@@ -40,13 +39,9 @@ class VideoSpriteManager extends VideoSprite {
         #end
 
         super(daX, daY #if (hxCodec < "2.6.0" && hxCodec), width, height, autoScale #end);
-        if(onPlayState)
-            PlayState.instance.videoSprites.push(this); 
         
         onVideoEnd = new FlxSignal();
         onVideoEnd.add(function(){
-            if(onPlayState && PlayState.instance.videoSprites.contains(this))
-                PlayState.instance.videoSprites.remove(this); 
             destroy();
         });
         onVideoStart = new FlxSignal();
@@ -68,19 +63,20 @@ class VideoSpriteManager extends VideoSprite {
         #end
     }
     
-     public function startVideo(path:String, #if hxCodec loop:Bool = false #elseif hxvlc loops:Int = 0, ?options:Array<String> #end) {
+     public function startVideo(path:String, loop:Bool = false #if hxvlc ,?options:Array<String> #end) {
         #if (hxCodec >= "3.0.0" && hxCodec)
         play(path, loop);
         #elseif (hxCodec < "3.0.0" && hxCodec)
         playVideo(path, loop, false);
         #elseif hxvlc
-        load(path, loops, options);
+        var repeats = 0;
+        if(loop)
+            repeats = 100 * 100;
+        load(path, repeats, options);
         new FlxTimer().start(0.001, function(tmr:FlxTimer) {
             play();
         });
         #end
-        if(onPlayState)
-            playbackRate = PlayState.instance.playbackRate;
     }
 
     @:noCompletion
@@ -131,11 +127,6 @@ class VideoSpriteManager extends VideoSprite {
     @:noCompletion
     private function get_playbackRate():Float {
         return bitmap.rate;
-    }
-
-    @:noCompletion
-    private function get_onPlayState():Bool {
-        return Std.isOfType(MusicBeatState.getState(), PlayState);
     }
 
     public function altDestroy() {

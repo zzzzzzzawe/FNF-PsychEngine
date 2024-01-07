@@ -7,6 +7,9 @@ import openfl.display.BlendMode;
 import Type.ValueType;
 
 import substates.GameOverSubstate;
+#if VIDEOS_ALLOWED
+import backend.VideoSpriteManager;
+#end
 
 typedef LuaTweenOptions = {
 	type:FlxTweenType,
@@ -46,6 +49,7 @@ class LuaUtils
 					target = retVal;
 			}
 			else target = Reflect.getProperty(instance, splitProps[0]);
+			trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
 
 			for (i in 1...splitProps.length)
 			{
@@ -87,7 +91,7 @@ class LuaUtils
 			}
 			else
 				target = Reflect.getProperty(instance, splitProps[0]);
-
+			trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
 			for (i in 1...splitProps.length)
 			{
 				var j:Dynamic = splitProps[i].substr(0, splitProps[i].length - 1);
@@ -225,9 +229,9 @@ class LuaUtils
 		return Reflect.getProperty(leArray, variable);
 	}
 
-	public static function getPropertyLoop(split:Array<String>, ?checkForTextsToo:Bool = true, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
+	public static function getPropertyLoop(split:Array<String>, ?checkForTextsToo:Bool = true, ?checkForVideos:Bool = true, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
 	{
-		var obj:Dynamic = getObjectDirectly(split[0], checkForTextsToo);
+		var obj:Dynamic = getObjectDirectly(split[0], checkForTextsToo, checkForVideos);
 		var end = split.length;
 		if(getProperty) end = split.length-1;
 
@@ -235,7 +239,7 @@ class LuaUtils
 		return obj;
 	}
 
-	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true, ?allowMaps:Bool = false):Dynamic
+	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true, ?checkForVideos:Bool = true, ?allowMaps:Bool = false):Dynamic
 	{
 		switch(objectName)
 		{
@@ -243,7 +247,7 @@ class LuaUtils
 				return PlayState.instance;
 			
 			default:
-				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo);
+				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo, checkForVideos);
 				if(obj == null) obj = getVarInArray(getTargetInstance(), objectName, allowMaps);
 				return obj;
 		}
@@ -485,4 +489,22 @@ class LuaUtils
 		}
 		return PlayState.instance.camGame;
 	}
+	#if VIDEOS_ALLOWED
+	inline public static function getVideoSpriteObject(name:String):VideoSpriteManager
+		return #if LUA_ALLOWED PlayState.instance.modchartVideoSprites.exists(name) ? PlayState.instance.modchartVideoSprites.get(name) : #end Reflect.getProperty(PlayState.instance, name);
+
+	public static function resetVideoSpriteTag(tag:String) {
+		#if LUA_ALLOWED
+		if(!PlayState.instance.modchartVideoSprites.exists(tag)) {
+			return;
+		}
+
+		var target:VideoSpriteManager = PlayState.instance.modchartVideoSprites.get(tag);
+		PlayState.instance.remove(target, true);
+		target.altDestroy();
+		target.destroy();
+		PlayState.instance.modchartVideoSprites.remove(tag);
+		#end
+	}
+	#end
 }

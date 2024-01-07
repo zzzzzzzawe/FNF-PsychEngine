@@ -1521,6 +1521,7 @@ class FunkinLua {
 		#if (desktop && !hl) DiscordClient.addLuaCallbacks(this); #end
 		#if SScript HScript.implement(this); #end
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(this); #end
+		#if VIDEOS_ALLOWED VideoFunctions.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);
