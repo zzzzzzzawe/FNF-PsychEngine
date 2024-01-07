@@ -1,4 +1,5 @@
 package shaders;
+
 #if CUSTOM_SHADERS_ALLOWED
 import shaders.FlxShader;
 import openfl.filters.ShaderFilter;
@@ -225,6 +226,51 @@ class GreyscaleShader extends FlxShader
 		super();
 	}
 }
+
+class BrightEffect extends Effect
+{
+	public static var shader:ShaderFilter = new ShaderFilter(new BrightShader());
+
+	public static function setup(brightness:Float, contrast:Float){
+		setBrightness(brightness);
+		setContrast(contrast);
+	}
+
+	public static function setBrightness(brightness:Float):Void
+	{
+		shader.shader.data.brightness.value = [brightness];
+	}
+	
+	public static function setContrast(contrast:Float):Void
+	{
+		shader.shader.data.contrast.value = [contrast];
+	}
+
+	public function new(){super();}
+}
+
+class BrightShader extends FlxShader
+{
+	@:glFragmentSource('
+		#pragma header
+
+		uniform float brightness;
+		uniform float contrast;
+
+		void main()
+		{
+			vec4 col = texture2D(bitmap, openfl_TextureCoordv);
+			col.rgb = col.rgb * contrast;
+			col.rgb = col.rgb + brightness;
+
+			gl_FragColor = col;
+		}')
+	public function new()
+	{
+		super();
+	}
+}
+
 
 class GrainEffect extends Effect
 {
@@ -617,7 +663,7 @@ void main() {
     //Screen UV goes from 0 - 1 along each axis
     vec2 screenUV = openfl_TextureCoordv;
     vec2 p = (2.0 * screenUV) - 1.0;
-    float screenAspect = 1280/720;
+    float screenAspect = 1280.0/720.0;
     p.x *= screenAspect;
     
     //Normalized Ray Dir
@@ -1198,50 +1244,6 @@ class Effect
 	}
 
 	public function new(){}
-}
-
-class BrightEffect extends Effect
-{
-	public static var shader:ShaderFilter = new ShaderFilter(new BrightShader());
-
-	public static function setup(brightness:Float, contrast:Float){
-		setBrightness(brightness);
-		setContrast(contrast);
-	}
-
-	public static function setBrightness(brightness:Float):Void
-	{
-		shader.shader.data.brightness.value = [brightness];
-	}
-	
-	public static function setContrast(contrast:Float):Void
-	{
-		shader.shader.data.contrast.value = [contrast];
-	}
-
-	public function new(){super();}
-}
-
-class BrightShader extends FlxShader
-{
-	@:glFragmentSource('
-		#pragma header
-
-		uniform float brightness;
-		uniform float contrast;
-
-		void main()
-		{
-			vec4 col = texture2D(bitmap, openfl_TextureCoordv);
-			col.rgb = col.rgb * contrast;
-			col.rgb = col.rgb + brightness;
-
-			gl_FragColor = col;
-		}')
-	public function new()
-	{
-		super();
-	}
 }
 
 #end
