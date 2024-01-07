@@ -1507,20 +1507,31 @@ class PlayState extends MusicBeatState
 	}
 
 	#if CUSTOM_SHADERS_ALLOWED
-	public function addShaderToCamera(cam:String, effect:Dynamic) {
-		if(cam == '') {
-			var curCamFilters:Array<BitmapFilter> = FlxG.game.filters;
+	public function addShaderToObject(obj:String, effect:Dynamic) {
+		if(obj == '') {
+			@:privateAccess
+			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
 			if(curCamFilters == null || curCamFilters.length == 0){
-				FlxG.game.filters = [effect];
+				FlxG.game.setFilters([effect]);
 				return;
 			}
 			curCamFilters.push(effect);
-			FlxG.game.filters = curCamFilters;
+			FlxG.game.setFilters(curCamFilters);
 			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
 		} else {
-			var camera:FlxCamera = LuaUtils.cameraFromString(cam);
-			if(camera == null) {
-				addTextToDebug('shader add function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
+			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
+			if(camera == null || ((obj.toLowerCase() != 'camgame' || obj.toLowerCase() != 'game') && camera == camGame)) {
+				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
+					var gameObject = Reflect.field(this, obj);
+					gameObject.shader = effect;
+					return;
+				}
+				var luaObject:FlxSprite = getLuaObject(obj);
+				if(luaObject == null){
+					addTextToDebug('add shader function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
+					return;
+				}
+				luaObject.shader = effect;
 				return;
 			}
 			var curCamFilters:Array<BitmapFilter> = camera.filters;
@@ -1549,8 +1560,8 @@ class PlayState extends MusicBeatState
 			camera.filters.remove(effect);
 	}
 
-	public function clearCameraShaders(cam:String) {
-		if(cam == '') {
+	public function clearObjectShaders(obj:String) {
+		if(obj == '') {
 			var shadersToRemove = [];
 			if(FlxG.game.filters.length > 0) {
 				for(shader in FlxG.game.filters)
@@ -1559,9 +1570,19 @@ class PlayState extends MusicBeatState
 					FlxG.game.filters.remove(shader);
 			}
 		} else {
-			var camera:FlxCamera = LuaUtils.cameraFromString(cam);
-			if(camera == null) {
-				addTextToDebug('camera shaders clear function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
+			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
+			if(camera == null || ((obj.toLowerCase() != 'camgame' || obj.toLowerCase() != 'game') && camera == camGame)) {
+				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
+					var gameObject = Reflect.field(this, obj);
+					gameObject.shader = null;
+					return;
+				}
+				var luaObject:FlxSprite = getLuaObject(obj);
+				if(luaObject == null){
+					addTextToDebug('shaders clear function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
+					return;
+				}
+				luaObject.shader = null;
 				return;
 			}
 			var shadersToRemove = [];
