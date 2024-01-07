@@ -1,6 +1,5 @@
 package states;
 
-import openfl.filters.ShaderFilter;
 import backend.Highscore;
 import backend.StageData;
 import backend.WeekData;
@@ -54,6 +53,10 @@ import psychlua.HScript;
 
 #if SScript
 import tea.SScript;
+#end
+
+#if CUSTOM_SHADERS_ALLOWED
+import shaders.ShaderFilter as CustomShaderFilter;
 #end
 
 /**
@@ -1507,7 +1510,7 @@ class PlayState extends MusicBeatState
 	}
 
 	#if CUSTOM_SHADERS_ALLOWED
-	public function addShaderToObject(obj:String, effect:ShaderFilter) {
+	public function addShaderToObject(obj:String, effect:CustomShaderFilter) {
 		if(obj == '') {
 			@:privateAccess
 			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
@@ -1523,7 +1526,7 @@ class PlayState extends MusicBeatState
 			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
 				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
 					var gameObject = Reflect.field(this, obj);
-					gameObject.shader = cast effect.shader;
+					gameObject.shader = effect.shader;
 					return;
 				}
 				var luaObject:FlxSprite = getLuaObject(obj);
@@ -1531,7 +1534,7 @@ class PlayState extends MusicBeatState
 					addTextToDebug('add shader function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
 					return;
 				}
-				luaObject.shader = cast effect.shader;
+				luaObject.shader = effect.shader;
 				return;
 			}
 			var curCamFilters:Array<BitmapFilter> = camera.filters;

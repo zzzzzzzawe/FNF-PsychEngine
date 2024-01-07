@@ -2,7 +2,7 @@ package shaders;
 
 #if CUSTOM_SHADERS_ALLOWED
 import shaders.FlxShader;
-import openfl.filters.ShaderFilter;
+import shaders.ShaderFilter;
 import openfl.Lib;
 
 typedef ShaderEffect =
