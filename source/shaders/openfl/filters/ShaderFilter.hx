@@ -1,11 +1,11 @@
 // WHY CAN'T I USE SHADERFILTER.SHADER FOR A FLXSHADER ARGUMENT GUH
 
-package shaders;
+package shaders.openfl.filters;
 
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObjectRenderer;
-import shaders.FlxShader;
+import shaders.flixel.system.FlxShader;
 import openfl.filters.BitmapFilter;
 
 class ShaderFilter extends BitmapFilter
