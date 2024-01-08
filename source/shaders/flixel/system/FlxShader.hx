@@ -1,7 +1,6 @@
 package shaders.flixel.system;
 
 import flixel.system.FlxAssets.FlxShader as OriginalFlxShader;
-using StringTools;
 
 /**
  * An improved FlxShader
