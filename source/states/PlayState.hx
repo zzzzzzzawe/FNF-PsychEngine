@@ -36,6 +36,7 @@ import substates.GameOverSubstate;
 import flixel.addons.display.FlxRuntimeShader;
 #end
 #if CUSTOM_SHADERS_ALLOWED
+import shaders.openfl.filters.ShaderFilter as CustomShaderFilter;
 import openfl.filters.BitmapFilter;
 import shaders.CustomShaders;
 #end
@@ -53,10 +54,6 @@ import psychlua.HScript;
 
 #if SScript
 import tea.SScript;
-#end
-
-#if CUSTOM_SHADERS_ALLOWED
-import shaders.ShaderFilter as CustomShaderFilter;
 #end
 
 /**
