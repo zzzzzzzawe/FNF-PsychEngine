@@ -5,7 +5,7 @@ using StringTools;
 
 /**
  * An improved FlxShader
- * @author MAJigsaw(Mihai Alexandru)
+ * @author Mihai Alexandru (M.A. Jigsaw)
  */
 class FlxShader extends OriginalFlxShader
 {
