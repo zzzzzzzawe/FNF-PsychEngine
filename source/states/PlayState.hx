@@ -1129,6 +1129,7 @@ class PlayState extends MusicBeatState
 				daNote.ignoreNote = true;
 
 				unspawnNotes.remove(daNote);
+				daNote.kill();
 				daNote.destroy();
 			}
 			--i;
@@ -3170,6 +3171,7 @@ class PlayState extends MusicBeatState
 
 	public function invalidateNote(note:Note):Void {
 		notes.remove(note, true);
+		note.kill();
 		note.destroy();
 	}
 

@@ -365,6 +365,7 @@ class PauseSubState extends MusicBeatSubstate
 		if(skipTimeText != null)
 		{
 			remove(skipTimeText);
+			skipTimeText.kill();
 			skipTimeText.destroy();
 		}
 		skipTimeText = null;
@@ -434,6 +435,7 @@ class PauseSubState extends MusicBeatSubstate
 		for (i in 0...grpMenuShit.members.length) {
 			var obj = grpMenuShit.members[0];
 			grpMenuShit.remove(obj, true);
+			obj.kill();
 			obj.destroy();
 		}
 

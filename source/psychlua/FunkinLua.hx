@@ -1202,6 +1202,7 @@ class FunkinLua {
 			var pee:ModchartSprite = game.modchartSprites.get(tag);
 			LuaUtils.getTargetInstance().remove(pee, true);
 			if(destroy) {
+				pee.kill();
 				pee.destroy();
 				game.modchartSprites.remove(tag);
 			}
