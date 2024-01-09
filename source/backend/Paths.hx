@@ -421,8 +421,8 @@ class Paths
 		{
 			var retKey:String = (path != null) ? '$path/$key' : key;
 			retKey = ((path == 'songs') ? 'songs:' : '') + getPath('$retKey.$SOUND_EXT', SOUND, library);
-			if(OpenFlAssets.exists(retKey, SOUND))
-				currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(retKey));
+			if(Assets.exists(retKey, SOUND))
+				currentTrackedSounds.set(gottenPath, Assets.getSound(retKey));
 		}
 		localTrackedAssets.push(gottenPath);
 		return currentTrackedSounds.get(gottenPath);
