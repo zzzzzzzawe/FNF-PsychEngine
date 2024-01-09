@@ -209,6 +209,7 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
+	public var luaVpadCam:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -580,31 +581,6 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
-		var buttonsColors:Array<FlxColor> = [];
-		var data:Dynamic;
-		if(ClientPrefs.data.dynamicColors)
-			data = ClientPrefs.data;
-		else
-			data = ClientPrefs.defaultData;
-
-		buttonsColors.push(data.arrowRGB[0][0]);
-		buttonsColors.push(data.arrowRGB[1][0]);
-		buttonsColors.push(data.arrowRGB[2][0]);
-		buttonsColors.push(data.arrowRGB[3][0]);
-		addMobileControls(false);
-
-		if(MobileControls.getMode() == 0 || MobileControls.getMode() == 1 || MobileControls.getMode() == 2 || MobileControls.getMode() == 3) {
-			mobileControls.virtualPad.buttonLeft.color =  buttonsColors[0];
-			mobileControls.virtualPad.buttonDown.color =  buttonsColors[1];
-			mobileControls.virtualPad.buttonUp.color =  buttonsColors[2];
-			mobileControls.virtualPad.buttonRight.color =  buttonsColors[3];
-		}
-		if(MobileControls.getMode() == 3) {
-			mobileControls.virtualPad.buttonLeft2.color = buttonsColors[0];
-			mobileControls.virtualPad.buttonDown2.color = buttonsColors[1];
-			mobileControls.virtualPad.buttonUp2.color = buttonsColors[2];
-			mobileControls.virtualPad.buttonRight2.color = buttonsColors[3];
-		}
 		startingSong = true;
 
 		#if LUA_ALLOWED
@@ -645,6 +621,32 @@ class PlayState extends MusicBeatState
 				#end
 			}
 		#end
+
+		var buttonsColors:Array<FlxColor> = [];
+		var data:Dynamic;
+		if(ClientPrefs.data.dynamicColors)
+			data = ClientPrefs.data;
+		else
+			data = ClientPrefs.defaultData;
+
+		buttonsColors.push(data.arrowRGB[0][0]);
+		buttonsColors.push(data.arrowRGB[1][0]);
+		buttonsColors.push(data.arrowRGB[2][0]);
+		buttonsColors.push(data.arrowRGB[3][0]);
+		addMobileControls(false);
+
+		if(MobileControls.getMode() == 0 || MobileControls.getMode() == 1 || MobileControls.getMode() == 2 || MobileControls.getMode() == 3) {
+			mobileControls.virtualPad.buttonLeft.color =  buttonsColors[0];
+			mobileControls.virtualPad.buttonDown.color =  buttonsColors[1];
+			mobileControls.virtualPad.buttonUp.color =  buttonsColors[2];
+			mobileControls.virtualPad.buttonRight.color =  buttonsColors[3];
+		}
+		if(MobileControls.getMode() == 3) {
+			mobileControls.virtualPad.buttonLeft2.color = buttonsColors[0];
+			mobileControls.virtualPad.buttonDown2.color = buttonsColors[1];
+			mobileControls.virtualPad.buttonUp2.color = buttonsColors[2];
+			mobileControls.virtualPad.buttonRight2.color = buttonsColors[3];
+		}
 
 		startCallback();
 		RecalculateRating();
@@ -3732,4 +3734,57 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
+
+	public function addLuaVirtualPad(DPadMode:String, ActionMode:String) {
+		// reseting?
+		if(luaVirtualPad.exists)
+			removeLuaVirtualPad();
+
+		luaVirtualPad = new FlxVirtualPad(dpadMode.get(DPadMode), actionMode.get(ActionMode));
+		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
+	}
+
+	public function addLuaVirtualPadCamera(?DefaultDrawTarget:Bool = false) {
+		if(luaVirtualPad != null) {
+			luaVpadCam = new FlxCamera();
+			luaVpadCam.bgColor.alpha = 0;
+			FlxG.cameras.add(luaVpadCam, DefaultDrawTarget);
+			luaVirtualPad.cameras = [luaVpadCam];
+		}
+	}
+
+	public function removeLuaVirtualPad() {
+		if (luaVirtualPad != null) {
+			luaVirtualPad.kill();
+			luaVirtualPad.destroy();
+			remove(luaVirtualPad);
+		}
+	}
+
+	public function luaVirtualPadPressed(button:Dynamic):Bool {
+		if(Std.isOfType(button, String))
+			return luaVirtualPad.buttonPressed(button);
+		else if(Std.isOfType(button, Array))
+			return luaVirtualPad.anyPressed(button);
+		else
+			return false;
+	}
+
+	public function luaVirtualPadJustPressed(button:Dynamic):Bool {
+		if(Std.isOfType(button, String))
+			return luaVirtualPad.buttonJustPressed(button);
+		else if(Std.isOfType(button, Array))
+			return luaVirtualPad.anyJustPressed(button);
+		else
+			return false;
+	}
+	
+	public function luaVirtualPadJustReleased(button:Dynamic):Bool {
+		if(Std.isOfType(button, String))
+			return luaVirtualPad.buttonJustReleased(button);
+		else if(Std.isOfType(button, Array))
+			return luaVirtualPad.anyJustReleased(button);
+		else
+			return false;
+	}
 }

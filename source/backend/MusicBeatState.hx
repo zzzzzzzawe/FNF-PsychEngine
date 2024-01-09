@@ -23,8 +23,8 @@ class MusicBeatState extends FlxUIState
 		return Controls.instance;
 	}
 
-	public static var dpadMode:Map<String, FlxDPadMode>;
-	public static var actionMode:Map<String, FlxActionMode>;
+	public var dpadMode:Map<String, FlxDPadMode>;
+	public var actionMode:Map<String, FlxActionMode>;
 	public var virtualPad:FlxVirtualPad;
 	public var mobileControls:MobileControls;
 	public var camControls:FlxCamera;

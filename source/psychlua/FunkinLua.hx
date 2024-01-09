@@ -41,6 +41,10 @@ import flixel.input.gamepad.FlxGamepadInputID;
 
 import haxe.Json;
 
+#if mobile
+import mobile.psychlua.Functions;
+#end
+
 class FunkinLua {
 	public var lua:State = null;
 	public var camTarget:FlxCamera;
@@ -661,33 +665,6 @@ class FunkinLua {
 				}));
 			}
 		});
-
-        #if android
-        set("backJustPressed", function() {
-            var touch:Bool = FlxG.android.justPressed.BACK;
-            return touch;
-        });
-        set("backPressed", function() {
-                var touch:Bool = FlxG.android.pressed.BACK;
-                return touch;
-        });
-        set("backJustReleased", function() {
-                var touch:Bool = FlxG.android.justReleased.BACK;
-                return touch;
-        });
-        set("menuJustPressed", function() {
-                var touch:Bool = FlxG.android.justPressed.MENU;
-                return touch;
-        });
-        set("menuPressed", function() {
-                var touch:Bool = FlxG.android.pressed.MENU;
-                return touch;
-        });
-        set("menuJustReleased", function() {
-                var touch:Bool = FlxG.android.justReleased.MENU;
-                return touch;
-        });
-        #end
 
 		set("mouseClicked", function(button:String) {
 			var click:Bool = FlxG.mouse.justPressed;
@@ -1523,6 +1500,8 @@ class FunkinLua {
 		CustomSubstate.implement(this);
 		ShaderFunctions.implement(this);
 		DeprecatedFunctions.implement(this);
+		#if mobile Functions.MobileFunctions.implement(this); #end
+		#if android Functions.AndroidFunctions.implement(this); #end
 
 		try{
 			var isString:Bool = !FileSystem.exists(scriptName);
