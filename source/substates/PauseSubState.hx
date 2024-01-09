@@ -32,14 +32,12 @@ class PauseSubState extends MusicBeatSubstate
 
 	public static var songName:String = null;
 
-	public function new(x:Float, y:Float)
+	override function create()
 	{
-		super();
-
-		for(option in menuItemsOG)
+		var items = menuItemsOG;
+		for(option in items)
 			if(option.contains('Editor') && !controls.mobileC)
 				menuItemsOG.remove(option);
-
 		if(Difficulty.list.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -167,6 +165,8 @@ class PauseSubState extends MusicBeatSubstate
 
 		regenMenu();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+
+		super.create();
 	}
 
 	var holdTime:Float = 0;
@@ -329,12 +329,11 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.seenCutscene = false;
 
 					Mods.loadTopMod();
-					if(PlayState.isStoryMode) {
+					if(PlayState.isStoryMode)
 						MusicBeatState.switchState(new StoryMenuState());
-					} else {
+					else 
 						MusicBeatState.switchState(new FreeplayState());
-					}
-					PlayState.cancelMusicFadeTween();
+
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
 					PlayState.chartingMode = false;
