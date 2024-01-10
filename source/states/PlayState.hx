@@ -3736,12 +3736,9 @@ class PlayState extends MusicBeatState
 	#end
 
 	public function addLuaVirtualPad(DPadMode:String, ActionMode:String) {
-		// reseting?
-		if(luaVirtualPad.exists)
-			removeLuaVirtualPad();
-
 		luaVirtualPad = new FlxVirtualPad(dpadMode.get(DPadMode), actionMode.get(ActionMode));
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
+		add(luaVirtualPad);
 	}
 
 	public function addLuaVirtualPadCamera(?DefaultDrawTarget:Bool = false) {
