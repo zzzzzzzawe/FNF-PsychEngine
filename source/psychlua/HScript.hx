@@ -303,11 +303,11 @@ class HScript extends SScript
 		set('insert', function(pos:Int, obj:FlxBasic) PlayState.instance.insert(pos, obj));
 		set('remove', function(obj:FlxBasic, ?splice:Bool = false) PlayState.instance.remove(obj, splice));
 		#if mobile
-		funk.set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
+		set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
 		  });
   
-		set("makeVirtualPad", PlayState.instance.addLuaVirtualPad);
+		set("addVirtualPad", PlayState.instance.addLuaVirtualPad);
   
 		set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
   

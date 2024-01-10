@@ -60,7 +60,7 @@ class MobileFunctions {
           PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
         });
 
-        funk.set("makeVirtualPad", PlayState.instance.addLuaVirtualPad); // ig i can do it like this since it dosen't need any args ????
+        funk.set("addVirtualPad", PlayState.instance.addLuaVirtualPad); // ig i can do it like this since it dosen't need any args ????
 
         funk.set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
 
