@@ -3734,11 +3734,19 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
-
-	public function addLuaVirtualPad(DPadMode:String, ActionMode:String) {
+	
+	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
+		if(!variables.exists("luaVirtualPad"))
+			variables.set("luaVirtualPad", luaVirtualPad);
 		luaVirtualPad = new FlxVirtualPad(dpadMode.get(DPadMode), actionMode.get(ActionMode));
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
-		add(luaVirtualPad);
+	}
+	
+	public function addLuaVirtualPad() {
+		if(luaVirtualPad == null)
+			return;
+		var target = LuaUtils.getTargetInstance();
+		target.insert(target.members.length + 1, luaVirtualPad);
 	}
 
 	public function addLuaVirtualPadCamera(?DefaultDrawTarget:Bool = false) {

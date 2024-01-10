@@ -302,6 +302,47 @@ class HScript extends SScript
 		set('addBehindBF', function(obj:FlxBasic) PlayState.instance.addBehindBF(obj));
 		set('insert', function(pos:Int, obj:FlxBasic) PlayState.instance.insert(pos, obj));
 		set('remove', function(obj:FlxBasic, ?splice:Bool = false) PlayState.instance.remove(obj, splice));
+		#if mobile
+		funk.set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
+			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
+		  });
+  
+		set("makeVirtualPad", PlayState.instance.addLuaVirtualPad);
+  
+		set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
+  
+		set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
+			if(PlayState.instance.luaVirtualPad == null){
+				FunkinLua.luaTrace('addVirtualPadCamera: Virtual Pad Does Not Exist!!');
+				return;
+			}
+			PlayState.instance.addVirtualPadCamera(DefaultDrawTarget);
+		});
+  
+		set("virtualPadJustPressed", function(button:Dynamic):Bool {
+			if(PlayState.instance.luaVirtualPad == null){
+			  FunkinLua.luaTrace('virtualPadJustPressed: Virtual Pad Does Not Exist!!');
+			  return false;
+			}
+		  return PlayState.instance.luaVirtualPadJustPressed(button);
+		});
+  
+		set("virtualPadPressed", function(button:Dynamic):Bool {
+			if(PlayState.instance.luaVirtualPad == null){
+				FunkinLua.luaTrace('virtualPadPressed: Virtual Pad Does Not Exist!!');
+				return false;
+			}
+			return PlayState.instance.luaVirtualPadPressed(button);
+		});
+  
+		set("virtualPadJustReleased", function(button:Dynamic):Bool {
+			if(PlayState.instance.luaVirtualPad == null){
+				FunkinLua.luaTrace('virtualPadJustReleased: Virtual Pad Does Not Exist!!');
+				return false;
+			}
+			return PlayState.instance.luaVirtualPadJustReleased(button);
+		});
+		#end
 
 		if(varsToBring != null) {
 			for (key in Reflect.fields(varsToBring)) {

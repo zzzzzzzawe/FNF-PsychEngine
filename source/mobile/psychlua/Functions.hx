@@ -56,13 +56,13 @@ class MobileFunctions {
 		    return Haptic.vibrate(period, duration);
 		});
 
-        funk.set("addVirtualPad", (DPadMode:String, ActionMode:String) -> {
-          PlayState.instance.addLuaVirtualPad(DPadMode, ActionMode);
+        funk.set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
+          PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
         });
 
-        funk.set("removeVirtualPad", function(){
-            PlayState.instance.removeLuaVirtualPad();
-        });
+        funk.set("makeVirtualPad", PlayState.instance.addLuaVirtualPad); // ig i can do it like this since it dosen't need any args ????
+
+        funk.set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
 
         funk.set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
             if(PlayState.instance.luaVirtualPad == null){
