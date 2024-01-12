@@ -10,6 +10,135 @@ typedef ShaderEffect =
 	var shader:Dynamic;
 }
 
+class RadialBlurEffect extends Effect
+{
+	public static var shader:ShaderFilter = new ShaderFilter(new RadialBlurShader());
+
+	public static function setup(strength:Int = 10, x:Float = 0.0, y:Float = 0.0, zoom:Float = 1.0)
+	{
+		setStrength(strength);
+		setPos(x, y);
+		setZoom(zoom);
+	}
+
+	public static function setStrength(int:Int = 10)
+	{
+		shader.shader.data.strength.value = [int];
+	}
+
+	public static function setPos(x:Float = 0.0, y:Float = 0.0)
+	{
+			shader.shader.data.xPos.value = [x];
+			shader.shader.data.yPos.value = [y];
+	}
+
+	public static function setZoom(zoom:Float = 1.0){
+		shader.shader.data.zoom.value = [zoom];
+	}
+
+	public function new(){super();}
+}
+
+class RadialBlurShader extends FlxShader
+{
+	// https://www.shadertoy.com/view/XsfSDs with some modifications
+	@:glFragmentSource('
+	#pragma header
+	vec2 fragCoord = openfl_TextureCoordv*openfl_TextureSize;
+    vec2 iResolution = openfl_TextureSize;
+	uniform int strength;
+	uniform float xPos;
+	uniform float yPos;
+	uniform float zoom; // idfk what to call this shit
+	
+	
+	void main()
+	{
+		vec2 pos = vec2(xPos, yPos); 
+		vec2 center = pos / iResolution.xy;
+		float blurStart = zoom;
+		float blurWidth = blurStart * 0.1;
+	
+		
+		vec2 uv = fragCoord.xy / iResolution.xy;
+		
+		uv -= center;
+		float precompute = blurWidth * (1.0 / float(strength - 1));
+		
+		vec4 color = vec4(0.0);
+		for(int i = 0; i < strength; i++)
+		{
+			float scale = blurStart + (float(i)* precompute);
+			color += flixel_texture2D(bitmap, uv * scale + center);
+		}
+		
+		
+		color /= float(strength);
+		
+		gl_FragColor = color;
+	}
+  ')
+	public function new()
+	{
+		super();
+	}
+}
+
+class BulgeEffect extends Effect
+{
+	public static var shader:ShaderFilter = new ShaderFilter(new BulgeShader());
+
+	public static function setup(multi:Float = 0.0)
+	{
+		setMultiplier(multi);
+	}
+
+	public static function setMultiplier(multi:Float)
+	{
+		shader.shader.data.multi.value = [multi];
+	}
+
+	public function new(){super();}
+}
+
+// MY FIRST TIME PORTING SHADERS FROM SHADERTOY IDFK -karim
+class BulgeShader extends FlxShader
+{
+	// https://www.shadertoy.com/view/XsVSW1  with some modifications
+	@:glFragmentSource('
+	#pragma header
+    uniform float multi;
+    vec2 fragCoord = openfl_TextureCoordv*openfl_TextureSize;
+    vec2 iResolution = openfl_TextureSize;
+
+ void main() {
+    vec2 p = fragCoord.xy/iResolution.xy - 0.5;
+
+      // cartesian to polar coordinates
+      float r = length(p);
+      float a = atan(p.y, p.x);
+  
+    // distort
+    if(multi == 0.0) {
+        vec2 guh = fragCoord.xy/iResolution.xy - 0.5;
+        r = length(guh);
+    } else {
+        r = r*r* multi; // bulge
+    }
+  
+    p = r * vec2(cos(a), sin(a));
+  
+    vec4 color = flixel_texture2D(bitmap, p + 0.5);
+    gl_FragColor = color;
+    }
+  ')
+	public function new()
+	{
+		super();
+	}
+}
+
+
 class BuildingEffect
 {
 	public static var shader:ShaderFilter = new ShaderFilter(new BuildingShader());

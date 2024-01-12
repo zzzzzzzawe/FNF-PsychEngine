@@ -13,9 +13,8 @@ class ShaderFunctions
 	#if (!flash && MODS_ALLOWED && sys)
         private static var storedFilters:Map<String, ShaderFilter> = [];
         #end
-		public static function implement(funk:FunkinLua)
-			{
-				// shader shit
+		public static function implement(funk:FunkinLua) {
+		// shader shit
 		funk.addLocalCallback("initLuaShader", function(name:String) {
 			if(!ClientPrefs.data.shaders) return false;
 
@@ -26,18 +25,8 @@ class ShaderFunctions
 			#end
 			return false;
 		});
-		
-		funk.addLocalCallback("setSpriteShader", function(obj:String, shader:String) {
-			if(!ClientPrefs.data.shaders) return false;
 
-			#if (!flash && MODS_ALLOWED && sys)
-			if(!funk.runtimeShaders.exists(shader) && !funk.initLuaShader(shader))
-			{
-				FunkinLua.luaTrace('setSpriteShader: Shader $shader is missing!', false, false, FlxColor.RED);
-				return false;
-			}
-
-			funk.addLocalCallback("addShaderToCam", function(cam:String, shader:String, ?index:String) {
+		funk.addLocalCallback("addShaderToCam", function(cam:String, shader:String, ?index:String) {
 			if (!ClientPrefs.data.shaders) return false;
 
 			if (index == null || index.length < 1)
@@ -49,50 +38,60 @@ class ShaderFunctions
 			    return false;
 			}
 
-                        var arr:Array<String> = funk.runtimeShaders.get(shader);
+            var arr:Array<String> = funk.runtimeShaders.get(shader);
 			// Both FlxGame and FlxCamera has a _filters array and a setFilters function
 			// We should maybe make an interface for that?
-                        var camera = getCam(cam);
-                        @:privateAccess {
-                                if (camera._filters == null)
-                                    camera._filters = [];
-
-                                var filter = new ShaderFilter(new FlxRuntimeShader(arr[0], arr[1]));
-                                storedFilters.set(index, filter);
-                                camera._filters.push(filter);
-                        }
-                        return true;
+            var camera = getCam(cam);
+            @:privateAccess {
+            if (camera._filters == null)
+                camera._filters = [];
+            var filter = new ShaderFilter(new FlxRuntimeShader(arr[0], arr[1]));
+            storedFilters.set(index, filter);
+            camera._filters.push(filter);
+            }
+            return true;
 			#else
-                        FunkinLua.luaTrace("addShaderToCam: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
+            FunkinLua.luaTrace("addShaderToCam: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
 			#end
 			return false;
 		});
 
-                funk.addLocalCallback("removeCamShader", function(cam:String, shader:String) {
-                        #if (!flash && MODS_ALLOWED && sys)
-                        var camera = getCam(cam);
-                        @:privateAccess {
-                                if (!storedFilters.exists(shader)) {
-                                        FunkinLua.luaTrace('removeCamShader: $shader does not exist!', false, false, FlxColor.YELLOW);
-                                        return false;
-                                }
+		funk.addLocalCallback("removeCamShader", function(cam:String, shader:String) {
+			#if (!flash && MODS_ALLOWED && sys)
+			var camera = getCam(cam);
+			@:privateAccess {
+			if(!storedFilters.exists(shader)) {
+				FunkinLua.luaTrace('removeCamShader: $shader does not exist!', false, false, FlxColor.YELLOW);
+				return false;
+			}
 
-                                if (camera._filters == null) {
-                                        FunkinLua.luaTrace('removeCamShader: camera $cam does not have any shaders!', false, false, FlxColor.YELLOW);
-                                        return false;
-                                }
+			if (camera._filters == null) {
+				FunkinLua.luaTrace('removeCamShader: camera $cam does not have any shaders!', false, false, FlxColor.YELLOW);
+				return false;
+			}
 
-                                camera._filters.remove(storedFilters.get(shader));
-                                storedFilters.remove(shader);
-                                return true;
-                        }
-                        #else
-                        FunkinLua.luaTrace('removeCamShader: Platform unsupported for Runtime Shaders!', false, false, FlxColor.RED);
-                        #end
-                        return false;
-                });
+			camera._filters.remove(storedFilters.get(shader));
+			storedFilters.remove(shader);
+			return true;
+			}
+			#else
+			FunkinLua.luaTrace('removeCamShader: Platform unsupported for Runtime Shaders!', false, false, FlxColor.RED);
+			#end
+			return false;
+		});
+		
+		funk.addLocalCallback("clearCamShaders", function(cam:String) getCam(cam).setFilters([]));
 
-                funk.addLocalCallback("clearCamShaders", function(cam:String) getCam(cam).setFilters([]));
+		funk.addLocalCallback("setSpriteShader", function(obj:String, shader:String) {
+			if(!ClientPrefs.data.shaders) return false;
+
+			#if (!flash && MODS_ALLOWED && sys)
+			if(!funk.runtimeShaders.exists(shader) && !funk.initLuaShader(shader))
+			{
+				FunkinLua.luaTrace('setSpriteShader: Shader $shader is missing!', false, false, FlxColor.RED);
+				return false;
+			}
+
 
 			var split:Array<String> = obj.split('.');
 			var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
@@ -111,6 +110,7 @@ class ShaderFunctions
 			return false;
 
 		});
+
 		funk.set("removeSpriteShader", function(obj:String) {
 			var split:Array<String> = obj.split('.');
 			var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
@@ -139,6 +139,7 @@ class ShaderFunctions
 			return null;
 			#end
 		});
+
 		funk.set("getShaderBoolArray", function(obj:String, prop:String) {
 			#if (!flash && MODS_ALLOWED && sys)
 			var shader:FlxRuntimeShader = getShader(obj);
@@ -415,6 +416,20 @@ class ShaderFunctions
 			var shader = BrightEffect.shader;
 			BrightEffect.setup(brightness, contrast);
 			PlayState.instance.modchartShader.set('bright', shader);
+            PlayState.instance.addShaderToObject(object, shader);
+        });
+
+		funk.set("addBulgeEffect", function(object:String, multi:Float = 0.0) {
+			var shader = BulgeEffect.shader;
+			BulgeEffect.setup(multi);
+			PlayState.instance.modchartShader.set('bulge', shader);
+            PlayState.instance.addShaderToObject(object, shader);
+        });
+
+		funk.set("addRadialBlurEffect", function(object:String, strength:Int = 0, x:Float = 0, y:Float = 0, zoom:Float = 1.0) {
+			var shader = RadialBlurEffect.shader;
+			RadialBlurEffect.setup(strength, x, y, zoom);
+			PlayState.instance.modchartShader.set('radialblur', shader);
             PlayState.instance.addShaderToObject(object, shader);
         });
 
