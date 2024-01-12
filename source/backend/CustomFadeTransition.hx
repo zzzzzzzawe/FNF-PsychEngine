@@ -5,7 +5,6 @@ import flixel.FlxSubState;
 
 class CustomFadeTransition extends FlxSubState {
 	public static var finishCallback:Void->Void;
-	private var leTween:FlxTween = null;
 	var isTransIn:Bool = false;
 	var transBlack:FlxSprite;
 	var transGradient:FlxSprite;
