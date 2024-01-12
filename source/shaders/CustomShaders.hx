@@ -18,7 +18,7 @@ class RadialBlurEffect extends Effect
 {
 	public var shader:ShaderFilter = new ShaderFilter(new RadialBlurShader());
 
-	public function new(strength:Int = 10, x:Float = 0.0, y:Float = 0.0, zoom:Float = 1.0){
+	public function new(strength:Float = 10, x:Float = 0.0, y:Float = 0.0, zoom:Float = 1.0){
 		super();
 		daShader = shader;
 		setStrength(strength);
@@ -26,9 +26,9 @@ class RadialBlurEffect extends Effect
 		setZoom(zoom);
 	}
 
-	public function setStrength(int:Int = 10)
+	public function setStrength(value:Float = 10)
 	{
-		shader.shader.data.strength.value = [int];
+		shader.shader.data.strength.value = [value];
 	}
 
 	public function setPos(x:Float = 0.0, y:Float = 0.0)

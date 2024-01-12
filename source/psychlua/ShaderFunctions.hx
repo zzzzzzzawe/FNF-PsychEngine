@@ -413,7 +413,7 @@ class ShaderFunctions
             PlayState.instance.addShaderToObject(object, shader.shader);
         });
 
-		funk.set("addRadialBlurEffect", function(object:String, strength:Int = 0, x:Float = 0, y:Float = 0, zoom:Float = 1.0) {
+		funk.set("addRadialBlurEffect", function(object:String, strength:Float = 0, x:Float = 0, y:Float = 0, zoom:Float = 1.0) {
 			var shader = new RadialBlurEffect(strength, x, y, zoom);
 			resetShader(shader, 'Radialblur');
             PlayState.instance.addShaderToObject(object, shader.shader);
