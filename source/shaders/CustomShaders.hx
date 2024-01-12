@@ -3,6 +3,10 @@ package shaders;
 #if CUSTOM_SHADERS_ALLOWED
 import shaders.flixel.system.FlxShader;
 import shaders.openfl.filters.ShaderFilter;
+import openfl.display.ShaderParameter;
+import openfl.display.ShaderParameterType;
+import openfl.display.BitmapData;
+import openfl.display.ShaderInput;
 import openfl.Lib;
 
 typedef ShaderEffect =
@@ -12,31 +16,30 @@ typedef ShaderEffect =
 
 class RadialBlurEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new RadialBlurShader());
+	public var shader:ShaderFilter = new ShaderFilter(new RadialBlurShader());
 
-	public static function setup(strength:Int = 10, x:Float = 0.0, y:Float = 0.0, zoom:Float = 1.0)
-	{
+	public function new(strength:Int = 10, x:Float = 0.0, y:Float = 0.0, zoom:Float = 1.0){
+		super();
+		daShader = shader;
 		setStrength(strength);
 		setPos(x, y);
 		setZoom(zoom);
 	}
 
-	public static function setStrength(int:Int = 10)
+	public function setStrength(int:Int = 10)
 	{
 		shader.shader.data.strength.value = [int];
 	}
 
-	public static function setPos(x:Float = 0.0, y:Float = 0.0)
+	public function setPos(x:Float = 0.0, y:Float = 0.0)
 	{
 			shader.shader.data.xPos.value = [x];
 			shader.shader.data.yPos.value = [y];
 	}
 
-	public static function setZoom(zoom:Float = 1.0){
+	public function setZoom(zoom:Float = 1.0){
 		shader.shader.data.zoom.value = [zoom];
 	}
-
-	public function new(){super();}
 }
 
 class RadialBlurShader extends FlxShader
@@ -46,7 +49,7 @@ class RadialBlurShader extends FlxShader
 	#pragma header
 	vec2 fragCoord = openfl_TextureCoordv*openfl_TextureSize;
     vec2 iResolution = openfl_TextureSize;
-	uniform int strength;
+	uniform float strength;
 	uniform float xPos;
 	uniform float yPos;
 	uniform float zoom; // idfk what to call this shit
@@ -63,10 +66,10 @@ class RadialBlurShader extends FlxShader
 		vec2 uv = fragCoord.xy / iResolution.xy;
 		
 		uv -= center;
-		float precompute = blurWidth * (1.0 / float(strength - 1));
+		float precompute = blurWidth * (1.14 / strength);
 		
 		vec4 color = vec4(0.0);
-		for(int i = 0; i < strength; i++)
+		for(float i = 0.0; i < strength; i++)
 		{
 			float scale = blurStart + (float(i)* precompute);
 			color += flixel_texture2D(bitmap, uv * scale + center);
@@ -86,19 +89,18 @@ class RadialBlurShader extends FlxShader
 
 class BulgeEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new BulgeShader());
+	public var shader:ShaderFilter = new ShaderFilter(new BulgeShader());
 
-	public static function setup(multi:Float = 0.0)
+	public function setValue(value:Float)
 	{
-		setMultiplier(multi);
+		shader.shader.data.value.value = [value];
 	}
 
-	public static function setMultiplier(multi:Float)
-	{
-		shader.shader.data.multi.value = [multi];
+	public function new(value:Float){
+		super();
+		daShader = shader;
+		setValue(value);
 	}
-
-	public function new(){super();}
 }
 
 // MY FIRST TIME PORTING SHADERS FROM SHADERTOY IDFK -karim
@@ -107,7 +109,7 @@ class BulgeShader extends FlxShader
 	// https://www.shadertoy.com/view/XsVSW1  with some modifications
 	@:glFragmentSource('
 	#pragma header
-    uniform float multi;
+    uniform float value;
     vec2 fragCoord = openfl_TextureCoordv*openfl_TextureSize;
     vec2 iResolution = openfl_TextureSize;
 
@@ -119,11 +121,11 @@ class BulgeShader extends FlxShader
       float a = atan(p.y, p.x);
   
     // distort
-    if(multi == 0.0) {
+    if(value == 0.0) {
         vec2 guh = fragCoord.xy/iResolution.xy - 0.5;
         r = length(guh);
     } else {
-        r = r*r* multi; // bulge
+        r = r*r* value; // bulge
     }
   
     p = r * vec2(cos(a), sin(a));
@@ -141,7 +143,7 @@ class BulgeShader extends FlxShader
 
 class BuildingEffect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new BuildingShader());
+	public var shader:ShaderFilter = new ShaderFilter(new BuildingShader());
 
 	public function new()
 	{
@@ -210,35 +212,32 @@ class ChromaticAberrationShader extends FlxShader
 
 class ChromaticAberrationEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new ChromaticAberrationShader());
+	public var shader:ShaderFilter = new ShaderFilter(new ChromaticAberrationShader());
 
-	public static function setup(offset:Float = 0.00)
-	{
-		shader.shader.data.rOffset.value = [offset];
-		shader.shader.data.gOffset.value = [0.0];
-		shader.shader.data.bOffset.value = [-offset];
-	}
 
-	public static function setChrome(chromeOffset:Float):Void
+	public function setChrome(chromeOffset:Float):Void
 	{
 		shader.shader.data.rOffset.value = [chromeOffset];
 		shader.shader.data.gOffset.value = [0.0];
 		shader.shader.data.bOffset.value = [chromeOffset * -1];
 	}
 
-	public function new(){super();}
+	public function new(chromeOffset:Float){
+		super();
+		daShader = shader;
+		setChrome(chromeOffset);
+	}
 }
 
 class ScanlineEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new Scanline());
+	public var shader:ShaderFilter = new ShaderFilter(new Scanline());
 
-	public static function setup(lockAlpha:Bool)
-	{
+	public function new(lockAlpha:Bool){
+		super();
+		daShader = shader;
 		shader.shader.data.lockAlpha.value = [lockAlpha];
 	}
-
-	public function new(){super();}
 }
 
 class Scanline extends FlxShader
@@ -267,15 +266,14 @@ class Scanline extends FlxShader
 
 class TiltshiftEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new Tiltshift());
+	public var shader:ShaderFilter = new ShaderFilter(new Tiltshift());
 
-	public static function setup(blurAmount:Float, center:Float)
-	{
+	public function new(blurAmount:Float, center:Float){
+		super();
+		daShader = shader;
 		shader.shader.data.bluramount.value = [blurAmount];
 		shader.shader.data.center.value = [center];
 	}
-
-	public function new(){super();}
 }
 
 class Tiltshift extends FlxShader
@@ -333,9 +331,12 @@ class Tiltshift extends FlxShader
 
 class GreyscaleEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new GreyscaleShader());
+	public var shader:ShaderFilter = new ShaderFilter(new GreyscaleShader());
 
-	public function new(){super();}
+	public function new(){
+		super();
+		daShader = shader;
+	}
 }
 
 class GreyscaleShader extends FlxShader
@@ -358,24 +359,28 @@ class GreyscaleShader extends FlxShader
 
 class BrightEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new BrightShader());
+	public var shader:ShaderFilter = new ShaderFilter(new BrightShader());
 
-	public static function setup(brightness:Float, contrast:Float){
-		setBrightness(brightness);
-		setContrast(contrast);
+	public  function setup(){
+		
 	}
 
-	public static function setBrightness(brightness:Float):Void
+	public function setBrightness(brightness:Float):Void
 	{
 		shader.shader.data.brightness.value = [brightness];
 	}
 	
-	public static function setContrast(contrast:Float):Void
+	public function setContrast(contrast:Float):Void
 	{
 		shader.shader.data.contrast.value = [contrast];
 	}
 
-	public function new(){super();}
+	public function new(brightness:Float, contrast:Float){
+		super();
+		daShader = shader;
+		setBrightness(brightness);
+		setContrast(contrast);
+	}
 }
 
 class BrightShader extends FlxShader
@@ -403,23 +408,22 @@ class BrightShader extends FlxShader
 
 class GrainEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new Grain());
+	public var shader:ShaderFilter = new ShaderFilter(new Grain());
 
-	public static function setup(grainsize, lumamount, lockAlpha)
+	public function update(elapsed:Float)
 	{
+		shader.shader.data.uTime.value[0] += elapsed;
+	}
+
+	public function new(grainsize:Float, lumamount:Float, lockAlpha:Bool){
+		super();
+		daShader = shader;
 		shader.shader.data.lumamount.value = [lumamount];
 		shader.shader.data.grainsize.value = [grainsize];
 		shader.shader.data.lockAlpha.value = [lockAlpha];
 		shader.shader.data.uTime.value = [FlxG.random.float(0, 8)];
 		PlayState.instance.shaderUpdates.push(update);
 	}
-
-	public static function update(elapsed:Float)
-	{
-		shader.shader.data.uTime.value[0] += elapsed;
-	}
-
-	public function new(){super();}
 }
 
 class Grain extends FlxShader
@@ -556,10 +560,11 @@ class Grain extends FlxShader
 
 class VCRDistortionEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new VCRDistortionShader());
+	public var shader:ShaderFilter = new ShaderFilter(new VCRDistortionShader());
 
-	public static function setup(glitchFactor:Float, distortion:Bool = true, perspectiveOn:Bool = true, vignetteMoving:Bool = true)
-	{
+	public function new(glitchFactor:Float, distortion:Bool = true, perspectiveOn:Bool = true, vignetteMoving:Bool = true){
+		super();
+		daShader = shader;
 		shader.shader.data.iTime.value = [0];
 		shader.shader.data.vignetteOn.value = [true];
 		shader.shader.data.perspectiveOn.value = [perspectiveOn];
@@ -571,9 +576,7 @@ class VCRDistortionEffect extends Effect
 		PlayState.instance.shaderUpdates.push(update);
 	}
 
-	public function new(){super();}
-
-	public static function update(elapsed:Float)
+	public function update(elapsed:Float)
 	{
 		shader.shader.data.iTime.value[0] += elapsed;
 		shader.shader.data.iResolution.value = [Lib.current.stage.stageWidth, Lib.current.stage.stageHeight];
@@ -734,17 +737,16 @@ class VCRDistortionShader extends FlxShader // https://www.shadertoy.com/view/ld
 
 class ThreeDEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new ThreeDShader());
+	public var shader:ShaderFilter = new ShaderFilter(new ThreeDShader());
 
-	public static function setup(xrotation:Float = 0, yrotation:Float = 0, zrotation:Float = 0, depth:Float = 0)
-	{
+	public function new(xrotation:Float = 0, yrotation:Float = 0, zrotation:Float = 0, depth:Float = 0){
+		super();
+		daShader = shader;
 		shader.shader.data.xrot.value = [xrotation];
 		shader.shader.data.yrot.value = [yrotation];
 		shader.shader.data.zrot.value = [zrotation];
 		shader.shader.data.dept.value = [depth];
 	}
-
-	public function new(){super();}
 }
 
 class ThreeDShader extends FlxShader
@@ -831,15 +833,14 @@ void main() {
 
 class FuckingTriangleEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new FuckingTriangle());
+	public var shader:ShaderFilter = new ShaderFilter(new FuckingTriangle());
 
-	public static function setup(rotx:Float, roty:Float)
-	{
+	public function new(rotx:Float, roty:Float){
+		super();
+		daShader = shader;
 		shader.shader.data.rotX.value = [rotx];
 		shader.shader.data.rotY.value = [roty];
 	}
-
-	public function new(){super();}
 }
 
 class FuckingTriangle extends FlxShader
@@ -981,14 +982,14 @@ void main()
 
 class BloomEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new BloomShader());
+	public var shader:ShaderFilter = new ShaderFilter(new BloomShader());
 
-	public static function setup(blurSize:Float, intensity:Float)
-	{
+	public function new(blurSize:Float, intensity:Float){
+		super();
+		daShader = shader;
 		shader.shader.data.blurSize.value = [blurSize];
 		shader.shader.data.intensity.value = [intensity];
 	}
-	public function new(){super();}
 }
 
 class BloomShader extends FlxShader
@@ -1046,14 +1047,15 @@ class BloomShader extends FlxShader
 
 class GlitchEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new GlitchShader());
+	public var shader:ShaderFilter = new ShaderFilter(new GlitchShader());
 
-	public static var waveSpeed(default, set):Float = 0;
-	public static var waveFrequency(default, set):Float = 0;
-	public static var waveAmplitude(default, set):Float = 0;
+	public var waveSpeed(default, set):Float = 0;
+	public var waveFrequency(default, set):Float = 0;
+	public var waveAmplitude(default, set):Float = 0;
 
-	public static function setup(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float):Void
-	{
+	public function new(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float){
+		super();
+		daShader = shader;
 		shader.shader.data.uTime.value = [0];
 		waveSpeed = WaveSpeed;
 		waveFrequency = WaveFrequency;
@@ -1061,28 +1063,26 @@ class GlitchEffect extends Effect
 		PlayState.instance.shaderUpdates.push(update);
 	}
 
-	public function new(){super();}
-
-	public static function update(elapsed:Float):Void
+	public function update(elapsed:Float):Void
 	{
 		shader.shader.data.uTime.value[0] += elapsed;
 	}
 
-	static function set_waveSpeed(v:Float):Float
+	function set_waveSpeed(v:Float):Float
 	{
 		waveSpeed = v;
 		shader.shader.data.uSpeed.value = [waveSpeed];
 		return v;
 	}
 
-	static function set_waveFrequency(v:Float):Float
+	function set_waveFrequency(v:Float):Float
 	{
 		waveFrequency = v;
 		shader.shader.data.uFrequency.value = [waveFrequency];
 		return v;
 	}
 
-	static function set_waveAmplitude(v:Float):Float
+	function set_waveAmplitude(v:Float):Float
 	{
 		waveAmplitude = v;
 		shader.shader.data.uWaveAmplitude.value = [waveAmplitude];
@@ -1092,14 +1092,15 @@ class GlitchEffect extends Effect
 
 class DistortBGEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new DistortBGShader());
+	public var shader:ShaderFilter = new ShaderFilter(new DistortBGShader());
 
-	public static var waveSpeed(default, set):Float = 0;
-	public static var waveFrequency(default, set):Float = 0;
-	public static var waveAmplitude(default, set):Float = 0;
+	public var waveSpeed(default, set):Float = 0;
+	public var waveFrequency(default, set):Float = 0;
+	public var waveAmplitude(default, set):Float = 0;
 
-	public static function setup(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float):Void
-	{
+	public function new(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float){
+		super();
+		daShader = shader;
 		waveSpeed = WaveSpeed;
 		waveFrequency = WaveFrequency;
 		waveAmplitude = WaveAmplitude;
@@ -1107,28 +1108,26 @@ class DistortBGEffect extends Effect
 		PlayState.instance.shaderUpdates.push(update);
 	}
 
-	public function new(){super();}
-
-	public static function update(elapsed:Float):Void
+	public function update(elapsed:Float):Void
 	{
 		shader.shader.data.uTime.value[0] += elapsed;
 	}
 
-	static function set_waveSpeed(v:Float):Float
+	function set_waveSpeed(v:Float):Float
 	{
 		waveSpeed = v;
 		shader.shader.data.uSpeed.value = [waveSpeed];
 		return v;
 	}
 
-	static function set_waveFrequency(v:Float):Float
+	function set_waveFrequency(v:Float):Float
 	{
 		waveFrequency = v;
 		shader.shader.data.uFrequency.value = [waveFrequency];
 		return v;
 	}
 
-	static function set_waveAmplitude(v:Float):Float
+	function set_waveAmplitude(v:Float):Float
 	{
 		waveAmplitude = v;
 		shader.shader.data.uWaveAmplitude.value = [waveAmplitude];
@@ -1138,14 +1137,15 @@ class DistortBGEffect extends Effect
 
 class PulseEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new PulseShader());
+	public var shader:ShaderFilter = new ShaderFilter(new PulseShader());
 
-	public static var waveSpeed(default, set):Float = 0;
-	public static var waveFrequency(default, set):Float = 0;
-	public static var waveAmplitude(default, set):Float = 0;
+	public var waveSpeed(default, set):Float = 0;
+	public var waveFrequency(default, set):Float = 0;
+	public var waveAmplitude(default, set):Float = 0;
 
-	public static function setup(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float)
-	{
+	public function new(WaveSpeed:Float, WaveFrequency:Float, WaveAmplitude:Float){
+		super();
+		daShader = shader;
 		waveSpeed = WaveSpeed;
 		waveFrequency = WaveFrequency;
 		waveAmplitude = WaveAmplitude;
@@ -1154,28 +1154,26 @@ class PulseEffect extends Effect
 		PlayState.instance.shaderUpdates.push(update);
 	}
 
-	public function new(){super();}
-
-	public static function update(elapsed:Float):Void
+	public function update(elapsed:Float):Void
 	{
 		shader.shader.data.uTime.value[0] += elapsed;
 	}
 
-	static function set_waveSpeed(v:Float):Float
+	function set_waveSpeed(v:Float):Float
 	{
 		waveSpeed = v;
 		shader.shader.data.uSpeed.value = [waveSpeed];
 		return v;
 	}
 
-	static function set_waveFrequency(v:Float):Float
+	function set_waveFrequency(v:Float):Float
 	{
 		waveFrequency = v;
 		shader.shader.data.uFrequency.value = [waveFrequency];
 		return v;
 	}
 
-	static function set_waveAmplitude(v:Float):Float
+	function set_waveAmplitude(v:Float):Float
 	{
 		waveAmplitude = v;
 		shader.shader.data.uWaveAmplitude.value = [waveAmplitude];
@@ -1185,9 +1183,12 @@ class PulseEffect extends Effect
 
 class InvertColorsEffect extends Effect
 {
-	public static var shader:ShaderFilter = new ShaderFilter(new InvertShader());
+	public var shader:ShaderFilter = new ShaderFilter(new InvertShader());
 
-	public function new(){super();}
+	public function new(){
+		super();
+		daShader = shader;
+	}
 }
 
 class GlitchShader extends FlxShader
@@ -1367,10 +1368,268 @@ class PulseShader extends FlxShader
 
 class Effect
 {
-	public static function setValue(shader:FlxShader, variable:String, value:Float)
-	{
-		Reflect.setProperty(Reflect.getProperty(shader, 'shader'), variable, [value]);
-	}
+	public var daShader:ShaderFilter;
+	// stolen from FlxRuntimeShader-
+
+	/**
+	 * Modify a float parameter of the shader.
+	 *
+	 * @param name The name of the parameter to modify.
+	 * @param value The new value to use.
+	 */
+	 public function setFloat(name:String, value:Float):Void
+		{
+			var prop:ShaderParameter<Float> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader float property "$name" not found.');
+				return;
+			}
+	
+			prop.value = [value];
+		}
+	
+		/**
+		 * Retrieve a float parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getFloat(name:String):Null<Float>
+		{
+			var prop:ShaderParameter<Float> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader float property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value[0];
+		}
+	
+		/**
+		 * Modify a float array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setFloatArray(name:String, value:Array<Float>):Void
+		{
+			var prop:ShaderParameter<Float> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader float[] property "$name" not found.');
+				return;
+			}
+	
+			prop.value = value;
+		}
+	
+		/**
+		 * Retrieve a float array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getFloatArray(name:String):Null<Array<Float>>
+		{
+			var prop:ShaderParameter<Float> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader float[] property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value;
+		}
+	
+		/**
+		 * Modify an integer parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setInt(name:String, value:Int):Void
+		{
+			var prop:ShaderParameter<Int> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader int property "$name" not found.');
+				return;
+			}
+	
+			prop.value = [value];
+		}
+	
+		/**
+		 * Retrieve an integer parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getInt(name:String):Null<Int>
+		{
+			var prop:ShaderParameter<Int> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader int property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value[0];
+		}
+	
+		/**
+		 * Modify an integer array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setIntArray(name:String, value:Array<Int>):Void
+		{
+			var prop:ShaderParameter<Int> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader int[] property "$name" not found.');
+				return;
+			}
+	
+			prop.value = value;
+		}
+	
+		/**
+		 * Retrieve an integer array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getIntArray(name:String):Null<Array<Int>>
+		{
+			var prop:ShaderParameter<Int> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader int[] property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value;
+		}
+	
+		/**
+		 * Modify a bool parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setBool(name:String, value:Bool):Void
+		{
+			var prop:ShaderParameter<Bool> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader bool property "$name" not found.');
+				return;
+			}
+	
+			prop.value = [value];
+		}
+	
+		/**
+		 * Retrieve a bool parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getBool(name:String):Null<Bool>
+		{
+			var prop:ShaderParameter<Bool> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader bool property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value[0];
+		}
+	
+		/**
+		 * Modify a bool array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setBoolArray(name:String, value:Array<Bool>):Void
+		{
+			var prop:ShaderParameter<Bool> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader bool[] property "$name" not found.');
+				return;
+			}
+	
+			prop.value = value;
+		}
+	
+		/**
+		 * Retrieve a bool array parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 */
+		public function getBoolArray(name:String):Null<Array<Bool>>
+		{
+			var prop:ShaderParameter<Bool> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader bool[] property "$name" not found.');
+				return null;
+			}
+	
+			return prop.value;
+		}
+	
+		/**
+		 * Modify a bitmap data parameter of the shader.
+		 *
+		 * @param name The name of the parameter to modify.
+		 * @param value The new value to use.
+		 */
+		public function setSampler2D(name:String, value:BitmapData):Void
+		{
+			var prop:ShaderInput<BitmapData> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader sampler2D property "$name" not found.');
+				return;
+			}
+	
+			prop.input = value;
+		}
+	
+		/**
+		 * Retrieve a bitmap data parameter of the shader.
+		 *
+		 * @param name The name of the parameter to retrieve.
+		 * @return The value of the parameter.
+		 */
+		public function getSampler2D(name:String):Null<BitmapData>
+		{
+			var prop:ShaderInput<BitmapData> = Reflect.field(daShader.shader.data, name);
+	
+			if (prop == null)
+			{
+				FlxG.log.warn('Shader sampler2D property "$name" not found.');
+				return null;
+			}
+	
+			return prop.input;
+		}
 
 	public function new(){}
 }
