@@ -136,9 +136,7 @@ class CopyState extends MusicBeatState {
     public static function getFileBytes(file:String):ByteArray {
         switch(Path.extension(file)) {
             case 'otf' | 'ttf':
-                var fileBytes:haxe.io.Bytes = cast OpenflAssets.getFont(file);
-                var md5 = haxe.crypto.Md5.encode(haxe.crypto.Md5.make(fileBytes).toString());
-                return cast md5;
+                return cast OpenflAssets.getFont(file);
             default:
                 return OpenflAssets.getBytes(file);
         }
