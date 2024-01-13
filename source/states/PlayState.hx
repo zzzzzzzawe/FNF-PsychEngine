@@ -752,8 +752,9 @@ class PlayState extends MusicBeatState
 			spr.y += newText.height + 2;
 		});
 		luaDebugGroup.add(newText);
-
+		#if sys
 		Sys.println(text);
+		#end
 	}
 	#end
 

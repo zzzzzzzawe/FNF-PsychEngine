@@ -1,5 +1,5 @@
 package options;
-
+import options.Option;
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	public function new()
