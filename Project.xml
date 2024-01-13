@@ -20,8 +20,8 @@
 	
 	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
 
-	<define name="MODS_ALLOWED" if="desktop || mobile" />
-	<define name="HSCRIPT_ALLOWED" if="desktop || mobile" />
+	<define name="MODS_ALLOWED" if="desktop || mobile || emscripten" />
+	<define name="HSCRIPT_ALLOWED" if="desktop || mobile || web" />
 	<define name="LUA_ALLOWED" if="desktop || mobile" unless="hl"/>
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="DISCORD_ALLOWED" if="desktop" unless="hl"/>
@@ -97,7 +97,7 @@
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED"/>
-	<haxelib name="flxanimate" unless="web"/>
+	<haxelib name="flxanimate"/>
 	<haxelib name="tjson"/>
 
 	<!-- Android Specific-->
