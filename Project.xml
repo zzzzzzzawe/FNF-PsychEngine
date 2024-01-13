@@ -61,6 +61,9 @@
 
 	<!-- __________________________ Game Assets & Etc. __________________________ -->
 
+	<define name="PRELOAD_ALL" unless="web" />
+	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
+
 	<!-- Assets -->
 	<assets path="assets/fonts" />
 	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
@@ -76,8 +79,16 @@
 	</section>
 
 	<library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
+
+	<section if="PRELOAD_ALL">
 	<library name="songs"         preload="true" />
 	<library name="week_assets"   preload="true" />
+	</section>
+
+	<section if="NO_PRELOAD_ALL">
+	<library name="songs"         preload="false" />
+	<library name="week_assets"   preload="false" />
+	</section>
 
 	<define name="CHECK_FOR_UPDATES" if="officialBuild" unless="ios"/>
 
