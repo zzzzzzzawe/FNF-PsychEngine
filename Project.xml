@@ -79,7 +79,7 @@
 	<library name="songs"         preload="true" />
 	<library name="week_assets"   preload="true" />
 
-	<define name="CHECK_FOR_UPDATES" if="officialBuild"/>
+	<define name="CHECK_FOR_UPDATES" if="officialBuild" unless="iphonesim || iphoneos"/>
 
 	<section if="MODS_ALLOWED">
 		<assets path='example_mods' rename='mods' embed='false'/>
