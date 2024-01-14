@@ -414,7 +414,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		// "GLOBAL" SCRIPTS
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+		#if (LUA_ALLOWED || HSCRIPT_ALLOWED && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
@@ -605,7 +605,7 @@ class PlayState extends MusicBeatState
 		}
 
 		// SONG SPECIFIC SCRIPTS
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+		#if (LUA_ALLOWED || HSCRIPT_ALLOWED && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
@@ -853,7 +853,11 @@ class PlayState extends MusicBeatState
 		#end
 		{
 			scriptFile = Paths.getSharedPath(scriptFile);
+                        #if sys
 			if(FileSystem.exists(scriptFile))
+                        #else
+                        if(Assets.exists(scriptFile))
+                        #end
 				doPush = true;
 		}
 
@@ -3375,7 +3379,11 @@ class PlayState extends MusicBeatState
 		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
 		#end
 
-		if(FileSystem.exists(scriptToLoad))
+		#if sys
+                if(FileSystem.exists(scriptToLoad))
+                #else
+                if(Assets.exists(scriptToLoad))
+                #end
 		{
 			if (SScript.global.exists(scriptToLoad)) return false;
 
