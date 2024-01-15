@@ -449,7 +449,7 @@ class Paths
 			retKey = ((path == 'songs') ? 'songs:' : '') + getPath('$retKey.$SOUND_EXT', SOUND, library);
 			if(Assets.exists(retKey, SOUND))
 			{
-				currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(retKey));
+				currentTrackedSounds.set(gottenPath, Assets.getSound(retKey));
 				//trace('precached vanilla sound: $retKey');
 			}
 		}
