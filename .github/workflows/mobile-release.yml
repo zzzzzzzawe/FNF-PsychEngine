@@ -141,8 +141,8 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          automatic_release_tag: "0.7.2h"
-          title: "0.7.2h"
+          automatic_release_tag: "0.7.3"
+          title: "0.7.3"
           files: |
             /home/runner/*.apk
             /home/runner/*.zip
