@@ -12,6 +12,7 @@ import states.TitleState;
 import haxe.io.Path;
 #if (target.threaded)
 import sys.thread.Thread;
+import sys.thread.Mutex;
 #end
 
 class CopyState extends MusicBeatState {
@@ -35,6 +36,7 @@ class CopyState extends MusicBeatState {
         'frag',
         'vert'
     ];
+    #if (target.threaded) var mutex:Mutex = new Mutex(); #end
     
     override function create() {
         locatedFiles = [];
@@ -63,14 +65,14 @@ class CopyState extends MusicBeatState {
             loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
             add(loadedText);
     
-            #if (target.threaded) Thread.create(() -> {#end
+            #if (target.threaded) Thread.create(() -> { mutex.acquire(); #end
             var ticks:Int = 15;
             if(maxLoopTimes <= 15)
                 ticks = 1;
             copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
             add(copyLoop);
             copyLoop.start();
-            #if (target.threaded) }); #end
+            #if (target.threaded) mutex.release(); }); #end
         } else {
             TitleState.ignoreCopy = true;
             FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
