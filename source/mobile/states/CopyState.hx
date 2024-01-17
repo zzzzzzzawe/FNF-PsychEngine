@@ -26,6 +26,7 @@ class CopyState extends MusicBeatState {
     var loopTimes:Int = 0;
     var failedFiles:Array<String> = [];
     var canUpdate:Bool = true;
+    var shouldCopy:Bool = false;
     static final textFilesExtensions:Array<String> = [
         'txt',
         'xml',
@@ -41,6 +42,7 @@ class CopyState extends MusicBeatState {
         maxLoopTimes = 0;
         checkExistingFiles();
         if(maxLoopTimes > 0){
+            shouldCopy = true;
             FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
             "Notice!");
@@ -79,34 +81,36 @@ class CopyState extends MusicBeatState {
     }
 
     override function update(elapsed:Float) {
-        if(copyLoop.finished && canUpdate){
-            if(!checkExistingFiles()){
-                FlxG.resetState();
-                return;
+        if(shouldCopy) {
+            if(copyLoop.finished && canUpdate) {
+                if(!checkExistingFiles()){
+                    FlxG.resetState();
+                    return;
+                }
+                if(failedFiles.length > 0){
+                    FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
+                    if(!FileSystem.exists('logs'))
+                        FileSystem.createDirectory('logs');
+                    File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
+                }
+                canUpdate = false;
+        		FlxG.sound.play(Paths.sound('confirmMenu'));
+                var black = new FlxSprite(0,0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+                black.alpha = 0;
+                add(black);
+                FlxTween.tween(black, {alpha: 1}, 0.9, {
+                    onComplete: function(twn:FlxTween) {
+                        System.gc();
+                        TitleState.ignoreCopy = true;
+                        FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
+                        MusicBeatState.switchState(new TitleState());
+                    }, ease: FlxEase.linear, startDelay: 0.4});
             }
-            if(failedFiles.length > 0){
-                FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
-                if(!FileSystem.exists('logs'))
-                    FileSystem.createDirectory('logs');
-                File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
-            }
-            canUpdate = false;
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-            var black = new FlxSprite(0,0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-            black.alpha = 0;
-            add(black);
-            FlxTween.tween(black, {alpha: 1}, 0.9, {
-                onComplete: function(twn:FlxTween) {
-                    System.gc();
-                    TitleState.ignoreCopy = true;
-                    FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
-                    MusicBeatState.switchState(new TitleState());
-                }, ease: FlxEase.linear, startDelay: 0.4});
+            if(maxLoopTimes == 0)
+                loadedText.text = "Completed!";
+            else
+                loadedText.text = '$loopTimes/$maxLoopTimes';
         }
-        if(maxLoopTimes == 0)
-            loadedText.text = "Completed!";
-        else
-            loadedText.text = '$loopTimes/$maxLoopTimes';
         super.update(elapsed);
     }
 

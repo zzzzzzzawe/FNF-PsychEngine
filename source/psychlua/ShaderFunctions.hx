@@ -430,9 +430,9 @@ class ShaderFunctions
         });
 
 		funk.set("tweenEffectFloat", function(effect:String, floatToTween:String, duration:Float, from:Float, to:Float) {
-			var shader:Effect = PlayState.instance.modchartShader.get(formatShaderTag(effect));
+			var shader:Effect = PlayState.instance.modchartShader.get(effect);
 			if(shader == null){
-				FunkinLua.luaTrace("tweenEffectInt: the effect " + formatShaderTag(effect) + " is not added to the game", false, false, FlxColor.RED);
+				FunkinLua.luaTrace("tweenEffectInt: the effect " + effect + " is not added to the game", false, false, FlxColor.RED);
 				return;
 			}
 			FlxTween.num(from, to, duration, function(newValue) {
@@ -441,9 +441,9 @@ class ShaderFunctions
 		});
 
 		funk.set("tweenEffectInt", function(effect:String, intToTween:String, duration:Float, from:Int, to:Int) {
-			var shader:Effect = PlayState.instance.modchartShader.get(formatShaderTag(effect));
+			var shader:Effect = PlayState.instance.modchartShader.get(effect);
 			if(shader == null){
-				FunkinLua.luaTrace("tweenEffectInt: the effect " + formatShaderTag(effect) + " is not added to the game", false, false, FlxColor.RED);
+				FunkinLua.luaTrace("tweenEffectInt: the effect " + effect + " is not added to the game", false, false, FlxColor.RED);
 				return;
 			}
 			FlxTween.num(from, to, duration, function(newValue) {

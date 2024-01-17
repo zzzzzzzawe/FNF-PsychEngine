@@ -228,7 +228,7 @@ class ChromaticAberrationEffect extends Effect
 		}
 	}
 
-	public function new(chromeOffset:Float, ?redOffset:Float = 0.0, ?greenOffset:Float = 0.0, ?blueOffset:Float = 0.0){
+	public function new(globalChromeOffset:Float, ?redOffset:Float = 0.0, ?greenOffset:Float = 0.0, ?blueOffset:Float = 0.0){
 		super();
 		daShader = shader;
 		if(globalChromeOffset != 0.0){

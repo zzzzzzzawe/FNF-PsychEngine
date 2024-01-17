@@ -1,11 +1,9 @@
 package mobile.flixel;
 
-import mobile.flixel.FlxButton;
-import mobile.flixel.FlxButton.ButtonsStates;
 import flixel.graphics.frames.FlxTileFrames;
+import mobile.flixel.input.FlxMobileInputManager;
+import mobile.flixel.FlxButton;
 import flixel.math.FlxPoint;
-import haxe.ds.Map;
-import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 /**
  * A gamepad.
@@ -14,7 +12,7 @@ import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
  * @original author Ka Wing Chin & Mihai Alexandru
  * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
  */
-class FlxVirtualPad extends FlxButtonGroup
+class FlxVirtualPad extends FlxMobileInputManager
 {
 	public var buttonLeft:FlxButton = new FlxButton(0, 0);
 	public var buttonUp:FlxButton = new FlxButton(0, 0);
@@ -38,36 +36,6 @@ class FlxVirtualPad extends FlxButtonGroup
 	public var buttonZ:FlxButton = new FlxButton(0, 0);
 	public var buttonP:FlxButton = new FlxButton(0, 0);
 
-	public var buttonsMap:Map<FlxMobileInputID, FlxButton> = new Map<FlxMobileInputID, FlxButton>();
-	// kill me -Karim
-	public var buttons:Array<FlxMobileInputID> = [
-		FlxMobileInputID.A,
-		FlxMobileInputID.B,
-		FlxMobileInputID.C,
-		FlxMobileInputID.D,
-		FlxMobileInputID.E,
-		FlxMobileInputID.F,
-		FlxMobileInputID.G,
-		FlxMobileInputID.S,
-		FlxMobileInputID.V,
-		FlxMobileInputID.X,
-		FlxMobileInputID.Y,
-		FlxMobileInputID.Z,
-		FlxMobileInputID.P,
-		FlxMobileInputID.UP,
-		FlxMobileInputID.UP2,
-		FlxMobileInputID.DOWN,
-		FlxMobileInputID.DOWN2,
-		FlxMobileInputID.LEFT,
-		FlxMobileInputID.LEFT2,
-		FlxMobileInputID.RIGHT,
-		FlxMobileInputID.RIGHT2,
-		FlxMobileInputID.noteUP,
-		FlxMobileInputID.noteDOWN,
-		FlxMobileInputID.noteLEFT,
-		FlxMobileInputID.noteRIGHT
-	];
-
 	/**
 	 * Create a gamepad.
 	 *
@@ -89,6 +57,36 @@ class FlxVirtualPad extends FlxButtonGroup
 		buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
 
 		scrollFactor.set();
+
+		// DPad Buttons
+		trackedButtons.set(FlxMobileInputID.UP, buttonUp);
+		trackedButtons.set(FlxMobileInputID.UP2, buttonUp2);
+		trackedButtons.set(FlxMobileInputID.DOWN, buttonDown);
+		trackedButtons.set(FlxMobileInputID.DOWN2, buttonDown2);
+		trackedButtons.set(FlxMobileInputID.LEFT, buttonLeft);
+		trackedButtons.set(FlxMobileInputID.LEFT2, buttonLeft2);
+		trackedButtons.set(FlxMobileInputID.RIGHT, buttonRight);
+		trackedButtons.set(FlxMobileInputID.RIGHT2, buttonRight2);
+
+		trackedButtons.set(FlxMobileInputID.noteUP, buttonUp);
+		trackedButtons.set(FlxMobileInputID.noteRIGHT, buttonRight);
+		trackedButtons.set(FlxMobileInputID.noteLEFT, buttonLeft);
+		trackedButtons.set(FlxMobileInputID.noteDOWN, buttonDown);
+
+		// Actions buttons
+		trackedButtons.set(FlxMobileInputID.A, buttonA);
+		trackedButtons.set(FlxMobileInputID.B, buttonB);
+		trackedButtons.set(FlxMobileInputID.C, buttonC);
+		trackedButtons.set(FlxMobileInputID.D, buttonD);
+		trackedButtons.set(FlxMobileInputID.E, buttonE);
+		trackedButtons.set(FlxMobileInputID.F, buttonF);
+		trackedButtons.set(FlxMobileInputID.G, buttonG);
+		trackedButtons.set(FlxMobileInputID.S, buttonS);
+		trackedButtons.set(FlxMobileInputID.V, buttonV);
+		trackedButtons.set(FlxMobileInputID.X, buttonX);
+		trackedButtons.set(FlxMobileInputID.Y, buttonY);
+		trackedButtons.set(FlxMobileInputID.Z, buttonZ);
+		trackedButtons.set(FlxMobileInputID.P, buttonP);
 
 		switch (DPad)
 		{
@@ -234,7 +232,6 @@ class FlxVirtualPad extends FlxButtonGroup
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00));
 			case NONE: // do nothing
 		}
-		updateMap();
 	}
 
 	/*
@@ -284,144 +281,6 @@ class FlxVirtualPad extends FlxButtonGroup
 		button.tag = Graphic.toUpperCase();
 		return button;
 	}
-
-	/**
-	* Check to see if the button was pressed.
-	*
-	* @param	button 	A button ID
-	* @return	Whether at least one of the buttons passed was pressed.
-	*/
-	public inline function buttonPressed(button:FlxMobileInputID):Bool {
-		return anyPressed([button]);
-	}
-
-	/**
-	* Check to see if the button was just pressed.
-	*
-	* @param	button 	A button ID
-	* @return	Whether at least one of the buttons passed was just pressed.
-	*/
-	public inline function buttonJustPressed(button:FlxMobileInputID):Bool {
-		return anyJustPressed([button]);
-	}
-	
-	/**
-	* Check to see if the button was just released.
-	*
-	* @param	button 	A button ID
-	* @return	Whether at least one of the buttons passed was just released.
-	*/
-	public inline function buttonJustReleased(button:FlxMobileInputID):Bool {
-		return anyJustReleased([button]);
-	}
-
-	/**
-	* Check to see if at least one button from an array of buttons is pressed.
-	*
-	* @param	buttonsArray 	An array of buttos names
-	* @return	Whether at least one of the buttons passed in is pressed.
-	*/
-	public inline function anyPressed(buttonsArray:Array<FlxMobileInputID>):Bool {
-		return checkButtonArrayState(buttonsArray, PRESSED);
-	}
-
-	/**
-	* Check to see if at least one button from an array of buttons was just pressed.
-	*
-	* @param	buttonsArray 	An array of buttons names
-	* @return	Whether at least one of the buttons passed was just pressed.
-	*/
-	public inline function anyJustPressed(buttonsArray:Array<FlxMobileInputID>):Bool {
-		return checkButtonArrayState(buttonsArray, JUST_PRESSED);
-	}
-	
-	/**
-	* Check to see if at least one button from an array of buttons was just released.
-	*
-	* @param	buttonsArray 	An array of button names
-	* @return	Whether at least one of the buttons passed was just released.
-	*/
-	public inline function anyJustReleased(buttonsArray:Array<FlxMobileInputID>):Bool {
-		return checkButtonArrayState(buttonsArray, JUST_RELEASED);
-	}
-
-	/**
-	 * Check the status of a single button
-	 *
-	 * @param	Button		button to be checked.
-	 * @param	state		The button state to check for.
-	 * @return	Whether the provided key has the specified status.
-	 */
-	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
-		switch(button){
-			case FlxMobileInputID.ANY:
-				for(each in buttons){
-					checkStatusUnsafe(each, state);
-				}
-			case FlxMobileInputID.NONE:
-				return false;
-	
-			default:
-				if(this.buttonsMap.exists(button))
-					return checkStatusUnsafe(button, state);
-		}
-		return false;
-	}
-
-	/**
-	* Helper function to check the status of an array of buttons
-	*
-	* @param	Buttons	An array of buttons as Strings
-	* @param	state		The button state to check for
-	* @return	Whether at least one of the buttons has the specified status
-	*/
-	function checkButtonArrayState(Buttons:Array<FlxMobileInputID>, state:ButtonsStates = JUST_PRESSED):Bool {
-		if(Buttons == null)
-			return false;
-	
-		for(button in Buttons)
-			if(checkStatus(button, state))
-				return true;
-
-		return false;
-	}
-
-	function checkStatusUnsafe(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
-		return this.buttonsMap.get(button).hasState(state);
-	}
-
-	function updateMap() {
-		buttonsMap.clear();
-		// DPad Buttons
-		buttonsMap.set(FlxMobileInputID.UP, buttonUp);
-		buttonsMap.set(FlxMobileInputID.UP2, buttonUp2);
-		buttonsMap.set(FlxMobileInputID.DOWN, buttonDown);
-		buttonsMap.set(FlxMobileInputID.DOWN2, buttonDown2);
-		buttonsMap.set(FlxMobileInputID.LEFT, buttonLeft);
-		buttonsMap.set(FlxMobileInputID.LEFT2, buttonLeft2);
-		buttonsMap.set(FlxMobileInputID.RIGHT, buttonRight);
-		buttonsMap.set(FlxMobileInputID.RIGHT2, buttonRight2);
-
-		buttonsMap.set(FlxMobileInputID.noteUP, buttonUp);
-		buttonsMap.set(FlxMobileInputID.noteRIGHT, buttonRight);
-		buttonsMap.set(FlxMobileInputID.noteLEFT, buttonLeft);
-		buttonsMap.set(FlxMobileInputID.noteDOWN, buttonDown);
-
-		// Actions buttons
-		buttonsMap.set(FlxMobileInputID.A, buttonA);
-		buttonsMap.set(FlxMobileInputID.B, buttonB);
-		buttonsMap.set(FlxMobileInputID.C, buttonC);
-		buttonsMap.set(FlxMobileInputID.D, buttonD);
-		buttonsMap.set(FlxMobileInputID.E, buttonE);
-		buttonsMap.set(FlxMobileInputID.F, buttonF);
-		buttonsMap.set(FlxMobileInputID.G, buttonG);
-		buttonsMap.set(FlxMobileInputID.S, buttonS);
-		buttonsMap.set(FlxMobileInputID.V, buttonV);
-		buttonsMap.set(FlxMobileInputID.X, buttonX);
-		buttonsMap.set(FlxMobileInputID.Y, buttonY);
-		buttonsMap.set(FlxMobileInputID.Z, buttonZ);
-		buttonsMap.set(FlxMobileInputID.P, buttonP);
-	}
 }
 
 enum FlxDPadMode
@@ -458,6 +317,3 @@ enum FlxActionMode
 	B_C;
 	NONE;
 }
-
-typedef FlxButtonGroup = FlxTypedSpriteGroup<FlxButton>;
-
