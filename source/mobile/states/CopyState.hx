@@ -10,7 +10,6 @@ import openfl.utils.ByteArray;
 import openfl.system.System;
 import states.TitleState;
 import haxe.io.Path;
-import haxe.Json;
 #if (target.threaded)
 import sys.thread.Thread;
 #end
@@ -42,6 +41,7 @@ class CopyState extends MusicBeatState {
         maxLoopTimes = 0;
         checkExistingFiles();
         if(maxLoopTimes > 0){
+            trace(locatedFiles);
             shouldCopy = true;
             FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
@@ -64,8 +64,8 @@ class CopyState extends MusicBeatState {
             add(loadedText);
     
             #if (target.threaded) Thread.create(() -> {#end
-            var ticks:Int = 25;
-            if(maxLoopTimes <= 25)
+            var ticks:Int = 15;
+            if(maxLoopTimes <= 15)
                 ticks = 1;
             copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
             add(copyLoop);
@@ -81,7 +81,7 @@ class CopyState extends MusicBeatState {
     }
 
     override function update(elapsed:Float) {
-        if(shouldCopy) {
+        if(shouldCopy && copyLoop != null) {
             if(copyLoop.finished && canUpdate) {
                 if(!checkExistingFiles()){
                     FlxG.resetState();
