@@ -136,8 +136,8 @@ class CopyState extends MusicBeatState {
     public static function getFileBytes(file:String):ByteArray {
         switch(Path.extension(file)) {
             case 'otf' | 'ttf':
-                var font = OpenflAssets.getFont(Font).fontName;
-                return OpenflAssets.getBytes(font);
+                var font = OpenflAssets.getFont(file).fontName;
+                return OpenflAssets.getBytes(file);
             default:
                 return OpenflAssets.getBytes(file);
         }
