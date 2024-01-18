@@ -14,27 +14,27 @@ import flixel.math.FlxPoint;
  */
 class FlxVirtualPad extends FlxMobileInputManager
 {
-	public var buttonLeft:FlxButton = new FlxButton(0, 0);
-	public var buttonUp:FlxButton = new FlxButton(0, 0);
-	public var buttonRight:FlxButton = new FlxButton(0, 0);
-	public var buttonDown:FlxButton = new FlxButton(0, 0);
-	public var buttonLeft2:FlxButton = new FlxButton(0, 0);
-	public var buttonUp2:FlxButton = new FlxButton(0, 0);
-	public var buttonRight2:FlxButton = new FlxButton(0, 0);
-	public var buttonDown2:FlxButton = new FlxButton(0, 0);
-	public var buttonA:FlxButton = new FlxButton(0, 0);
-	public var buttonB:FlxButton = new FlxButton(0, 0);
-	public var buttonC:FlxButton = new FlxButton(0, 0);
-	public var buttonD:FlxButton = new FlxButton(0, 0);
-	public var buttonE:FlxButton = new FlxButton(0, 0);
-    public var buttonF:FlxButton = new FlxButton(0, 0);
-    public var buttonG:FlxButton = new FlxButton(0, 0);
-    public var buttonS:FlxButton = new FlxButton(0, 0);
-	public var buttonV:FlxButton = new FlxButton(0, 0);
-	public var buttonX:FlxButton = new FlxButton(0, 0);
-	public var buttonY:FlxButton = new FlxButton(0, 0);
-	public var buttonZ:FlxButton = new FlxButton(0, 0);
-	public var buttonP:FlxButton = new FlxButton(0, 0);
+	public var buttonLeft:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.LEFT, FlxMobileInputID.noteLEFT]);
+	public var buttonUp:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.UP, FlxMobileInputID.noteUP]);
+	public var buttonRight:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.RIGHT, FlxMobileInputID.noteRIGHT]);
+	public var buttonDown:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.DOWN, FlxMobileInputID.noteDOWN]);
+	public var buttonLeft2:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.LEFT, FlxMobileInputID.noteLEFT]);
+	public var buttonUp2:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.UP2, FlxMobileInputID.noteUP]);
+	public var buttonRight2:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.RIGHT2, FlxMobileInputID.noteRIGHT]);
+	public var buttonDown2:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.DOWN2, FlxMobileInputID.noteDOWN]);
+	public var buttonA:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.A]);
+	public var buttonB:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.B]);
+	public var buttonC:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.C]);
+	public var buttonD:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.D]);
+	public var buttonE:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.E]);
+    public var buttonF:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.F]);
+    public var buttonG:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.G]);
+    public var buttonS:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.S]);
+	public var buttonV:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.V]);
+	public var buttonX:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.X]);
+	public var buttonY:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.Y]);
+	public var buttonZ:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.Z]);
+	public var buttonP:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.P]);
 
 	/**
 	 * Create a gamepad.
@@ -140,7 +140,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 				add(buttonLeft = createButton(0, 0, 132, 127, 'left', buttonLeftColor[0], [FlxMobileInputID.LEFT]));
 				add(buttonRight = createButton(127, 0, 132, 127, 'right', buttonRightColor[0], [FlxMobileInputID.RIGHT]));
 				add(buttonDown = createButton(127, 125, 132, 127, 'down', buttonDownColor[0], [FlxMobileInputID.DOWN]));
-				add(buttonUp2 = createButton(127, 393, 132, 127, 'up', buttonUpColor[0], [FlxMobileInputID.U2]));
+				add(buttonUp2 = createButton(127, 393, 132, 127, 'up', buttonUpColor[0], [FlxMobileInputID.UP2]));
 				add(buttonLeft2 = createButton(0, 393, 132, 127, 'left', buttonLeftColor[0], [FlxMobileInputID.LEFT2]));
 				add(buttonRight2 = createButton(1145, 393, 132, 127, 'right', buttonRightColor[0], [FlxMobileInputID.RIGHT2]));
 				add(buttonDown2 = createButton(1015, 393, 132, 127, 'down', buttonDownColor[0], [FlxMobileInputID.DOWN2]));
