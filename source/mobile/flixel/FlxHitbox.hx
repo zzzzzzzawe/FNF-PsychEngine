@@ -16,12 +16,12 @@ class FlxHitbox extends FlxMobileInputManager
 	final offsetFir:Int = (ClientPrefs.data.hitbox2 ? Std.int(FlxG.height / 4) * 3 : 0);
 	final offsetSec:Int = (ClientPrefs.data.hitbox2 ? 0 : Std.int(FlxG.height / 4));
 
-	public var buttonLeft:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.hitboxLEFT, FlxMobileInputID.noteLEFT]);
-	public var buttonDown:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.hitboxDOWN, FlxMobileInputID.noteDOWN]);
-	public var buttonUp:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.hitboxUP, FlxMobileInputID.noteUP]);
-	public var buttonRight:FlxButton = new FlxButton(0, 0, [FlxMobileInputID.hitboxRIGHT, FlxMobileInputID.noteRIGHT]);
-	public var buttonExtra:FlxButton = new FlxButton(0, 0, null);
-	public var buttonExtra1:FlxButton = new FlxButton(0, 0, null);
+	public var buttonLeft:FlxButton = new FlxButton(0, 0);
+	public var buttonDown:FlxButton = new FlxButton(0, 0);
+	public var buttonUp:FlxButton = new FlxButton(0, 0);
+	public var buttonRight:FlxButton = new FlxButton(0, 0);
+	public var buttonExtra:FlxButton = new FlxButton(0, 0);
+	public var buttonExtra1:FlxButton = new FlxButton(0, 0);
 
 	/**
 	 * Create the zone.
