@@ -233,6 +233,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00, [FlxMobileInputID.B]));
 			case NONE: // do nothing
 		}
+		updateTrackedButtons();
 	}
 
 	/*
