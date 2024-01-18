@@ -45,7 +45,7 @@ class CopyState extends MusicBeatState {
         if(maxLoopTimes > 0){
             trace(locatedFiles);
             shouldCopy = true;
-            FlxG.stage.window.alert(
+            lime.app.Application.current.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
             "Notice!");
 
