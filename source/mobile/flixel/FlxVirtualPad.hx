@@ -57,37 +57,6 @@ class FlxVirtualPad extends FlxMobileInputManager
 		buttonRightColor = ClientPrefs.defaultData.arrowRGB[3];
 
 		scrollFactor.set();
-		/*
-		// DPad Buttons
-		trackedButtons.set(FlxMobileInputID.UP, buttonUp);
-		trackedButtons.set(FlxMobileInputID.UP2, buttonUp2);
-		trackedButtons.set(FlxMobileInputID.DOWN, buttonDown);
-		trackedButtons.set(FlxMobileInputID.DOWN2, buttonDown2);
-		trackedButtons.set(FlxMobileInputID.LEFT, buttonLeft);
-		trackedButtons.set(FlxMobileInputID.LEFT2, buttonLeft2);
-		trackedButtons.set(FlxMobileInputID.RIGHT, buttonRight);
-		trackedButtons.set(FlxMobileInputID.RIGHT2, buttonRight2);
-
-		trackedButtons.set(FlxMobileInputID.noteUP, buttonUp);
-		trackedButtons.set(FlxMobileInputID.noteRIGHT, buttonRight);
-		trackedButtons.set(FlxMobileInputID.noteLEFT, buttonLeft);
-		trackedButtons.set(FlxMobileInputID.noteDOWN, buttonDown);
-
-		// Actions buttons
-		trackedButtons.set(FlxMobileInputID.A, buttonA);
-		trackedButtons.set(FlxMobileInputID.B, buttonB);
-		trackedButtons.set(FlxMobileInputID.C, buttonC);
-		trackedButtons.set(FlxMobileInputID.D, buttonD);
-		trackedButtons.set(FlxMobileInputID.E, buttonE);
-		trackedButtons.set(FlxMobileInputID.F, buttonF);
-		trackedButtons.set(FlxMobileInputID.G, buttonG);
-		trackedButtons.set(FlxMobileInputID.S, buttonS);
-		trackedButtons.set(FlxMobileInputID.V, buttonV);
-		trackedButtons.set(FlxMobileInputID.X, buttonX);
-		trackedButtons.set(FlxMobileInputID.Y, buttonY);
-		trackedButtons.set(FlxMobileInputID.Z, buttonZ);
-		trackedButtons.set(FlxMobileInputID.P, buttonP);
-		*/
 
 		switch (DPad)
 		{

@@ -43,18 +43,6 @@ class FlxHitbox extends FlxMobileInputManager
 		buttonsColors.push(data.arrowRGB[2][0]);
 		buttonsColors.push(data.arrowRGB[3][0]);
 
-		/*
-		trackedButtons.set(FlxMobileInputID.hitboxUP, buttonUp);
-		trackedButtons.set(FlxMobileInputID.hitboxRIGHT, buttonRight);
-		trackedButtons.set(FlxMobileInputID.hitboxLEFT, buttonLeft);
-		trackedButtons.set(FlxMobileInputID.hitboxDOWN, buttonDown);
-
-		trackedButtons.set(FlxMobileInputID.noteUP, buttonUp);
-		trackedButtons.set(FlxMobileInputID.noteRIGHT, buttonRight);
-		trackedButtons.set(FlxMobileInputID.noteLEFT, buttonLeft);
-		trackedButtons.set(FlxMobileInputID.noteDOWN, buttonDown);
-		*/
-
 		switch (mode)
 		{
 			case DEFAULT:
@@ -78,6 +66,7 @@ class FlxHitbox extends FlxMobileInputManager
 			
 		}
 		scrollFactor.set();
+		updateTrackedButtons();
 	}
 
 	/**
