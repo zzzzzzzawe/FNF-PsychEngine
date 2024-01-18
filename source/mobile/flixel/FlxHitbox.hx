@@ -43,6 +43,7 @@ class FlxHitbox extends FlxMobileInputManager
 		buttonsColors.push(data.arrowRGB[2][0]);
 		buttonsColors.push(data.arrowRGB[3][0]);
 
+		/*
 		trackedButtons.set(FlxMobileInputID.hitboxUP, buttonUp);
 		trackedButtons.set(FlxMobileInputID.hitboxRIGHT, buttonRight);
 		trackedButtons.set(FlxMobileInputID.hitboxLEFT, buttonLeft);
@@ -52,25 +53,26 @@ class FlxHitbox extends FlxMobileInputManager
 		trackedButtons.set(FlxMobileInputID.noteRIGHT, buttonRight);
 		trackedButtons.set(FlxMobileInputID.noteLEFT, buttonLeft);
 		trackedButtons.set(FlxMobileInputID.noteDOWN, buttonDown);
+		*/
 
 		switch (mode)
 		{
 			case DEFAULT:
-				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[0]));
-				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[1]));
-				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[2]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[3]));
+				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[0], [FlxMobileInputID.hitboxLEFT, FlxMobileInputID.noteLEFT]));
+				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[1], [FlxMobileInputID.hitboxDOWN, FlxMobileInputID.noteDOWN]));
+				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[2], [FlxMobileInputID.hitboxUP, FlxMobileInputID.noteUP]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, buttonsColors[3], [FlxMobileInputID.hitboxRIGHT, FlxMobileInputID.noteRIGHT]));
 			case SINGLE:
-				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0]));
-				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1]));
-				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3]));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0], [FlxMobileInputID.hitboxLEFT, FlxMobileInputID.noteLEFT]));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1], [FlxMobileInputID.hitboxDOWN, FlxMobileInputID.noteDOWN]));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2], [FlxMobileInputID.hitboxUP, FlxMobileInputID.noteUP]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3], [FlxMobileInputID.hitboxRIGHT, FlxMobileInputID.noteRIGHT]));
 				add(buttonExtra = createHint(0, offsetFir, FlxG.width, Std.int(FlxG.height / 4), 0xFF0066FF));
 			case DOUBLE:
-				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0]));
-				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1]));
-				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2]));
-				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3]));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[0], [FlxMobileInputID.hitboxLEFT, FlxMobileInputID.noteLEFT]));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[1], [FlxMobileInputID.hitboxDOWN, FlxMobileInputID.noteDOWN]));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[2], [FlxMobileInputID.hitboxUP, FlxMobileInputID.noteUP]));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, buttonsColors[3], [FlxMobileInputID.hitboxRIGHT, FlxMobileInputID.noteRIGHT]));
 				add(buttonExtra = createHint(Std.int(FlxG.width / 2), offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xFF0066FF));
 				add(buttonExtra1 = createHint(0, offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0x00FFF7));
 			
@@ -95,6 +97,9 @@ class FlxHitbox extends FlxMobileInputManager
 
 	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData
 	{
+		var guh = ClientPrefs.data.controlsAlpha;
+		if(guh >= 0.9)
+			guh = ClientPrefs.data.controlsAlpha - 0.07;
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(Color);
 		shape.graphics.lineStyle(3, Color, 1);
@@ -102,7 +107,7 @@ class FlxHitbox extends FlxMobileInputManager
 		shape.graphics.lineStyle(0, 0, 0);
 		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
 		shape.graphics.endFill();
-		shape.graphics.beginGradientFill(RADIAL, [Color, FlxColor.TRANSPARENT], [0.6, 0], [0, 255], null, null, null, 0.5);
+		shape.graphics.beginGradientFill(RADIAL, [Color, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
 		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
 		shape.graphics.endFill();
 
@@ -111,10 +116,10 @@ class FlxHitbox extends FlxMobileInputManager
 		return bitmap;
 	}
 
-	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton
+	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF, IDs:Array<FlxMobileInputID>):FlxButton
 	{
 		var hintTween:FlxTween = null;
-		var hint:FlxButton = new FlxButton(X, Y);
+		var hint:FlxButton = new FlxButton(X, Y, IDs);
 		hint.loadGraphic(createHintGraphic(Width, Height, Color));
 		hint.solid = false;
 		hint.immovable = true;

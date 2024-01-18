@@ -10,14 +10,23 @@ import haxe.ds.Map;
 */
 class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 
-    public function new(){
-        super();
-    }
+	/**
+	* A map to keep track of all the buttons using it's ID
+	*/
+	public var trackedButtons:Map<FlxMobileInputID, FlxButton> = new Map<FlxMobileInputID, FlxButton>();
 
-    /**
-    * A map to keep track of all the buttons using it's ID
-    */
-    public var trackedButtons:Map<FlxMobileInputID, FlxButton> = new Map<FlxMobileInputID, FlxButton>();
+    public function new() {
+        super();
+
+		forEachExists(function(button:FlxButton) {
+			if(button.IDs != null){
+				for(id in button.IDs){
+					if(!trackedButtons.exists(id))
+						trackedButtons.set(id, button);
+				}
+			}
+		});
+    }
 
     /**
 	* Check to see if the button was pressed.
@@ -121,6 +130,15 @@ class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 	}
 
 	function checkStatusUnsafe(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
-		return trackedButtons.get(button).hasState(state);
+		return switch (state) {
+			case JUST_RELEASED: trackedButtons.get(button).justReleased;
+			case PRESSED: trackedButtons.get(button).pressed;
+			case JUST_PRESSED: trackedButtons.get(button).justPressed;
+		}
 	}
+}
+enum ButtonsStates{
+	PRESSED;
+	JUST_PRESSED;
+	JUST_RELEASED;
 }
