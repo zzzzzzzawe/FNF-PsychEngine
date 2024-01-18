@@ -92,8 +92,8 @@ class FlxVirtualPad extends FlxMobileInputManager
 		switch (DPad)
 		{
 			case UP_DOWN:
-				add(buttonUp = createButton(0, FlxG.height - 255, 132, 127, 'up', buttonUpColor[0], [FlxMobileInputID.DOWN, FlxMobileInputID.noteDOWN]));
-				add(buttonDown = createButton(0, FlxG.height - 135, 132, 127, 'down', buttonDownColor[0], [FlxMobileInputID.UP, FlxMobileInputID.noteUP]));
+				add(buttonUp = createButton(0, FlxG.height - 255, 132, 127, 'up', buttonUpColor[0], [FlxMobileInputID.UP, FlxMobileInputID.noteUP]));
+				add(buttonDown = createButton(0, FlxG.height - 135, 132, 127, 'down', buttonDownColor[0], [FlxMobileInputID.DOWN, FlxMobileInputID.noteDOWN]));
 			case LEFT_RIGHT:
 				add(buttonLeft = createButton(0, FlxG.height - 135, 132, 127, 'left', buttonLeftColor[0], [FlxMobileInputID.LEFT, FlxMobileInputID.noteLEFT]));
 				add(buttonRight = createButton(127, FlxG.height - 135, 132, 127, 'right', buttonRightColor[0], [FlxMobileInputID.RIGHT, FlxMobileInputID.noteRIGHT]));
@@ -158,7 +158,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 				add(buttonX = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'x', 0x99062D, [FlxMobileInputID.X]));
 			case A_B:
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00, [FlxMobileInputID.B]));
-				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'a', 0xFF0000, [FlxMobileInputID.X]));
+				add(buttonA = createButton(FlxG.width - 132, FlxG.height - 135, 132, 127, 'a', 0xFF0000, [FlxMobileInputID.A]));
 			case A_B_C:
 				add(buttonC = createButton(FlxG.width - 384, FlxG.height - 135, 132, 127, 'c', 0x44FF00, [FlxMobileInputID.C]));
 				add(buttonB = createButton(FlxG.width - 258, FlxG.height - 135, 132, 127, 'b', 0xFFCB00, [FlxMobileInputID.B]));

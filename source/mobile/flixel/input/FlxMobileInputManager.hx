@@ -89,7 +89,7 @@ class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 	 */
 	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
 		if(!trackedButtons.exists(button))
-			trace('no button with an ID of ${button.toString()} is added';)
+			trace('no button with an ID of ${button.toString()} is added');
 		switch(button){
 			case FlxMobileInputID.ANY:
 				for(button in trackedButtons.keys()){
