@@ -87,9 +87,7 @@ class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 	 * @param	state		The button state to check for.
 	 * @return	Whether the provided key has the specified status.
 	 */
-	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
-		if(!trackedButtons.exists(button))
-			trace('no button with an ID of ${button.toString()} is added');
+	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {;
 		switch(button){
 			case FlxMobileInputID.ANY:
 				for(button in trackedButtons.keys()){
@@ -138,7 +136,6 @@ class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 				for(id in button.IDs){
 					if(!trackedButtons.exists(id)){
 						trackedButtons.set(id, button);
-						trace("added a button with an ID '" + id.toString() + "' to the buttons map");
 					}
 				}
 			}
