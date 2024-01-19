@@ -1,6 +1,3 @@
-/* KNNOWN ISSUE:
-    - Null Object Refrence while copying .ttf, .otf. (at embedded ones for now)
-*/
 package mobile.states;
 
 import flixel.addons.transition.FlxTransitionableState;
@@ -36,7 +33,9 @@ class CopyState extends MusicBeatState {
         'frag',
         'vert'
     ];
-    #if (target.threaded) var mutex:Mutex = new Mutex(); #end
+    #if (target.threaded)
+    var mutex:Mutex = new Mutex();
+    #end
     
     override function create() {
         locatedFiles = [];
@@ -45,7 +44,7 @@ class CopyState extends MusicBeatState {
         if(maxLoopTimes > 0){
             trace(locatedFiles);
             shouldCopy = true;
-            lime.app.Application.current.window.alert(
+            FlxG.stage.window.alert(
             "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process",
             "Notice!");
 
@@ -65,14 +64,20 @@ class CopyState extends MusicBeatState {
             loadedText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
             add(loadedText);
     
-            #if (target.threaded) Thread.create(() -> { mutex.acquire(); #end
+            #if (target.threaded)
+            Thread.create(() -> {
+            mutex.acquire();
+            #end
             var ticks:Int = 15;
             if(maxLoopTimes <= 15)
                 ticks = 1;
             copyLoop = new FlxAsyncLoop(maxLoopTimes, copyAsset, ticks);
             add(copyLoop);
             copyLoop.start();
-            #if (target.threaded) mutex.release(); }); #end
+            #if (target.threaded)
+            mutex.release();
+            });
+            #end
         } else {
             TitleState.ignoreCopy = true;
             FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
@@ -85,15 +90,16 @@ class CopyState extends MusicBeatState {
     override function update(elapsed:Float) {
         if(shouldCopy && copyLoop != null) {
             if(copyLoop.finished && canUpdate) {
-                if(!checkExistingFiles()){
-                    FlxG.resetState();
-                    return;
-                }
                 if(failedFiles.length > 0){
                     FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
                     if(!FileSystem.exists('logs'))
                         FileSystem.createDirectory('logs');
                     File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
+                }
+                if(!checkExistingFiles()){
+                    trace('reloaded CopyState...');
+                    FlxG.resetState();
+                    return;
                 }
                 canUpdate = false;
         		FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -106,7 +112,8 @@ class CopyState extends MusicBeatState {
                         TitleState.ignoreCopy = true;
                         FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
                         MusicBeatState.switchState(new TitleState());
-                    }, ease: FlxEase.linear, startDelay: 0.4});
+                    }, ease: FlxEase.linear, startDelay: 0.4
+                });
             }
             if(maxLoopTimes == 0)
                 loadedText.text = "Completed!";
@@ -142,10 +149,7 @@ class CopyState extends MusicBeatState {
     public static function getFileBytes(file:String):ByteArray {
         switch(Path.extension(file)) {
             case 'otf' | 'ttf':
-                //var font = OpenflAssets.getFont(file).fontName;
-                //return OpenflAssets.getBytes(file);
-                var fontBytes = ByteArray.fromFile(file);
-                return fontBytes;
+                return ByteArray.fromFile(file);
             default:
                 return OpenflAssets.getBytes(file);
         }
