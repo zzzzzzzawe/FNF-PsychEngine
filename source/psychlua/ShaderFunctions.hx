@@ -480,7 +480,7 @@ class ShaderFunctions
 	#end
 
 	#if CUSTOM_SHADERS_ALLOWED
-	public static function resetShader(shader:Dynamic, tag:String){
+	public static function resetShader(shader:Effect, tag:String){
 		if(PlayState.instance.modchartShader.exists(tag)){
 			PlayState.instance.removeShaderFromCamera('', PlayState.instance.modchartShader.get(tag));
 			PlayState.instance.removeShaderFromCamera('game', PlayState.instance.modchartShader.get(tag));

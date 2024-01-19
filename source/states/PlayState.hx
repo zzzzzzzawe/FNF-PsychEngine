@@ -112,7 +112,7 @@ class PlayState extends MusicBeatState
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	#end
 	#if CUSTOM_SHADERS_ALLOWED
-	public var modchartShader:Map<String, Dynamic> = new Map<String, Effect>();
+	public var modchartShader:Map<String, Effect> = new Map<String, Effect>();
 	public var shaderUpdates:Array<Float->Void> = [];
 	#end
 
@@ -1566,8 +1566,8 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		if(camera.filters.contains(effect))
-			camera.filters.remove(effect);
+		if(camera._filters.contains(effect))
+			camera._filters.remove(effect);
 	}
 
 	public function clearObjectShaders(obj:String) {
