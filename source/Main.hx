@@ -132,7 +132,7 @@ class Main extends Sprite
 		Achievements.load();
 
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
-		FlxG.game.addChild(fpsVar);
+		#if mobile FlxG.game.addChild #else addChild #end(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if(fpsVar != null) {
