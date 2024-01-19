@@ -3064,7 +3064,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(splitVocals) vocals.volume = 1;
+		if(!splitVocals) vocals.volume = 1;
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 		
