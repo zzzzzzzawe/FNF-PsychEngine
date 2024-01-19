@@ -1518,16 +1518,16 @@ class PlayState extends MusicBeatState
 
 	#if CUSTOM_SHADERS_ALLOWED
 	public function addShaderToObject(obj:String, effect:CustomShaderFilter) {
+		if(!ClientPrefs.data.shaders)
+			return;
 		if(obj == '') {
-			@:privateAccess
-			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
-			if(curCamFilters == null || curCamFilters.length == 0){
-				FlxG.game.setFilters([effect]);
+			@:privateAccess{
+			if(FlxG.game._filters == null || FlxG.game._filters.length == 0){
+				FlxG.game._filters = [effect];
 				return;
 			}
-			curCamFilters.push(effect);
-			FlxG.game.setFilters(curCamFilters);
-			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
+			FlxG.game._filters.push(effect);
+			}
 		} else {
 			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
 			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
@@ -1544,14 +1544,11 @@ class PlayState extends MusicBeatState
 				luaObject.shader = effect.shader;
 				return;
 			}
-			var curCamFilters:Array<BitmapFilter> = camera.filters;
-			if(curCamFilters == null || curCamFilters.length == 0){
+			if(camera.filters == null || camera.filters.length == 0){
 				camera.filters = [effect];
 				return;
 			}
-			curCamFilters.push(effect);
-			camera.filters = curCamFilters;
-			camera.filtersEnabled = ClientPrefs.data.shaders;
+			camera.filters.push(effect);
 		}
 	}
 
@@ -1678,7 +1675,7 @@ class PlayState extends MusicBeatState
 		stagesFunc(function(stage:BaseStage) stage.closeSubState());
 		if (paused)
 		{
-			if (FlxG.sound.music != null && !startingSong && SONG.needsVoices)
+			if (FlxG.sound.music != null && !startingSong)
 			{
 				var vocalsToResync:Array<FlxSound> = [vocals];
 				if(splitVocals)
@@ -1739,7 +1736,7 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals(vocals:Array<FlxSound>):Void
 	{
-		if(finishTimer != null || vocals == null) return;
+		if(finishTimer != null || vocals == null || !SONG.needsVoices) return;
 
 		for(vocal in vocals){
 			vocal.pause();
@@ -3222,6 +3219,9 @@ class PlayState extends MusicBeatState
 		Note.globalRgbShaders = [];
 		backend.NoteTypesConfig.clearNoteTypesData();
 		instance = null;
+		@:privateAccess
+		FlxG.game._filters = [];
+		camGame.filters = camHUD.filters = camOther.filters = [];
 		super.destroy();
 	}
 
