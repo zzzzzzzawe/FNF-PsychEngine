@@ -3161,7 +3161,6 @@ class PlayState extends MusicBeatState
 	public function invalidateNote(note:Note):Void {
 		notes.remove(note, true);
 		if(!ClientPrefs.data.lowQuality || !ClientPrefs.data.popUpRating || !cpuControlled) note.kill();
-		note.kill();
 		note.destroy();
 	}
 
