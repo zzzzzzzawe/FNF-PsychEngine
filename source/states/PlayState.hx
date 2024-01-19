@@ -1118,7 +1118,7 @@ class PlayState extends MusicBeatState
 				daNote.ignoreNote = true;
 
 				unspawnNotes.remove(daNote);
-				if(!ClientPrefs.data.lowQuality || !ClientPrefs.data.popUpRating || !cpuControlled) daNote.kill();
+				daNote.kill();
 				daNote.destroy();
 			}
 			--i;
@@ -1518,16 +1518,16 @@ class PlayState extends MusicBeatState
 
 	#if CUSTOM_SHADERS_ALLOWED
 	public function addShaderToObject(obj:String, effect:CustomShaderFilter) {
-		if(!ClientPrefs.data.shaders)
-			return;
 		if(obj == '') {
-			@:privateAccess{
-			if(FlxG.game._filters == null || FlxG.game._filters.length == 0){
-				FlxG.game._filters = [effect];
+			@:privateAccess
+			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
+			if(curCamFilters == null || curCamFilters.length == 0){
+				FlxG.game.setFilters([effect]);
 				return;
 			}
-			FlxG.game._filters.push(effect);
-			}
+			curCamFilters.push(effect);
+			FlxG.game.setFilters(curCamFilters);
+			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
 		} else {
 			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
 			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
@@ -1544,11 +1544,14 @@ class PlayState extends MusicBeatState
 				luaObject.shader = effect.shader;
 				return;
 			}
-			if(camera.filters == null || camera.filters.length == 0){
+			var curCamFilters:Array<BitmapFilter> = camera.filters;
+			if(curCamFilters == null || curCamFilters.length == 0){
 				camera.filters = [effect];
 				return;
 			}
-			camera.filters.push(effect);
+			curCamFilters.push(effect);
+			camera.filters = curCamFilters;
+			camera.filtersEnabled = ClientPrefs.data.shaders;
 		}
 	}
 
@@ -3157,7 +3160,7 @@ class PlayState extends MusicBeatState
 
 	public function invalidateNote(note:Note):Void {
 		notes.remove(note, true);
-		if(!ClientPrefs.data.lowQuality || !ClientPrefs.data.popUpRating || !cpuControlled) note.kill();
+		note.kill();
 		note.destroy();
 	}
 
