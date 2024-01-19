@@ -164,10 +164,12 @@ class Main extends Sprite
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
 
+		#if mobile
 		final scale:Float = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
 
 		if (fpsVar != null)
 			fpsVar.scaleX = fpsVar.scaleY = (scale > 1 ? scale : 1);
+		#end
 
 		     if (FlxG.cameras != null) {
 			   for (cam in FlxG.cameras.list) {
