@@ -87,7 +87,7 @@ class FlxMobileInputManager extends FlxTypedSpriteGroup<FlxButton>{
 	 * @param	state		The button state to check for.
 	 * @return	Whether the provided key has the specified status.
 	 */
-	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {;
+	 public function checkStatus(button:FlxMobileInputID, state:ButtonsStates = JUST_PRESSED):Bool {
 		switch(button){
 			case FlxMobileInputID.ANY:
 				for(button in trackedButtons.keys()){
