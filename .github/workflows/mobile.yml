@@ -33,6 +33,7 @@ jobs:
           haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
+          sudo rm /usr/bin/nproc && sudo echo 'echo -e "16"' > /usr/bin/nproc && sudo chmod 777 /usr/bin/nproc
 
       - name: Compile
         run: haxelib run lime build android -D ${{ matrix.storage-type }} -final
