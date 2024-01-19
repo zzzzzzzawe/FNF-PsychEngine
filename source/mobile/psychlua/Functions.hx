@@ -5,7 +5,7 @@ import llua.*;
 import llua.Lua;
 import lime.ui.Haptic;
 import psychlua.FunkinLua;
-import backend.TouchFunctions;
+import mobile.backend.TouchFunctions;
 
 class MobileFunctions {
     public static var mobileExtraInput(get, null):Dynamic;
@@ -60,9 +60,13 @@ class MobileFunctions {
           PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
         });
 
-        funk.set("addVirtualPad", PlayState.instance.addLuaVirtualPad); // ig i can do it like this since it dosen't need any args ????
+        funk.set("addVirtualPad", () -> {
+            PlayState.instance.addLuaVirtualPad();
+        });
 
-        funk.set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
+        funk.set("removeVirtualPad", () -> {
+            PlayState.instance.removeLuaVirtualPad();
+        });
 
         funk.set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
             if(PlayState.instance.luaVirtualPad == null){

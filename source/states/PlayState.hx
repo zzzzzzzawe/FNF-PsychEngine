@@ -55,6 +55,7 @@ import psychlua.HScript;
 #if SScript
 import tea.SScript;
 #end
+import mobile.backend.Data;
 
 /**
  * This is where all the Gameplay stuff happens and is managed
@@ -3736,7 +3737,7 @@ class PlayState extends MusicBeatState
 	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
 		if(!variables.exists("luaVirtualPad"))
 			variables.set("luaVirtualPad", luaVirtualPad);
-		luaVirtualPad = new FlxVirtualPad(dpadMode.get(DPadMode), actionMode.get(ActionMode));
+		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode));
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
 	}
 	

@@ -16,6 +16,7 @@ import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
 import openfl.events.KeyboardEvent;
+import mobile.backend.Data;
 #if hl
 import hl.Api;
 #end
@@ -159,6 +160,7 @@ class Main extends Sprite
 		#if mobile
 		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver;
 		#end
+		Data.setup();
 
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
