@@ -33,14 +33,13 @@ class FPSCounter extends TextField
 		else
 			os = '\nOS: ${LimeSystem.platformName} - ${LimeSystem.platformVersion}'; 
 
-		this.x = x;
-		this.y = y;
+		positionFPS(x, y);
 
 		currentFPS = 0;
 		selectable = false;
 		mouseEnabled = false;
 		defaultTextFormat = new TextFormat("_sans", 14, color);
-		autoSize = LEFT;
+		width = FlxG.width;
 		multiline = true;
 		text = "FPS: ";
 
@@ -82,4 +81,10 @@ class FPSCounter extends TextField
 
 	inline function get_memoryMegas():Float
 		return cast(OpenFlSystem.totalMemory, UInt);
+
+	public inline function positionFPS(X:Float, Y:Float, ?scale:Float = 1){
+		scaleX = scaleY = scale >= 1 ? 1 : scale;
+		x = FlxG.game.x + X;
+		y = FlxG.game.y + Y;
+	}
 }
