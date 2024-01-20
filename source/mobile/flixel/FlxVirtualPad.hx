@@ -10,7 +10,7 @@ import flixel.math.FlxPoint;
  * It's easy to customize the layout.
  *
  * @original author Ka Wing Chin & Mihai Alexandru
- * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
+ * @modification's author: Karim Akra & Lily (mcagabe19)
  */
 class FlxVirtualPad extends FlxMobileInputManager
 {

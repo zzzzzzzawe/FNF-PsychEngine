@@ -9,7 +9,7 @@ import openfl.display.Shape;
  * It's really easy to customize the layout.
  *
  * @author: Mihai Alexandru
- * @modification's author: Karim Akra (UTFan) & Lily (mcagabe19)
+ * @modification's author: Karim Akra & Lily (mcagabe19)
  */
 class FlxHitbox extends FlxMobileInputManager
 {
