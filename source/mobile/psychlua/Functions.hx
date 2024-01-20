@@ -58,11 +58,8 @@ class MobileFunctions {
 		    return Haptic.vibrate(period, duration);
 		});
 
-        funk.set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
-          PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
-        });
-
-        funk.set("addVirtualPad", () -> {
+        funk.set("addVirtualPad", (DPadMode:String, ActionMode:String) -> {
+	    PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
             PlayState.instance.addLuaVirtualPad();
         });
 
