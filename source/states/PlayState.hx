@@ -308,11 +308,14 @@ class PlayState extends MusicBeatState
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
+		luaVpadCam = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
+		luaVpadCam.bgColor.alpha = 0;
 		//FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+		FlxG.cameras.add(luaVpadCam, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		persistentUpdate = true;
@@ -3750,9 +3753,6 @@ class PlayState extends MusicBeatState
 
 	public function addLuaVirtualPadCamera(?DefaultDrawTarget:Bool = false) {
 		if(luaVirtualPad != null) {
-			luaVpadCam = new FlxCamera();
-			luaVpadCam.bgColor.alpha = 0;
-			FlxG.cameras.add(luaVpadCam, DefaultDrawTarget);
 			luaVirtualPad.cameras = [luaVpadCam];
 		}
 	}
