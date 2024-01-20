@@ -306,11 +306,10 @@ class HScript extends SScript
                         set('addBehindBF', PlayState.instance.addBehindBF);
                         setSpecialObject(PlayState.instance, false, PlayState.instance.instancesExclude);
                 }
-		set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
+		set("addVirtualPad", (DPadMode:String, ActionMode:String) -> {
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
+			PlayState.instance.addLuaVirtualPad();
 		  });
-  
-		set("addVirtualPad", PlayState.instance.addLuaVirtualPad);
   
 		set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
   
