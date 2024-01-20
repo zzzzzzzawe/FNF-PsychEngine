@@ -11,6 +11,8 @@ class MobileFunctions {
     public static var mobileExtraInput(get, null):Dynamic;
 
     public static function implement(funk:FunkinLua) {
+        funk.set('mobileControlsMode', getMobileControlsAsString());
+
         funk.set("extraButtonPressed", function(button:String) {
 			button = button.toLowerCase();
 			if (mobileExtraInput != null){
@@ -70,7 +72,7 @@ class MobileFunctions {
 
         funk.set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
             if(PlayState.instance.luaVirtualPad == null){
-    			FunkinLua.luaTrace('addVirtualPadCamera: Virtual Pad Does Not Exist!!');
+    			FunkinLua.luaTrace('addVirtualPadCamera: VPAD does not exist.');
                 return;
             }
             PlayState.instance.addVirtualPadCamera(DefaultDrawTarget);
@@ -78,7 +80,7 @@ class MobileFunctions {
 
         funk.set("virtualPadJustPressed", function(button:Dynamic):Bool {
             if(PlayState.instance.luaVirtualPad == null){
-    			FunkinLua.luaTrace('virtualPadJustPressed: Virtual Pad Does Not Exist!!');
+    			FunkinLua.luaTrace('virtualPadJustPressed: VPAD does not exist.');
                 return false;
             }
             return PlayState.instance.luaVirtualPadJustPressed(button);
@@ -86,7 +88,7 @@ class MobileFunctions {
 
         funk.set("virtualPadPressed", function(button:Dynamic):Bool {
             if(PlayState.instance.luaVirtualPad == null){
-    			FunkinLua.luaTrace('virtualPadPressed: Virtual Pad Does Not Exist!!');
+    			FunkinLua.luaTrace('virtualPadPressed: VPAD does not exist.');
                 return false;
             }
             return PlayState.instance.luaVirtualPadPressed(button);
@@ -94,7 +96,7 @@ class MobileFunctions {
 
         funk.set("virtualPadJustReleased", function(button:Dynamic):Bool {
             if(PlayState.instance.luaVirtualPad == null){
-    			FunkinLua.luaTrace('virtualPadJustReleased: Virtual Pad Does Not Exist!!');
+    			FunkinLua.luaTrace('virtualPadJustReleased: VPAD does not exist.');
                 return false;
             }
             return PlayState.instance.luaVirtualPadJustReleased(button);
@@ -109,7 +111,7 @@ class MobileFunctions {
         funk.set("touchPressedObject", function(object:String):Bool {
             var obj = PlayState.instance.getLuaObject(object);
             if(obj == null){
-                FunkinLua.luaTrace('touchPressedObject: Object $object Does Not Exist!!');
+                FunkinLua.luaTrace('touchPressedObject: $object does not exist.');
                 return false;
             }
             return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchPressed;
@@ -118,7 +120,7 @@ class MobileFunctions {
         funk.set("touchJustPressedObject", function(object:String):Bool {
             var obj = PlayState.instance.getLuaObject(object);
             if(obj == null){
-                FunkinLua.luaTrace('touchJustPressedObject: Object $object Does Not Exist!!');
+                FunkinLua.luaTrace('touchJustPressedObject: $object does not exist.');
                 return false;
             }
             return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustPressed;
@@ -127,7 +129,7 @@ class MobileFunctions {
         funk.set("touchJustReleasedObject", function(object:String):Bool {
             var obj = PlayState.instance.getLuaObject(object);
             if(obj == null){
-                FunkinLua.luaTrace('touchJustPressedObject: Object $object Does Not Exist!!');
+                FunkinLua.luaTrace('touchJustPressedObject: $object does not exist.');
                 return false;
             }
             return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustReleased;
@@ -136,7 +138,7 @@ class MobileFunctions {
         funk.set("touchOverlapsObject", function(object:String):Bool {
             var obj = PlayState.instance.getLuaObject(object);
             if(obj == null){
-                FunkinLua.luaTrace('touchOverlapsObject: Object $object Does Not Exist!!');
+                FunkinLua.luaTrace('touchOverlapsObject: $object does not exist.');
                 return false;
             }
             return TouchFunctions.touchOverlapObject(obj);
@@ -152,6 +154,24 @@ class MobileFunctions {
 			default: //keybaord
 				return null;
 		}
+	}
+
+    public static function getMobileControlsAsString():String {
+			switch (MobileControls.getMode()){
+			case 0:
+				return 'left';
+			case 1:
+				return 'right';
+			case 2:
+				return 'custom';
+			case 3:
+				return 'duo';
+			case 4:
+				return 'hitbox';
+			case 5:
+				return 'none';
+			}
+			return 'null';
 	}
 }
 

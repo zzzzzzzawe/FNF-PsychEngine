@@ -306,7 +306,6 @@ class HScript extends SScript
                         set('addBehindBF', PlayState.instance.addBehindBF);
                         setSpecialObject(PlayState.instance, false, PlayState.instance.instancesExclude);
                 }
-		#if mobile
 		set("makeVirtualPad", (DPadMode:String, ActionMode:String) -> {
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
 		  });
@@ -346,7 +345,6 @@ class HScript extends SScript
 			}
 			return PlayState.instance.luaVirtualPadJustReleased(button);
 		});
-		#end
 
 		if(varsToBring != null) {
 			for (key in Reflect.fields(varsToBring)) {
