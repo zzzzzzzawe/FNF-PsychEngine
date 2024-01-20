@@ -1483,7 +1483,7 @@ class FunkinLua {
 		CustomSubstate.implement(this);
 		ShaderFunctions.implement(this);
 		DeprecatedFunctions.implement(this);
-		#if mobile MobileFunctions.implement(this); #end
+		MobileFunctions.implement(this);
 		#if android AndroidFunctions.implement(this); #end
 
 		try{
