@@ -311,14 +311,16 @@ class HScript extends SScript
 			PlayState.instance.addLuaVirtualPad();
 		  });
   
-		set("removeVirtualPad", PlayState.instance.removeLuaVirtualPad);
+		set("removeVirtualPad", () -> {
+			PlayState.instance.removeLuaVirtualPad();
+		});
   
-		set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
+		set("addVirtualPadCamera", () -> {
 			if(PlayState.instance.luaVirtualPad == null){
 				FunkinLua.luaTrace('addVirtualPadCamera: Virtual Pad Does Not Exist!!');
 				return;
 			}
-			PlayState.instance.addVirtualPadCamera(DefaultDrawTarget);
+			PlayState.instance.addLuaVirtualPadCamera();
 		});
   
 		set("virtualPadJustPressed", function(button:Dynamic):Bool {
