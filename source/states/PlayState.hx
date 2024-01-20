@@ -3761,6 +3761,7 @@ class PlayState extends MusicBeatState
 			luaVirtualPad.kill();
 			luaVirtualPad.destroy();
 			remove(luaVirtualPad);
+			luaVirtualPad = null;
 		}
 	}
 
