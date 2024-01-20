@@ -11,6 +11,8 @@ class MobileFunctions {
     public static var mobileExtraInput(get, null):Dynamic;
 
     public static function implement(funk:FunkinLua) {
+        funk.set('mobileControlsMode', getMobileControlsAsString());
+
         funk.set("extraButtonPressed", function(button:String) {
 			button = button.toLowerCase();
 			if (mobileExtraInput != null){

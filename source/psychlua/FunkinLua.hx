@@ -203,8 +203,6 @@ class FunkinLua {
 		// build target (windows, mac, linux, etc.)
 		set('buildTarget', LuaUtils.getBuildTarget());
 
-        set('mobileControlsMode', MobileFunctions.getMobileControlsAsString());
-
 		for (name => func in customFunctions)
 		{
 			if(func != null)
