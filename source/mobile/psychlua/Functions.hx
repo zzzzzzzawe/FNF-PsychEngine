@@ -67,12 +67,12 @@ class MobileFunctions {
             PlayState.instance.removeLuaVirtualPad();
         });
 
-        funk.set("addVirtualPadCamera", (?DefaultDrawTarget:Bool=false) -> {
+        funk.set("addVirtualPadCamera", () -> {
             if(PlayState.instance.luaVirtualPad == null){
     			FunkinLua.luaTrace('addVirtualPadCamera: VPAD does not exist.');
                 return;
             }
-            PlayState.instance.addVirtualPadCamera(DefaultDrawTarget);
+            PlayState.instance.addLuaVirtualPadCamera();
         });
 
         funk.set("virtualPadJustPressed", function(button:Dynamic):Bool {

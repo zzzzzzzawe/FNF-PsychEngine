@@ -3751,10 +3751,9 @@ class PlayState extends MusicBeatState
 		target.insert(target.members.length + 1, luaVirtualPad);
 	}
 
-	public function addLuaVirtualPadCamera(?DefaultDrawTarget:Bool = false) {
-		if(luaVirtualPad != null) {
+	public function addLuaVirtualPadCamera() {
+		if(luaVirtualPad != null)
 			luaVirtualPad.cameras = [luaVpadCam];
-		}
 	}
 
 	public function removeLuaVirtualPad() {
