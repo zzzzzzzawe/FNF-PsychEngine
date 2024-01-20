@@ -3767,28 +3767,40 @@ class PlayState extends MusicBeatState
 
 	public function luaVirtualPadPressed(button:Dynamic):Bool {
 		if(Std.isOfType(button, String))
-			return luaVirtualPad.buttonPressed(button);
-		else if(Std.isOfType(button, Array))
-			return luaVirtualPad.anyPressed(button);
-		else
+			return luaVirtualPad.buttonPressed(FlxMobileInputID.fromString(button));
+		else if(Std.isOfType(button, Array)){
+			var FUCK:Array<String> = button; // haxe said "You Can't Iterate On A Dyanmic Value Please Specificy Iterator or Iterable *insert ned emoji*" so that's the only i foud to fix
+			var idArray:Array<FlxMobileInputID> = [];
+			for(strId in FUCK)
+				idArray.push(FlxMobileInputID.fromString(strId));
+			return luaVirtualPad.anyPressed(idArray);
+		} else
 			return false;
 	}
 
 	public function luaVirtualPadJustPressed(button:Dynamic):Bool {
 		if(Std.isOfType(button, String))
-			return luaVirtualPad.buttonJustPressed(button);
-		else if(Std.isOfType(button, Array))
-			return luaVirtualPad.anyJustPressed(button);
-		else
+			return luaVirtualPad.buttonJustPressed(FlxMobileInputID.fromString(button));
+		else if(Std.isOfType(button, Array)){
+			var FUCK:Array<String> = button;
+			var idArray:Array<FlxMobileInputID> = [];
+			for(strId in FUCK)
+				idArray.push(FlxMobileInputID.fromString(strId));
+			return luaVirtualPad.anyJustPressed(idArray);
+		} else
 			return false;
 	}
 	
 	public function luaVirtualPadJustReleased(button:Dynamic):Bool {
 		if(Std.isOfType(button, String))
-			return luaVirtualPad.buttonJustReleased(button);
-		else if(Std.isOfType(button, Array))
-			return luaVirtualPad.anyJustReleased(button);
-		else
+			return luaVirtualPad.buttonJustReleased(FlxMobileInputID.fromString(button));
+		else if(Std.isOfType(button, Array)){
+			var FUCK:Array<String> = button;
+			var idArray:Array<FlxMobileInputID> = [];
+			for(strId in FUCK)
+				idArray.push(FlxMobileInputID.fromString(strId));
+			return luaVirtualPad.anyJustReleased(idArray);
+		} else
 			return false;
 	}
 }

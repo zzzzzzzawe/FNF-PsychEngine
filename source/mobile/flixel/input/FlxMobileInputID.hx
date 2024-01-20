@@ -6,7 +6,7 @@ import flixel.system.macros.FlxMacroUtil;
 * Maps enum values and strings to unique integer codes
 * @author Karim Akra & Lily(mcagabe19)
 */
-//@:runtimeValue
+@:runtimeValue
 enum abstract FlxMobileInputID(Int) from Int to Int
 {
     public static var fromStringMap(default, null):Map<String, FlxMobileInputID> = FlxMacroUtil.buildMap("mobile.flixel.input.FlxMobileInputID");
