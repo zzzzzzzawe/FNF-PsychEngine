@@ -3766,6 +3766,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public function luaVirtualPadPressed(button:Dynamic):Bool {
+		if(luaVirtualPad != null) {
 		if(Std.isOfType(button, String))
 			return luaVirtualPad.buttonPressed(FlxMobileInputID.fromString(button));
 		else if(Std.isOfType(button, Array)){
@@ -3776,9 +3777,11 @@ class PlayState extends MusicBeatState
 			return luaVirtualPad.anyPressed(idArray);
 		} else
 			return false;
+		}
 	}
 
 	public function luaVirtualPadJustPressed(button:Dynamic):Bool {
+		if(luaVirtualPad != null) {
 		if(Std.isOfType(button, String))
 			return luaVirtualPad.buttonJustPressed(FlxMobileInputID.fromString(button));
 		else if(Std.isOfType(button, Array)){
@@ -3789,9 +3792,11 @@ class PlayState extends MusicBeatState
 			return luaVirtualPad.anyJustPressed(idArray);
 		} else
 			return false;
+		}
 	}
 	
 	public function luaVirtualPadJustReleased(button:Dynamic):Bool {
+		if(luaVirtualPad != null) {
 		if(Std.isOfType(button, String))
 			return luaVirtualPad.buttonJustReleased(FlxMobileInputID.fromString(button));
 		else if(Std.isOfType(button, Array)){
@@ -3802,5 +3807,6 @@ class PlayState extends MusicBeatState
 			return luaVirtualPad.anyJustReleased(idArray);
 		} else
 			return false;
+		}
 	}
 }
