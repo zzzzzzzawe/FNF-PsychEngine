@@ -153,6 +153,24 @@ class MobileFunctions {
 				return null;
 		}
 	}
+
+    public static function getMobileControlsAsString():String {
+			switch (MobileControls.getMode()){
+			case 0:
+				return 'left';
+			case 1:
+				return 'right';
+			case 2:
+				return 'custom';
+			case 3:
+				return 'duo';
+			case 4:
+				return 'hitbox';
+			case 5:
+				return 'none';
+			}
+			return 'null';
+	}
 }
 
 #if android
