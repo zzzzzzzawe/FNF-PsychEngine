@@ -100,11 +100,8 @@ class MobileFunctions {
         });
 
         funk.set("touchJustPressed", TouchFunctions.touchJustPressed);
-        
         funk.set("touchPressed", TouchFunctions.touchPressed);
-
         funk.set("touchJustReleased", TouchFunctions.touchJustReleased);
-
         funk.set("touchPressedObject", function(object:String):Bool {
             var obj = PlayState.instance.getLuaObject(object);
             if(obj == null){
@@ -176,15 +173,11 @@ class MobileFunctions {
 class AndroidFunctions {
     public static function implement(funk:FunkinLua) {
         funk.set("backJustPressed", FlxG.android.justPressed.BACK);
-
         funk.set("backPressed", FlxG.android.pressed.BACK);
-
         funk.set("backJustReleased", FlxG.android.justReleased.BACK);
 
         funk.set("menuJustPressed", FlxG.android.justPressed.MENU);
-
         funk.set("menuPressed", FlxG.android.pressed.MENU);
-
         funk.set("menuJustReleased", FlxG.android.justReleased.MENU);
     }
 }
