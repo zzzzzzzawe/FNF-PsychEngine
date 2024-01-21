@@ -91,6 +91,13 @@
       "name": "extension-androidtools",
       "type": "haxelib",
       "version": null
+    },
+    {
+      "name": "extension-iostools",
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/Futuredorito/extension-iostools"
     }
   ]
 }
