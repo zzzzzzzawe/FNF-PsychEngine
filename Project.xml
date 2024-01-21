@@ -114,7 +114,7 @@
 
 	<!-- Mobile Specific-->
 	<haxelib name="extension-androidtools" if="android" />
-	<haxelib name="extension-iostools" if="ios" />
+	<haxelib name="hx-ios-uikit" if="ios" />
 
 	<!-- Disable Discord IO Thread -->
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />

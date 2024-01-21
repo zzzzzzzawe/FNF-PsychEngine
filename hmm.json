@@ -93,11 +93,9 @@
       "version": null
     },
     {
-      "name": "extension-iostools",
-      "type": "git",
-      "dir": null,
-      "ref": "main",
-      "url": "https://github.com/Futuredorito/extension-iostools"
+      "name": "hx-ios-uikit",
+      "type": "haxelib",
+      "version": null
     }
   ]
 }
