@@ -24,6 +24,8 @@ class FlxHitbox extends FlxMobileInputManager
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
+	var storedButtonsIDs:Map<FlxButton, Null<Array<FlxMobileInputID>>> = new Map<FlxButton, Null<Array<FlxMobileInputID>>>();
+
 	/**
 	 * Create the zone.
 	 */
@@ -31,39 +33,40 @@ class FlxHitbox extends FlxMobileInputManager
 	{
 		super();
 
-		var buttonsColors:Array<FlxColor> = [];
-		var data:Dynamic;
-		if (ClientPrefs.data.dynamicColors)
-			data = ClientPrefs.data;
-		else
-			data = ClientPrefs.defaultData;
-
-		buttonsColors.push(data.arrowRGB[0][0]);
-		buttonsColors.push(data.arrowRGB[1][0]);
-		buttonsColors.push(data.arrowRGB[2][0]);
-		buttonsColors.push(data.arrowRGB[3][0]);
+		for (buttonStr in Reflect.fields(this))
+		{
+			var button = Reflect.field(this, buttonStr);
+			if (Std.isOfType(button, FlxButton))
+				storedButtonsIDs.set(button, button.IDs);
+		}
 
 		switch (extraMode)
 		{
 			case NONE:
-				add(createHint(buttonLeft, 0, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFFC24B99));
-				add(createHint(buttonDown, FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF00FFFF));
-				add(createHint(buttonUp, FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF12FA05));
-				add(createHint(buttonRight, (FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, 0xFFF9393F));
+				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFFC24B99));
+				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF00FFFF));
+				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), FlxG.height, 0xFF12FA05));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), FlxG.height, 0xFFF9393F));
 			case SINGLE:
-				add(createHint(buttonLeft, 0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFC24B99));
-				add(createHint(buttonDown, FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF00FFFF));
-				add(createHint(buttonUp, FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF12FA05));
-				add(createHint(buttonRight, (FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFF9393F));
-				add(createHint(buttonExtra, 0, offsetFir, FlxG.width, Std.int(FlxG.height / 4), 0xFF0066FF));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFC24B99));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF00FFFF));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF12FA05));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3,
+					0xFFF9393F));
+				add(buttonExtra = createHint(0, offsetFir, FlxG.width, Std.int(FlxG.height / 4), 0xFF0066FF));
 			case DOUBLE:
-				add(createHint(buttonLeft, 0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFC24B99));
-				add(createHint(buttonDown, FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF00FFFF));
-				add(createHint(buttonUp, FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF12FA05));
-				add(createHint(buttonRight, (FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFF9393F));
-				add(createHint(buttonExtra, Std.int(FlxG.width / 2), offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xFF0066FF));
-				add(createHint(buttonExtra2, 0, offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xA6FF00));
+				add(buttonLeft = createHint(0, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFFC24B99));
+				add(buttonDown = createHint(FlxG.width / 4, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF00FFFF));
+				add(buttonUp = createHint(FlxG.width / 2, offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3, 0xFF12FA05));
+				add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), offsetSec, Std.int(FlxG.width / 4), Std.int(FlxG.height / 4) * 3,
+					0xFFF9393F));
+				add(buttonExtra = createHint(Std.int(FlxG.width / 2), offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xFF0066FF));
+				add(buttonExtra2 = createHint(0, offsetFir, Std.int(FlxG.width / 2), Std.int(FlxG.height / 4), 0xA6FF00));
 		}
+		forEachAlive((button:FlxButton) ->
+		{
+			button.IDs = storedButtonsIDs.get(button);
+		});
 		scrollFactor.set();
 		updateTrackedButtons();
 	}
@@ -104,11 +107,10 @@ class FlxHitbox extends FlxMobileInputManager
 		return bitmap;
 	}
 
-	private function createHint(hint:FlxButton, X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton
+	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton
 	{
 		var hintTween:FlxTween = null;
-		var IDs = hint.IDs;
-		hint = new FlxButton(X, Y, IDs);
+		var hint = new FlxButton(X, Y);
 		hint.loadGraphic(createHintGraphic(Width, Height, Color));
 		hint.solid = false;
 		hint.immovable = true;
