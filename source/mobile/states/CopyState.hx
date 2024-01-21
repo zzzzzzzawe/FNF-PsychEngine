@@ -43,7 +43,7 @@ class CopyState extends MusicBeatState
 		{
 			trace(locatedFiles);
 			shouldCopy = true;
-			#if (!ios)
+			#if !ios
 			FlxG.stage.window.alert("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
 			#end
 
