@@ -3724,7 +3724,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	public function addLuaVirtualPad() {
-		if(luaVirtualPad == null || !members.contains(luaVirtualPad)) return;
+		if(luaVirtualPad == null || members.contains(luaVirtualPad)) return;
 
 		var target = LuaUtils.getTargetInstance();
 		target.insert(target.members.length + 1, luaVirtualPad);
