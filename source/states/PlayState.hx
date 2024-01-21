@@ -3714,17 +3714,17 @@ class PlayState extends MusicBeatState
 	#end
 	
 	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
-		if(luaVirtualPad.exists) return;
+		if(members.contains(luaVirtualPad)) return;
 
 		if(!variables.exists("luaVirtualPad"))
 			variables.set("luaVirtualPad", luaVirtualPad);
 
-		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode));
+		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode), NONE);
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
 	}
 	
 	public function addLuaVirtualPad() {
-		if(luaVirtualPad == null || luaVirtualPad.exists) return;
+		if(luaVirtualPad == null || !members.contains(luaVirtualPad)) return;
 
 		var target = LuaUtils.getTargetInstance();
 		target.insert(target.members.length + 1, luaVirtualPad);
