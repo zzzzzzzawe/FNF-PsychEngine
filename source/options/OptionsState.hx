@@ -128,7 +128,7 @@ class OptionsState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		if (virtualPad.buttonC.justPressed || FlxG.keys.justPressed.CTRL && controls.mobileC) {
+		if (virtualPad.buttonC.justPressed || FlxG.keys.justPressed.CONTROL && controls.mobileC) {
 			persistentUpdate = false;
 
 			openSubState(new MobileControlSelectSubState());
