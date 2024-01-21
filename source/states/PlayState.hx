@@ -624,31 +624,7 @@ class PlayState extends MusicBeatState
 			}
 		#end
 
-		var buttonsColors:Array<FlxColor> = [];
-		var data:Dynamic;
-		if(ClientPrefs.data.dynamicColors)
-			data = ClientPrefs.data;
-		else
-			data = ClientPrefs.defaultData;
-
-		buttonsColors.push(data.arrowRGB[0][0]);
-		buttonsColors.push(data.arrowRGB[1][0]);
-		buttonsColors.push(data.arrowRGB[2][0]);
-		buttonsColors.push(data.arrowRGB[3][0]);
 		addMobileControls(false);
-
-		if(MobileControls.getMode() == 0 || MobileControls.getMode() == 1 || MobileControls.getMode() == 2 || MobileControls.getMode() == 3) {
-			mobileControls.virtualPad.buttonLeft.color =  buttonsColors[0];
-			mobileControls.virtualPad.buttonDown.color =  buttonsColors[1];
-			mobileControls.virtualPad.buttonUp.color =  buttonsColors[2];
-			mobileControls.virtualPad.buttonRight.color =  buttonsColors[3];
-		}
-		if(MobileControls.getMode() == 3) {
-			mobileControls.virtualPad.buttonLeft2.color = buttonsColors[0];
-			mobileControls.virtualPad.buttonDown2.color = buttonsColors[1];
-			mobileControls.virtualPad.buttonUp2.color = buttonsColors[2];
-			mobileControls.virtualPad.buttonRight2.color = buttonsColors[3];
-		}
 
 		startCallback();
 		RecalculateRating();
@@ -3738,15 +3714,18 @@ class PlayState extends MusicBeatState
 	#end
 	
 	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
+		if(luaVirtualPad.exists) return;
+
 		if(!variables.exists("luaVirtualPad"))
 			variables.set("luaVirtualPad", luaVirtualPad);
+
 		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode));
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
 	}
 	
 	public function addLuaVirtualPad() {
-		if(luaVirtualPad == null)
-			return;
+		if(luaVirtualPad == null || luaVirtualPad.exists) return;
+
 		var target = LuaUtils.getTargetInstance();
 		target.insert(target.members.length + 1, luaVirtualPad);
 	}

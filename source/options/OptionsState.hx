@@ -3,6 +3,7 @@ package options;
 import states.MainMenuState;
 import backend.StageData;
 import flixel.addons.transition.FlxTransitionableState;
+import mobile.substates.MobileControlSelectSubState;
 #if (target.threaded)
 import sys.thread.Thread;
 import sys.thread.Mutex;
@@ -127,10 +128,10 @@ class OptionsState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		if (virtualPad.buttonC.justPressed) {
+		if (virtualPad.buttonC.justPressed || FlxG.keys.justPressed.C) {
 			persistentUpdate = false;
 
-			openSubState(new MobileControlsSubState());
+			openSubState(new MobileControlSelectSubState());
 		}
 
 		if (controls.BACK) {

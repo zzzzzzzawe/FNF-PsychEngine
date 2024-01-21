@@ -15,11 +15,10 @@ import backend.VideoSpriteManager;
 
 //Mobile Controls
 import mobile.objects.MobileControls;
-import mobile.substates.MobileControlsSubState;
 import mobile.flixel.FlxHitbox;
 import mobile.flixel.FlxVirtualPad;
-import mobile.flixel.FlxVirtualPadExtra;
 import mobile.flixel.input.FlxMobileInputID;
+import mobile.backend.Data;
 
 #if sys
 import sys.*;
