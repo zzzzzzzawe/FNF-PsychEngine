@@ -26,7 +26,6 @@ jobs:
           haxelib setup ~/haxelib
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
-          haxelib run lime rebuild extenstion-iostools ios -arm64 -final
 
       - name: Configure Android
         run: |
@@ -64,6 +63,7 @@ jobs:
           haxelib setup ~/haxelib
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
+          haxelib run lime rebuild extenstion-iostools ios -arm64 -final
 
       # - name: Install MobileVLCKit Framework
         # run: |
