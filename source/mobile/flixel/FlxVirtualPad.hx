@@ -38,7 +38,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
-	var storedButtonsIDs:Map<FlxButton, Null<Array<FlxMobileInputID>>> = new Map<FlxButton, Null<Array<FlxMobileInputID>>>();
+	var storedButtonsIDs:Map<String, Array<FlxMobileInputID>> = new Map<String, Array<FlxMobileInputID>>();
 
 	/**
 	 * Create a gamepad.
@@ -50,11 +50,13 @@ class FlxVirtualPad extends FlxMobileInputManager
 	{
 		super();
 
-		for (buttonStr in Reflect.fields(this))
+		for (button in Reflect.fields(this))
 		{
-			var button = Reflect.field(this, buttonStr);
-			if (Std.isOfType(button, FlxButton))
-				storedButtonsIDs.set(button, button.IDs);
+			if (Std.isOfType(Reflect.field(this, button), FlxButton))
+			{
+				storedButtonsIDs.set(button, Reflect.getProperty(Reflect.field(this, button), 'IDs'));
+				trace('stored $button\'s IDs (${storedButtonsIDs.get(button)})');
+			}
 		}
 
 		switch (DPad)
@@ -213,10 +215,15 @@ class FlxVirtualPad extends FlxMobileInputManager
 				setExtrasPos();
 			case NONE: // nothing
 		}
-		forEachAlive((button:FlxButton) ->
+
+		for (button in Reflect.fields(this))
 		{
-			button.IDs = storedButtonsIDs.get(button);
-		});
+			if (Std.isOfType(Reflect.field(this, button), FlxButton))
+			{
+				Reflect.setProperty(Reflect.getProperty(this, button), 'IDs', storedButtonsIDs.get(button));
+				trace('setted $button\'s IDs (${storedButtonsIDs.get(button)})');
+			}
+		}
 		scrollFactor.set();
 		updateTrackedButtons();
 	}
