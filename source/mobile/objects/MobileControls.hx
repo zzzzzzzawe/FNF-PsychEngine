@@ -50,10 +50,10 @@ class MobileControls extends FlxSpriteGroup
 		buttonsColors.push(data.arrowRGB[2][0]);
 		buttonsColors.push(data.arrowRGB[3][0]);
 
-		current.buttonLeft.color = buttonsColors[0];
-		current.buttonDown.color = buttonsColors[1];
-		current.buttonUp.color = buttonsColors[2];
-		current.buttonRight.color = buttonsColors[3];
+		virtualPad.buttonLeft.color = buttonsColors[0];
+		virtualPad.buttonDown.color = buttonsColors[1];
+		virtualPad.buttonUp.color = buttonsColors[2];
+		vitrualPad.buttonRight.color = buttonsColors[3];
 		if (mode == 3)
 		{
 			virtualPad.buttonLeft2.color = buttonsColors[0];
