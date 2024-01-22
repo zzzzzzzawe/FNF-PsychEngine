@@ -11,13 +11,13 @@ import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.math.FlxPoint;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxSave;
 import flixel.input.keyboard.FlxKey;
 import flixel.animation.FlxAnimationController;
-import openfl.utils.Assets;
+import lime.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
 import haxe.Json;
 
@@ -55,7 +55,6 @@ import psychlua.HScript;
 #if SScript
 import tea.SScript;
 #end
-import mobile.backend.Data;
 
 /**
  * This is where all the Gameplay stuff happens and is managed
@@ -75,7 +74,7 @@ import mobile.backend.Data;
 **/
 class PlayState extends MusicBeatState
 {
-	public static var STRUM_X = 48.5;
+	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
@@ -111,10 +110,10 @@ class PlayState extends MusicBeatState
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, FlxText> = new Map<String, FlxText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
-	#end
 	#if CUSTOM_SHADERS_ALLOWED
 	public var modchartShader:Map<String, Effect> = new Map<String, Effect>();
 	public var shaderUpdates:Array<Float->Void> = [];
+	#end
 	#end
 
 	public var BF_X:Float = 770;
@@ -312,7 +311,6 @@ class PlayState extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 		luaVpadCam.bgColor.alpha = 0;
-		//FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.add(luaVpadCam, false);
@@ -417,7 +415,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		// "GLOBAL" SCRIPTS
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED && sys)
+		#if ((LUA_ALLOWED || HSCRIPT_ALLOWED) && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
@@ -481,7 +479,7 @@ class PlayState extends MusicBeatState
 		noteGroup = new FlxTypedGroup<FlxBasic>();
 		add(noteGroup);
 		uiGroup = new FlxSpriteGroup();
-                add(uiGroup);
+		add(uiGroup);
 
 		Conductor.songPosition = -5000 / Conductor.songPosition;
 		var showTime:Bool = (ClientPrefs.data.timeBarType != 'Disabled');
@@ -608,7 +606,7 @@ class PlayState extends MusicBeatState
 		}
 
 		// SONG SPECIFIC SCRIPTS
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED && sys)
+		#if ((LUA_ALLOWED || HSCRIPT_ALLOWED) && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
@@ -651,7 +649,7 @@ class PlayState extends MusicBeatState
 
 		#if (!android)
 		addVirtualPad(NONE, P);
-       		addVirtualPadCamera(false);
+    	addVirtualPadCamera(false);
 		#end
 
 		super.create();
@@ -718,8 +716,8 @@ class PlayState extends MusicBeatState
 		#if sys
 		Sys.println(text);
 		#else
-                trace(text);
-                #end
+		trace(text);
+		#end
 	}
 	#end
 
@@ -816,12 +814,7 @@ class PlayState extends MusicBeatState
 		#end
 		{
 			scriptFile = Paths.getSharedPath(scriptFile);
-                        #if sys
-			if(FileSystem.exists(scriptFile))
-                        #else
-                        if(Assets.exists(scriptFile))
-                        #end
-				doPush = true;
+			if(#if sys FileSystem.exists(scriptFile) #else Assets.exists(scriptFile) #end) doPush = true;
 		}
 
 		if(doPush)
@@ -1097,8 +1090,8 @@ class PlayState extends MusicBeatState
 				daNote.visible = false;
 				daNote.ignoreNote = true;
 
-				unspawnNotes.remove(daNote);
 				if(!ClientPrefs.data.lowQuality || !ClientPrefs.data.popUpRating || !cpuControlled) daNote.kill();
+				unspawnNotes.remove(daNote);
 				daNote.destroy();
 			}
 			--i;
@@ -1117,8 +1110,6 @@ class PlayState extends MusicBeatState
 			--i;
 		}
 	}
-
-	public var scoreSeparator:String = " | ";
 
 	// fun fact: Dynamic Functions can be overriden by just doing this
 	// `updateScore = function(miss:Bool = false) { ... }
@@ -1320,7 +1311,7 @@ class PlayState extends MusicBeatState
 		#if MODS_ALLOWED
 		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
 		#else
-		if (Assets.exists(file))
+		if (OpenFlAssets.exists(file))
 		#end
 		{
 			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
@@ -1676,31 +1667,24 @@ class PlayState extends MusicBeatState
 			#end
 
 			paused = false;
-			mobileControls.visible = true;
-			#if !android virtualPad.visible = true; #end
-			callOnScripts('onResume');
+			mobileControls.visible = #if !android virtualPad.visible = #end true;			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
 	}
 
 	override public function onFocus():Void
 	{
-		callOnScripts('onFocus');
 		if (health > 0 && !paused) resetRPC(Conductor.songPosition > 0.0);
-
 		super.onFocus();
-		callOnScripts('onFocusPost');
 	}
 
-        override public function onFocusLost():Void
+	override public function onFocusLost():Void
 	{
-		callOnScripts('onFocusLost');
 		#if DISCORD_ALLOWED
 		if (health > 0 && !paused && autoUpdateRPC) DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		#end
 
 		super.onFocusLost();
-		callOnScripts('onFocusLostPost');
 	}
 
 	// Updating Discord Rich Presence.
@@ -1709,7 +1693,7 @@ class PlayState extends MusicBeatState
 	{
 		#if DISCORD_ALLOWED
 		if(!autoUpdateRPC) return;
-		
+
 		if (showTime)
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength - Conductor.songPosition - ClientPrefs.data.noteOffset);
 		else
@@ -1744,11 +1728,8 @@ class PlayState extends MusicBeatState
 	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
 
-
 	override public function update(elapsed:Float)
 	{
-		callOnScripts('onUpdate', [elapsed]);
-		FlxG.camera.followLerp = 0;
 		if(!inCutscene && !paused && !freezeCamera) {
 			FlxG.camera.followLerp = 2.4 * cameraSpeed * playbackRate;
 			if(!startingSong && !endingSong && boyfriend.getAnimationName().startsWith('idle')) {
@@ -1760,6 +1741,8 @@ class PlayState extends MusicBeatState
 				boyfriendIdleTime = 0;
 			}
 		}
+		else FlxG.camera.followLerp = 0;
+		callOnScripts('onUpdate', [elapsed]);
 
 		super.update(elapsed);
 
@@ -1771,7 +1754,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (controls.PAUSE #if android || FlxG.android.justReleased.BACK #end #if (!android) || virtualPad.buttonP.justPressed #end && startedCountdown && canPause)
+		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #else || virtualPad.buttonP.justPressed #end) && (startedCountdown && canPause))
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -1782,7 +1765,7 @@ class PlayState extends MusicBeatState
 		if(!endingSong && !inCutscene && allowDebugKeys)
 		{
 			if (controls.justPressed('debug_1'))
-			openChartEditor();
+				openChartEditor();
 			else if (controls.justPressed('debug_2'))
 				openCharacterEditor();
 		}
@@ -1957,7 +1940,7 @@ class PlayState extends MusicBeatState
 	var iconsAnimations:Bool = true;
 	function set_health(value:Float):Float // You can alter how icon animations work here
 	{
-			if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
+		if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
 		{
 			health = value;
 			return health;
@@ -1978,8 +1961,7 @@ class PlayState extends MusicBeatState
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		persistentDraw = true;
-		mobileControls.visible = false;
-		#if !android virtualPad.visible = false; #end
+		mobileControls.visible = #if !android virtualPad.visible = #end false;
 		paused = true;
 
 		#if VIDEOS_ALLOWED
@@ -2027,7 +2009,7 @@ class PlayState extends MusicBeatState
 		MusicBeatState.switchState(new ChartingState());
 	}
 
-	public function openCharacterEditor()
+	function openCharacterEditor()
 	{
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
@@ -2428,8 +2410,7 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong()
 	{
-		mobileControls.visible = false;
-		#if !android virtualPad.visible = false; #end
+		mobileControls.visible = #if !android virtualPad.visible = #end false;
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
 			notes.forEach(function(daNote:Note) {
@@ -3139,8 +3120,8 @@ class PlayState extends MusicBeatState
 	}
 
 	public function invalidateNote(note:Note):Void {
-		notes.remove(note, true);
 		if(!ClientPrefs.data.lowQuality || !ClientPrefs.data.popUpRating || !cpuControlled) note.kill();
+		notes.remove(note, true);
 		note.destroy();
 	}
 
@@ -3323,7 +3304,7 @@ class PlayState extends MusicBeatState
 		if(FileSystem.exists(luaToLoad))
 		#elseif sys
 		var luaToLoad:String = Paths.getSharedPath(luaFile);
-		if(Assets.exists(luaToLoad))
+		if(OpenFlAssets.exists(luaToLoad))
 		#end
 		{
 			for (script in luaArray)
@@ -3347,11 +3328,7 @@ class PlayState extends MusicBeatState
 		var scriptToLoad:String = Paths.getSharedPath(scriptFile);
 		#end
 
-		#if sys
-                if(FileSystem.exists(scriptToLoad))
-                #else
-                if(Assets.exists(scriptToLoad))
-                #end
+		if(#if sys FileSystem.exists(scriptToLoad) #else Assets.exists(scriptToLoad) #end)
 		{
 			if (SScript.global.exists(scriptToLoad)) return false;
 
@@ -3438,7 +3415,7 @@ class PlayState extends MusicBeatState
 				arr.push(script);
 				continue;
 			}
-			
+
 			if(exclusions.contains(script.scriptName))
 				continue;
 
@@ -3677,29 +3654,29 @@ class PlayState extends MusicBeatState
 
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'shaders/'))
 		{
-				var frag:String = folder + name + '.frag';
-				var vert:String = folder + name + '.vert';
-				var found:Bool = false;
-				if(FileSystem.exists(frag))
-				{
-					frag = File.getContent(frag);
-					found = true;
-				}
-				else frag = null;
+			var frag:String = folder + name + '.frag';
+			var vert:String = folder + name + '.vert';
+			var found:Bool = false;
+			if(FileSystem.exists(frag))
+			{
+				frag = File.getContent(frag);
+				found = true;
+			}
+			else frag = null;
 
-				if(FileSystem.exists(vert))
-				{
-					vert = File.getContent(vert);
-					found = true;
-				}
-				else vert = null;
+			if(FileSystem.exists(vert))
+			{
+				vert = File.getContent(vert);
+				found = true;
+			}
+			else vert = null;
 
-				if(found)
-				{
-					runtimeShaders.set(name, [frag, vert]);
-					//trace('Found shader $name!');
-					return true;
-				}
+			if(found)
+			{
+				runtimeShaders.set(name, [frag, vert]);
+				//trace('Found shader $name!');
+				return true;
+			}
 		}
 			#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
@@ -3712,7 +3689,7 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
-	
+
 	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
 		if(members.contains(luaVirtualPad)) return;
 
