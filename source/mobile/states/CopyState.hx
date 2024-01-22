@@ -7,6 +7,9 @@ import openfl.utils.ByteArray;
 import openfl.system.System;
 import states.TitleState;
 import haxe.io.Path;
+#if ios
+import ios.uikit.UIAlertController;
+#end
 #if (target.threaded)
 import sys.thread.Thread;
 import sys.thread.Mutex;
@@ -45,6 +48,8 @@ class CopyState extends MusicBeatState
 			shouldCopy = true;
 			#if !ios
 			FlxG.stage.window.alert("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
+			#else
+			UIAlertController.alertControllerWithTitleMessagePreferredStyle("Notice!", "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", UIAlertControllerStyle.UIAlertControllerStyleAlert);
 			#end
 
 			add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d));
