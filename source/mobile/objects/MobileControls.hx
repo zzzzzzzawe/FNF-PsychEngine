@@ -8,7 +8,8 @@ class MobileControls extends FlxSpriteGroup
 {
 	public var virtualPad:FlxVirtualPad = new FlxVirtualPad(NONE, NONE, NONE);
 	public var hitbox:FlxHitbox = new FlxHitbox(NONE);
-	public var current(get, default):Dynamic;
+	@:isVar // HAXE FORCED ME TO PUT THIS IDFK
+	public var current(get, set):Dynamic;
 
 	public static var mode(get, set):Int;
 	public static var forcedControl:Null<Int>;
@@ -150,6 +151,12 @@ class MobileControls extends FlxSpriteGroup
 			case 4: hitbox;
 			default: virtualPad;
 		}
+	}
+
+	function set_current(val:Dynamic)
+	{
+		current = val;
+		return val;
 	}
 
 	static function set_mode(mode:Int = 0)
