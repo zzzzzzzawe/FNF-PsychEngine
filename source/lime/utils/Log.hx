@@ -5,7 +5,7 @@ import openfl.Lib;
 import android.widget.Toast;
 #end
 import haxe.PosInfos;
-import lime.app.Application;
+import backend.SUtil;
 import lime.system.System;
 #if sys
 import sys.io.File;
@@ -66,7 +66,7 @@ class Log
 				#end
 
 				println(message);
-				Application.current.window.alert(message, 'Error!');
+				SUtil.showPopUp(message, 'Error!');
 				System.exit(1);
 			}
 			else

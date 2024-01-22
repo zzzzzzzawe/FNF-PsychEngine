@@ -5,7 +5,10 @@ import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
-#end
+#elseif ios
+import ios.uikit.UIAlertController;
+import ios.uikit.UIAlertControllerStyle;
+#wnd
 import haxe.io.Path;
 import haxe.CallStack;
 import lime.app.Application;
@@ -110,7 +113,7 @@ class SUtil
 		#end
 
 		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Error!');
+		SUtil.showPopUp(msg, "Error!");
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -157,7 +160,7 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			Lib.application.window.alert(fileName + " file has been saved", "Success!");
+			SUtil.showPopUp(fileName + " file has been saved", "Success!");
 		}
 		catch (e:Dynamic)
 		{
@@ -196,14 +199,26 @@ class SUtil
 
 	#end
 	#if android
-	public static function doPermissionsShit(){
+	public static function doPermissionsShit():Void
+        {
 		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
 			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
 				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
 			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
 				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
-			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
+			SUtil.showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
 		}
 	}
 	#end
+
+        public static function showPopUp(message:String, title:String):Void
+        {
+                #if ios
+                UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
+                #elseif (windows || android || js || wasm)
+                FlxG.stage.window.alert(message, title);
+                #else
+                trace('$title - $message');
+                #end
+        }
 }

@@ -47,11 +47,7 @@ class CopyState extends MusicBeatState
 		{
 			trace(locatedFiles);
 			shouldCopy = true;
-			#if !ios
-			FlxG.stage.window.alert("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
-			#else
-			UIAlertController.alertControllerWithTitleMessagePreferredStyle("Notice!", "Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", UIAlertControllerStyle.UIAlertControllerStyleAlert);
-			#end
+			SUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
 
 			add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d));
 
@@ -102,7 +98,7 @@ class CopyState extends MusicBeatState
 			{
 				if (failedFiles.length > 0)
 				{
-					FlxG.stage.window.alert(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
+					SUtil.showPopUp(failedFiles.join('\n'), 'Failed To Copy ${failedFiles.length} File.');
 					if (!FileSystem.exists('logs'))
 						FileSystem.createDirectory('logs');
 					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
