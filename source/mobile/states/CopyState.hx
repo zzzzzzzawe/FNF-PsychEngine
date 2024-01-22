@@ -9,7 +9,7 @@ import states.TitleState;
 import haxe.io.Path;
 #if (target.threaded)
 import sys.thread.Thread;
-import sys.thread.Mutex;
+//import sys.thread.Mutex;
 #end
 
 class CopyState extends MusicBeatState
@@ -30,9 +30,9 @@ class CopyState extends MusicBeatState
 
 	static final textFilesExtensions:Array<String> = ['txt', 'xml', 'lua', 'hx', 'json', 'frag', 'vert'];
 
-	#if (target.threaded)
+	/*#if (target.threaded)
 	var mutex:Mutex = new Mutex();
-	#end
+	#end*/
 
 	override function create()
 	{
@@ -63,7 +63,7 @@ class CopyState extends MusicBeatState
 
 			#if (target.threaded)
 			Thread.create(() -> {
-				mutex.acquire();
+				//mutex.acquire();
 			#end
 				var ticks:Int = 15;
 				if (maxLoopTimes <= 15)
@@ -72,7 +72,7 @@ class CopyState extends MusicBeatState
 				add(copyLoop);
 				copyLoop.start();
 			#if (target.threaded)
-			mutex.release();
+			        //mutex.release();
 			});
 			#end
 		}
