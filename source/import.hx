@@ -20,6 +20,11 @@ import mobile.flixel.FlxVirtualPad;
 import mobile.flixel.input.FlxMobileInputID;
 import mobile.backend.Data;
 
+//iOS
+#if ios
+import ios.uikit.*;
+#end
+
 #if sys
 import sys.*;
 import sys.io.*;
