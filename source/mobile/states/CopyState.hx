@@ -7,10 +7,6 @@ import openfl.utils.ByteArray;
 import openfl.system.System;
 import states.TitleState;
 import haxe.io.Path;
-#if ios
-import ios.uikit.UIAlertController;
-import ios.uikit.UIAlertControllerStyle;
-#end
 #if (target.threaded)
 import sys.thread.Thread;
 import sys.thread.Mutex;
