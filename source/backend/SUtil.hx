@@ -8,7 +8,7 @@ import android.Permissions;
 #elseif ios
 import ios.uikit.UIAlertController;
 import ios.uikit.UIAlertControllerStyle;
-#wnd
+#end
 import haxe.io.Path;
 import haxe.CallStack;
 import lime.app.Application;
