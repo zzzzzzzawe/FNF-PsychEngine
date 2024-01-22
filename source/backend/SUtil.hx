@@ -6,8 +6,7 @@ import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
 #elseif ios
-import ios.uikit.UIAlertController;
-import ios.uikit.UIAlertControllerStyle;
+//import Objc;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
@@ -214,7 +213,18 @@ class SUtil
         public static function showPopUp(message:String, title:String):Void
         {
                 #if ios
-                UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
+		var application:UIViewController = UIApplication.sharedApplication().keyWindow.rootViewController;
+
+                var alert = UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
+		var action = UIAlertAction.actionWithTitleStyleHandler("OK", UIAlertActionStyle.UIAlertActionStyleDefault,
+			UIAlertActionCall((data:UIAlertAction) -> {
+			//var title = data.title;
+			var label:UILabel = UILabel.alloc().initWithFrame(CGRectMake(100, 100, 200, 40));
+			label.text = "23";
+			label.textColor = UIColor.colorWithRedGreenBlueAlpha(1, 1, 0, 1);
+			application.view.addSubview(label);
+		}));
+		alert.addAction(action);
                 #elseif (windows || android || js || wasm)
                 FlxG.stage.window.alert(message, title);
                 #else
