@@ -19,6 +19,7 @@ import mobile.flixel.FlxHitbox;
 import mobile.flixel.FlxVirtualPad;
 import mobile.flixel.input.FlxMobileInputID;
 import mobile.backend.Data;
+import mobile.backend.SUtil;
 
 //iOS
 #if ios
@@ -43,7 +44,6 @@ import backend.Conductor;
 import backend.BaseStage;
 import backend.Difficulty;
 import backend.Mods;
-import backend.SUtil;
 
 import objects.Alphabet;
 import objects.BGSprite;

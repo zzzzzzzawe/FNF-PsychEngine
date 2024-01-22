@@ -1,12 +1,10 @@
-package backend;
+package mobile.backend;
 
 #if android
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
-#elseif ios
-//import Objc;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
@@ -112,7 +110,7 @@ class SUtil
 		#end
 
 		LimeLogger.println(msg);
-		SUtil.showPopUp(msg, "Error!");
+		showPopUp(msg, "Error!");
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -159,7 +157,7 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			SUtil.showPopUp(fileName + " file has been saved", "Success!");
+			showPopUp(fileName + " file has been saved", "Success!");
 		}
 		catch (e:Dynamic)
 		{
@@ -205,7 +203,7 @@ class SUtil
 				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
 			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
 				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
-			SUtil.showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
+			showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
 		}
 	}
 	#end
