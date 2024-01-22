@@ -326,7 +326,7 @@ class HScript extends SScript
   
 		set("virtualPadJustPressed", function(button:Dynamic):Bool {
 			if(PlayState.instance.luaVirtualPad == null){
-			  FunkinLua.luaTrace('virtualPadJustPressed: VPAD does not exist.');
+			  //FunkinLua.luaTrace('virtualPadJustPressed: VPAD does not exist.');
 			  return false;
 			}
 		  return PlayState.instance.luaVirtualPadJustPressed(button);
@@ -334,7 +334,7 @@ class HScript extends SScript
   
 		set("virtualPadPressed", function(button:Dynamic):Bool {
 			if(PlayState.instance.luaVirtualPad == null){
-				FunkinLua.luaTrace('virtualPadPressed: VPAD does not exist.');
+				//FunkinLua.luaTrace('virtualPadPressed: VPAD does not exist.');
 				return false;
 			}
 			return PlayState.instance.luaVirtualPadPressed(button);
@@ -342,7 +342,7 @@ class HScript extends SScript
   
 		set("virtualPadJustReleased", function(button:Dynamic):Bool {
 			if(PlayState.instance.luaVirtualPad == null){
-				FunkinLua.luaTrace('virtualPadJustReleased: VPAD does not exist.');
+				//FunkinLua.luaTrace('virtualPadJustReleased: VPAD does not exist.');
 				return false;
 			}
 			return PlayState.instance.luaVirtualPadJustReleased(button);
