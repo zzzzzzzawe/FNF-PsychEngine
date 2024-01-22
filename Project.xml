@@ -176,6 +176,11 @@
 			<android target-sdk-version="28" if="EXTERNAL || MEDIA"/> <!-- blame android 11+!!! -->
 		</section>
 
+		<section if="ios">
+			<define name='objc' />
+			<ios linker-flags='-ObjC' />
+		</section>
+
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
