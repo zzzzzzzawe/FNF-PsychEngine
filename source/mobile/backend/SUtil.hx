@@ -54,7 +54,7 @@ class SUtil
 				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
 		}
 		#elseif ios
-		daPath = LimeSystem.documentsDirectory + Application.current.meta.get('file');
+		daPath = LimeSystem.documentsDirectory + '/' + Application.current.meta.get('file');
 		#end
 
 		return daPath;
