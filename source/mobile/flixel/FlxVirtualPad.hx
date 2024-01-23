@@ -53,10 +53,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		for (button in Reflect.fields(this))
 		{
 			if (Std.isOfType(Reflect.field(this, button), FlxButton))
-			{
 				storedButtonsIDs.set(button, Reflect.getProperty(Reflect.field(this, button), 'IDs'));
-				trace('stored $button\'s IDs (${storedButtonsIDs.get(button)})');
-			}
 		}
 
 		switch (DPad)
@@ -219,10 +216,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		for (button in Reflect.fields(this))
 		{
 			if (Std.isOfType(Reflect.field(this, button), FlxButton))
-			{
 				Reflect.setProperty(Reflect.getProperty(this, button), 'IDs', storedButtonsIDs.get(button));
-				trace('setted $button\'s IDs (${storedButtonsIDs.get(button)})');
-			}
 		}
 		scrollFactor.set();
 		updateTrackedButtons();

@@ -36,10 +36,7 @@ class FlxHitbox extends FlxMobileInputManager
 		for (button in Reflect.fields(this))
 		{
 			if (Std.isOfType(Reflect.field(this, button), FlxButton))
-			{
 				storedButtonsIDs.set(button, Reflect.getProperty(Reflect.field(this, button), 'IDs'));
-				trace('stored $button\'s IDs (${storedButtonsIDs.get(button)})');
-			}
 		}
 
 		switch (extraMode)
@@ -69,10 +66,7 @@ class FlxHitbox extends FlxMobileInputManager
 		for (button in Reflect.fields(this))
 		{
 			if (Std.isOfType(Reflect.field(this, button), FlxButton))
-			{
 				Reflect.setProperty(Reflect.getProperty(this, button), 'IDs', storedButtonsIDs.get(button));
-				trace('setted $button\'s IDs (${storedButtonsIDs.get(button)})');
-			}
 		}
 		scrollFactor.set();
 		updateTrackedButtons();
@@ -93,32 +87,12 @@ class FlxHitbox extends FlxMobileInputManager
 		buttonExtra2 = FlxDestroyUtil.destroy(buttonExtra2);
 	}
 
-	private function createHintGraphic(Width:Int, Height:Int, Color:Int = 0xFFFFFF):BitmapData
-	{
-		var guh = ClientPrefs.data.controlsAlpha;
-		if (guh >= 0.9)
-			guh = ClientPrefs.data.controlsAlpha - 0.07;
-		var shape:Shape = new Shape();
-		shape.graphics.beginFill(Color);
-		shape.graphics.lineStyle(3, Color, 1);
-		shape.graphics.drawRect(0, 0, Width, Height);
-		shape.graphics.lineStyle(0, 0, 0);
-		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
-		shape.graphics.endFill();
-		shape.graphics.beginGradientFill(RADIAL, [Color, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
-		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
-		shape.graphics.endFill();
-
-		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
-		bitmap.draw(shape);
-		return bitmap;
-	}
-
 	private function createHint(X:Float, Y:Float, Width:Int, Height:Int, Color:Int = 0xFFFFFF):FlxButton
 	{
 		var hintTween:FlxTween = null;
 		var hint = new FlxButton(X, Y);
-		hint.loadGraphic(createHintGraphic(Width, Height, Color));
+		hint.loadGraphic(createHintGraphic(Width, Height));
+		hint.color = Color;
 		hint.solid = false;
 		hint.immovable = true;
 		hint.multiTouch = true;
@@ -169,5 +143,25 @@ class FlxHitbox extends FlxMobileInputManager
 		hint.ignoreDrawDebug = true;
 		#end
 		return hint;
+	}
+
+	function createHintGraphic(Width:Int, Height:Int):BitmapData
+	{
+		var guh = ClientPrefs.data.controlsAlpha;
+		if (guh >= 0.9)
+			guh = ClientPrefs.data.controlsAlpha - 0.07;
+		var shape:Shape = new Shape();
+		shape.graphics.beginFill(0xFFFFFF);
+		shape.graphics.lineStyle(3, 0xFFFFFF, 1);
+		shape.graphics.drawRect(0, 0, Width, Height);
+		shape.graphics.lineStyle(0, 0, 0);
+		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
+		shape.graphics.endFill();
+		shape.graphics.beginGradientFill(RADIAL, [0xFFFFFF, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
+		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
+		shape.graphics.endFill();
+		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
+		bitmap.draw(shape);
+		return bitmap;
 	}
 }

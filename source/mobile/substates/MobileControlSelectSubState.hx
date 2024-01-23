@@ -94,7 +94,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 		add(keyboardText);
 		keyboardText.kill();
 
-		var exit = new UIButton(0, 70, "Exit & Save", () ->
+		var exit = new UIButton(0, itemText.y - 25, "Exit & Save", () ->
 		{
 			if (options[curOption] == 'Pad-Extra')
 			{
@@ -249,7 +249,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 		itemText.text = options[curOption].replace('-', ' ');
 		itemText.updateHitbox();
 		itemText.offset.set(0, 15);
-		FlxTween.tween(rightArrow, {x: itemText.x + itemText.width + 10}, 0.07, {ease: FlxEase.quintOut});
+		FlxTween.tween(rightArrow, {x: itemText.x + itemText.width + 10}, 0.1, {ease: FlxEase.quintOut});
 	}
 
 	function updatePosText()
@@ -260,14 +260,13 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 			positionText.visible = positionTextBg.visible = true;
 			if (optionName == 'Pad-Custom')
 			{
-				positionText.text = 'LEFT X: ${control.virtualPad.buttonLeft.x} - Y: ${control.virtualPad.buttonLeft.y}\nDOWN X: ${control.virtualPad.buttonDown.x} - Y: ${control.virtualPad.buttonDown.y}\nUP X: ${control.virtualPad.buttonUp.x} - Y: ${control.virtualPad.buttonUp.y}\nRIGHT X: ${control.virtualPad.buttonRight.x} - Y: ${control.virtualPad.buttonRight.y}';
+				positionText.text = 'LEFT X: ${control.virtualPad.buttonLeft.x} - Y: ${control.virtualPad.buttonLeft.y}\nDOWN X: ${control.virtualPad.buttonDown.x} - Y: ${control.virtualPad.buttonDown.y}\n\nUP X: ${control.virtualPad.buttonUp.x} - Y: ${control.virtualPad.buttonUp.y}\nRIGHT X: ${control.virtualPad.buttonRight.x} - Y: ${control.virtualPad.buttonRight.y}';
 			}
 			else
 			{
 				positionText.text = 'S X: ${control.virtualPad.buttonExtra.x} - Y: ${control.virtualPad.buttonExtra.y}\n\n\n\nG X: ${control.virtualPad.buttonExtra2.x} - Y: ${control.virtualPad.buttonExtra2.y}';
 			}
-			positionText.setPosition((((positionTextBg.width - positionText.width) / 2) + positionTextBg.x) + 60,
-				(((positionTextBg.height - positionText.height) / 2) + positionTextBg.y));
+			positionText.setPosition(0, (((positionTextBg.height - positionText.height) / 2) + positionTextBg.y));
 		}
 		else
 			positionText.visible = positionTextBg.visible = false;
