@@ -119,7 +119,7 @@ class Main extends Sprite
 		}
 
 		#if mobile
-		Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
+		Sys.setCwd(Path.addTrailingSlash(SUtil.getStorageDirectory()));
 		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
