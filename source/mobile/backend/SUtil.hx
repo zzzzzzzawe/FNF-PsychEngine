@@ -116,6 +116,9 @@ class SUtil
 		DiscordClient.shutdown();
 		#end
 
+                if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
 		LimeSystem.exit(1);
 	}
 
