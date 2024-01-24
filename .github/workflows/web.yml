@@ -59,7 +59,7 @@ jobs:
         run: haxelib run lime config EMSCRIPTEN_SDK $EMSDK
 
       - name: Compile
-        run: PATH=$EMSDK:$PATH haxelib run lime build emscripten -v
+        run: PATH=$EMSDK:$PATH haxelib run lime build emscripten
 
       - name: Upload Artifact
         if: ${{ success() }}
