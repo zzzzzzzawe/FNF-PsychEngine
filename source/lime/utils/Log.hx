@@ -67,7 +67,14 @@ class Log
 
 				println(message);
 				Application.current.window.alert(message, 'Error!');
-				System.exit(1);
+				#if js
+                if (FlxG.sound.music != null)
+                        FlxG.sound.music.stop();
+
+                js.Browser.window.location.reload(true);
+                #else
+                System.exit(1);
+                #end
 			}
 			else
 			{

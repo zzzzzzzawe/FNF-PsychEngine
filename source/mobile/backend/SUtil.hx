@@ -116,10 +116,14 @@ class SUtil
 		DiscordClient.shutdown();
 		#end
 
+                #if js
                 if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
+                js.Browser.window.location.reload(true);
+                #else
 		LimeSystem.exit(1);
+                #end
 	}
 
 	/**
