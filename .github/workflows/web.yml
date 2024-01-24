@@ -19,7 +19,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build html5 -final
+        run: haxelib run lime build html5
 
       - name: Upload Artifact
         if: ${{ success() }}
