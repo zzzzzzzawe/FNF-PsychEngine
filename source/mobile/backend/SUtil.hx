@@ -5,10 +5,10 @@ import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
+import lime.app.Application;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
-import lime.app.Application;
 import lime.system.System as LimeSystem;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
@@ -230,7 +230,7 @@ class SUtil
 		}));
 		alert.addAction(action);*/
                 #if (windows || mobile || js || wasm)
-                Application.current.window.alert(message, title);
+                Lib.application.window.alert(message, title);
                 #else
                 LimeLogger.println('$title - $message');
                 #end
