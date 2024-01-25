@@ -109,7 +109,6 @@ class SUtil
 		}
 		#end
 
-		LimeLogger.println(msg);
 		showPopUp(msg, "Error!");
 
 		#if DISCORD_ALLOWED
@@ -233,7 +232,7 @@ class SUtil
                 #if (windows || mobile || js || wasm)
                 Application.current.window.alert(message, title);
                 #else
-                trace('$title - $message');
+                LimeLogger.println('$title - $message');
                 #end
         }
 }
