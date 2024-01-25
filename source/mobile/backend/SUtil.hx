@@ -5,10 +5,10 @@ import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
+import lime.app.Application;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
-import lime.app.Application;
 import lime.system.System as LimeSystem;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
@@ -109,7 +109,6 @@ class SUtil
 		}
 		#end
 
-		LimeLogger.println(msg);
 		showPopUp(msg, "Error!");
 
 		#if DISCORD_ALLOWED
@@ -217,23 +216,10 @@ class SUtil
 
         public static function showPopUp(message:String, title:String):Void
         {
-                #if ios
-		var application:UIViewController = UIApplication.sharedApplication().keyWindow.rootViewController;
-
-                var alert = UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
-		var action = UIAlertAction.actionWithTitleStyleHandler("OK", UIAlertActionStyle.UIAlertActionStyleDefault,
-			UIAlertActionCall((data:UIAlertAction) -> {
-			//var title = data.title;
-			var label:UILabel = UILabel.alloc().initWithFrame(CGRectMake(100, 100, 200, 40));
-			label.text = "23";
-			label.textColor = UIColor.colorWithRedGreenBlueAlpha(1, 1, 0, 1);
-			application.view.addSubview(label);
-		}));
-		alert.addAction(action);
-                #elseif (windows || android || js || wasm)
-                FlxG.stage.window.alert(message, title);
+                #if (windows || mobile || js || wasm)
+                Lib.application.window.alert(message, title);
                 #else
-                trace('$title - $message');
+                LimeLogger.println('$title - $message');
                 #end
         }
 }
