@@ -117,9 +117,9 @@ class VideoSprite extends MainVideoSprite
 		{
 			bitmap.onEndReached();
 		}
-		catch (fym:Dynamic)
+		catch (e:Dynamic)
 		{
-			trace(fym);
+			trace(e);
 		}
 		#end
 	}
