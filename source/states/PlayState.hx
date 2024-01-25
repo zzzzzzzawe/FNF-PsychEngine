@@ -55,6 +55,11 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
+#if VIDEOS_ALLOWED
+import objects.Video;
+import objects.VideoSprite;
+#end
+
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -114,7 +119,7 @@ class PlayState extends MusicBeatState
 	public var shaderUpdates:Array<Float->Void> = [];
 	#end
 	#if VIDEOS_ALLOWED
-	public var modchartVideoSprites:Map<String, VideoSpriteManager> = new Map<String, VideoSpriteManager>();
+	public var modchartVideoSprites:Map<String, VideoSprite> = new Map<String, VideoSprite>();
 	#end
 	#end
 
@@ -851,11 +856,11 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String) #if VIDEOS_ALLOWED :VideoManager#end
+	public function startVideo(name:String) #if VIDEOS_ALLOWED :Video#end
 	{
 		#if VIDEOS_ALLOWED
 		var filepath:String = Paths.video(name);
-		video = new VideoManager();
+		video = new Video();
 		inCutscene = true;
 
 		if(#if MODS_ALLOWED !FileSystem.exists(filepath) #else !Assets.exists(filepath) #end) {

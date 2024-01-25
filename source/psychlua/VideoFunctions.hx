@@ -1,7 +1,7 @@
 package psychlua;
 
 #if VIDEOS_ALLOWED
-import backend.VideoSpriteManager;
+import objects.VideoSprite;
 import states.PlayState;
 import substates.GameOverSubstate;
 
@@ -20,7 +20,7 @@ class VideoFunctions
 		});
 
 		// when you don't give it a tag it plays a normal video cutscene
-		funk.set("startVideo", function(videoName:String, ?tag:String = null, ?loop)
+		funk.set("startVideo", function(videoName:String, ?tag:String = null, ?loop:Bool = false)
 		{
 			var videoPath = Paths.video(videoName);
 			if (!FileSystem.exists(videoPath))

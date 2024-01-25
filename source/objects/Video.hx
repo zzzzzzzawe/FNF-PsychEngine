@@ -1,14 +1,14 @@
-package backend;
+package objects;
 
 #if VIDEOS_ALLOWED
 #if (hxCodec >= "3.0.0")
-import hxcodec.flixel.FlxVideo as Video;
+import hxcodec.flixel.FlxVideo as VideoHandler;
 #elseif (hxCodec >= "2.6.1")
-import hxcodec.VideoHandler as Video;
+import hxcodec.VideoHandler;
 #elseif (hxCodec == "2.6.0")
-import VideoHandler as Video;
+import VideoHandler;
 #else
-import vlc.MP4Handler as Video;
+import vlc.MP4Handler as VideoHandler;
 #end
 #end
 import haxe.extern.EitherType;
@@ -16,7 +16,7 @@ import flixel.util.FlxSignal;
 import haxe.io.Path;
 
 #if VIDEOS_ALLOWED
-class VideoManager extends Video
+class Video extends VideoHandler
 {
 	public var playbackRate(get, set):EitherType<Single, Float>;
 	public var paused(default, set):Bool = false;
@@ -42,13 +42,14 @@ class VideoManager extends Video
 		#end
 	}
 
-	public function startVideo(path:String, loop:Bool = false)
+	public function startVideo(path:String, loop:Bool = false):Video
 	{
 		#if (hxCodec >= "3.0.0")
 		play(path, loop);
 		#else
 		playVideo(path, loop, false);
 		#end
+		return this;
 	}
 
 	@:noCompletion

@@ -1,14 +1,14 @@
-package backend;
+package objects;
 
 #if VIDEOS_ALLOWED
 #if (hxCodec >= "3.0.0")
-import hxcodec.flixel.FlxVideoSprite as VideoSprite;
+import hxcodec.flixel.FlxVideoSprite as MainVideoSprite;
 #elseif (hxCodec >= "2.6.1")
-import hxcodec.VideoSprite;
+import hxcodec.VideoSprite as MainVideoSprite;
 #elseif (hxCodec == "2.6.0")
-import VideoSprite;
+import VideoSprite as MainVideoSprite;
 #else
-import vlc.MP4Sprite as VideoSprite;
+import vlc.MP4Sprite as VideoMainVideoSpriteprite;
 #end
 #end
 import states.PlayState;
@@ -17,52 +17,38 @@ import flixel.util.FlxSignal;
 import haxe.io.Path;
 
 #if VIDEOS_ALLOWED
-class VideoSpriteManager extends VideoSprite
+class VideoSprite extends MainVideoSprite
 {
 	public var playbackRate(get, set):EitherType<Single, Float>;
 	public var paused(default, set):Bool = false;
 	public var onVideoEnd:FlxSignal;
 	public var onVideoStart:FlxSignal;
 
-	public function new(x:Float = 0, y:Float = 0 #if (hxCodec < "2.6.0"), width:Float = 1280, height:Float = 720, autoScale:Bool = true #end)
+	public function new(x:Float = 0, y:Float = 0)
 	{
-		super(x, y #if (hxCodec < "2.6.0"), width, height, autoScale #end);
+		super(x, y);
 
 		onVideoEnd = new FlxSignal();
-		onVideoEnd.add(function()
-		{
-			destroy();
-		});
+		onVideoEnd.add(destroy);
 		onVideoStart = new FlxSignal();
 		#if (hxCodec >= "3.0.0")
 		onVideoEnd.add(destroy);
-		bitmap.onOpening.add(function()
-		{
-			onVideoStart.dispatch();
-		});
-		bitmap.onEndReached.add(function()
-		{
-			onVideoEnd.dispatch();
-		});
+		bitmap.onOpening.add(onVideoStart.dispatch);
+		bitmap.onEndReached.add(onVideoEnd.dispatch);
 		#else
-		openingCallback = function()
-		{
-			onVideoStart.dispatch();
-		};
-		finishCallback = function()
-		{
-			onVideoEnd.dispatch(); // using  bitmap.finishCallback = onVideoEnd.dispatch was giving a null function pointer
-		};
+		openingCallback = onVideoStart.dispatch;
+		finishCallback = onVideoEnd.dispatch;
 		#end
 	}
 
-	public function startVideo(path:String, loop:Bool = false)
+	public function startVideo(path:String, loop:Bool = false):VideoSprite
 	{
 		#if (hxCodec >= "3.0.0")
 		play(path, loop);
 		#else
 		playVideo(path, loop, false);
 		#end
+		return this;
 	}
 
 	@:noCompletion
