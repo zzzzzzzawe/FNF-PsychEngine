@@ -95,7 +95,6 @@ class VideoFunctions
 			if (destroy)
 			{
 				video.destroy();
-				video.destroy();
 				PlayState.instance.modchartVideoSprites.remove(tag);
 			}
 		});
