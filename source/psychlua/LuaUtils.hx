@@ -8,7 +8,8 @@ import Type.ValueType;
 
 import substates.GameOverSubstate;
 #if VIDEOS_ALLOWED
-import backend.VideoSpriteManager;
+import objects.Video;
+import objects.VideoSprite;
 #end
 
 typedef LuaTweenOptions = {
@@ -530,7 +531,7 @@ class LuaUtils
 		return PlayState.instance.camGame;
 	}
 	#if VIDEOS_ALLOWED
-	inline public static function getVideoSpriteObject(name:String):VideoSpriteManager
+	inline public static function getVideoSpriteObject(name:String):VideoSprite
 		return #if LUA_ALLOWED PlayState.instance.modchartVideoSprites.exists(name) ? PlayState.instance.modchartVideoSprites.get(name) : #end Reflect.getProperty(PlayState.instance, name);
 
 	public static function resetVideoSpriteTag(tag:String) {
@@ -539,7 +540,7 @@ class LuaUtils
 			return;
 		}
 
-		var target:VideoSpriteManager = PlayState.instance.modchartVideoSprites.get(tag);
+		var target:VideoSprite = PlayState.instance.modchartVideoSprites.get(tag);
 		PlayState.instance.remove(target, true);
 		target.destroy();
 		PlayState.instance.modchartVideoSprites.remove(tag);

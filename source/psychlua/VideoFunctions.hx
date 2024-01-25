@@ -14,7 +14,7 @@ class VideoFunctions
 		{
 			tag = tag.replace('.', '');
 			LuaUtils.resetVideoSpriteTag(tag);
-			var video = new VideoSpriteManager(x, y);
+			var video = new VideoSprite(x, y);
 			video.playbackRate = PlayState.instance.playbackRate;
 			PlayState.instance.modchartVideoSprites.set(tag, video);
 		});
@@ -62,7 +62,7 @@ class VideoFunctions
 
 		funk.set("addLuaVideoSprite", function(tag:String, front:Bool = false)
 		{
-			var video:VideoSpriteManager = null;
+			var video:VideoSprite = null;
 			if (PlayState.instance.modchartVideoSprites.exists(tag))
 				video = PlayState.instance.modchartVideoSprites.get(tag);
 			else if (PlayState.instance.variables.exists(tag))

@@ -275,7 +275,7 @@ class PlayState extends MusicBeatState
 	public var endCallback:Void->Void = null;
 
 	#if VIDEOS_ALLOWED
-	public var video:VideoManager;
+	public var video:Video;
 	#end
 
 	public var luaVirtualPad:FlxVirtualPad;
