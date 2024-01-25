@@ -217,7 +217,7 @@ class SUtil
 
         public static function showPopUp(message:String, title:String):Void
         {
-                #if ios
+                /*#if ios
 		var application:UIViewController = UIApplication.sharedApplication().keyWindow.rootViewController;
 
                 var alert = UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
@@ -229,9 +229,9 @@ class SUtil
 			label.textColor = UIColor.colorWithRedGreenBlueAlpha(1, 1, 0, 1);
 			application.view.addSubview(label);
 		}));
-		alert.addAction(action);
-                #elseif (windows || android || js || wasm)
-                FlxG.stage.window.alert(message, title);
+		alert.addAction(action);*/
+                #if (windows || mobile || js || wasm)
+                Application.current.window.alert(message, title);
                 #else
                 trace('$title - $message');
                 #end

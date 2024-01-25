@@ -21,11 +21,11 @@ import mobile.flixel.input.FlxMobileInputID;
 import mobile.backend.Data;
 import mobile.backend.SUtil;
 
-//iOS
+/*iOS
 #if ios
 import Objc;
 import ios.uikit.*;
-#end
+#end*/
 
 #if sys
 import sys.*;
