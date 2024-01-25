@@ -2539,6 +2539,8 @@ class PlayState extends MusicBeatState
 	public var uiGroup:FlxSpriteGroup;
 	// Stores Note Objects in a Group
 	public var noteGroup:FlxTypedGroup<FlxBasic>;
+	// Stores The Cached PopUpRating Sprites As String
+	public var ratingsCache:Map<String, FlxSprite> = new Map<String, FlxSprite>();
 
 	private function cachePopUpScore()
 	{
@@ -2550,10 +2552,17 @@ class PlayState extends MusicBeatState
 			if (PlayState.isPixelStage) uiSuffix = '-pixel';
 		}
 
-		for (rating in ratingsData)
-			Paths.image(uiPrefix + rating.image + uiSuffix);
-		for (i in 0...10)
-			Paths.image(uiPrefix + 'num' + i + uiSuffix);
+		for (rating in ratingsData){
+			var ratingImage:String = uiPrefix + rating.image + uiSuffix;
+			var leRating = new FlxSprite().loadGraphic(Paths.image(ratingImage));
+			ratingsCache.set(ratingImage, leRating);
+		}
+
+		for (ratingNum in 0...10){
+			var ratingImage:String = uiPrefix + 'num' + ratingNum + uiSuffix;
+			var leRating = new FlxSprite().loadGraphic(Paths.image(ratingImage));
+			ratingsCache.set(ratingImage, leRating);
+		}
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -2605,7 +2614,7 @@ class PlayState extends MusicBeatState
 			antialias = !isPixelStage;
 		}
 		if(ClientPrefs.data.popUpRating && !cpuControlled) {
-			rating.loadGraphic(Paths.image(uiPrefix + daRating.image + uiSuffix));
+			rating.loadGraphicFromSprite(ratingsCache.get(uiPrefix + daRating.image + uiSuffix));
 			rating.screenCenter();
 			rating.x = placement - 40;
 			rating.y -= 60;
@@ -2660,7 +2669,8 @@ class PlayState extends MusicBeatState
 
 			for (i in seperatedScore)
 			{
-				var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'num' + Std.int(i) + uiSuffix));
+				var numScore:FlxSprite = new FlxSprite();
+				numScore.loadGraphicFromSprite(ratingsCache.get(uiPrefix + 'num' + Std.int(i) + uiSuffix));
 				numScore.screenCenter();
 				numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 				numScore.y += 80 - ClientPrefs.data.comboOffset[3];
