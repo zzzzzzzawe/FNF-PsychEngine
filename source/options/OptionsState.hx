@@ -3,6 +3,11 @@ package options;
 import states.MainMenuState;
 import backend.StageData;
 import flixel.addons.transition.FlxTransitionableState;
+import mobile.substates.MobileControlSelectSubState;
+#if (target.threaded)
+import sys.thread.Thread;
+import sys.thread.Mutex;
+#end
 
 class OptionsState extends MusicBeatState
 {
@@ -12,6 +17,7 @@ class OptionsState extends MusicBeatState
 	public static var menuBG:FlxSprite;
 	public static var onPlayState:Bool = false;
 	var tipText:FlxText;
+	#if (target.threaded) var mutex:Mutex = new Mutex(); #end
 
 	function openSelectedSubstate(label:String) {
 		persistentUpdate = false;
@@ -38,7 +44,7 @@ class OptionsState extends MusicBeatState
 	var selectorRight:Alphabet;
 
 	override function create() {
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Options Menu", null);
 		#end
 
@@ -50,14 +56,14 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-        if (controls.mobileC) {
-		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press C to Go In Mobile Controls Menu', 16);
+                if (controls.mobileC) {
+		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press ' + #if mobile 'C' #else 'CTRL or C' #end + ' to Go Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;
 		tipText.scrollFactor.set();
 		tipText.antialiasing = ClientPrefs.data.antialiasing;
 		add(tipText);
-		}
+                }
 
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
@@ -80,15 +86,32 @@ class OptionsState extends MusicBeatState
 
 		addVirtualPad(UP_DOWN, A_B_C);
 
+		#if (target.threaded)
+		Thread.create(()->{
+			mutex.acquire();
+
+			for (i in VisualsUISubState.pauseMusics)
+			{
+				if (i.toLowerCase() != "none")
+					Paths.music(Paths.formatToSongPath(i));
+			}
+
+			mutex.release();
+		});
+		#end
+
 		super.create();
 	}
 
 	override function closeSubState() {
-                controls.isInSubstate = false;
 		super.closeSubState();
+		#if DISCORD_ALLOWED
+		DiscordClient.changePresence("Options Menu", null);
+		#end
 		ClientPrefs.saveSettings();
 		ClientPrefs.loadPrefs();
-                removeVirtualPad();
+		controls.isInSubstate = false;
+        removeVirtualPad();
 		addVirtualPad(UP_DOWN, A_B_C);
 		persistentUpdate = true;
 	}
@@ -105,10 +128,10 @@ class OptionsState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		if (virtualPad.buttonC.justPressed) {
+		if (virtualPad.buttonC.justPressed || FlxG.keys.justPressed.CONTROL && controls.mobileC) {
 			persistentUpdate = false;
 
-			openSubState(new MobileControlsSubState());
+			openSubState(new MobileControlSelectSubState());
 		}
 
 		if (controls.BACK) {
@@ -117,7 +140,7 @@ class OptionsState extends MusicBeatState
 			if(onPlayState)
 			{
 				StageData.loadDirectory(PlayState.SONG);
-				MusicBeatState.switchState(new PlayState());
+				LoadingState.loadAndSwitchState(new PlayState());
 				FlxG.sound.music.volume = 0;
 			}
 			else MusicBeatState.switchState(new MainMenuState());

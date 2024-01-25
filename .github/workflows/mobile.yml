@@ -35,7 +35,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Compile
-        run: haxelib run lime build android -D ${{ matrix.storage-type }} -arm64 -final
+        run: haxelib run lime build android -D ${{ matrix.storage-type }} -final
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
@@ -63,14 +63,13 @@ jobs:
           haxelib setup ~/haxelib
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
+          # haxelib run lime rebuild extension-iostools ios -arm64 -final
 
       # - name: Install MobileVLCKit Framework
         # run: |
-          # cd $(haxelib libpath hxvlc)project/vlc/frameworks
+          # cd ${{ github.workspace }}/..
           # wget -q https://download.videolan.org/cocoapods/prod/MobileVLCKit-3.5.1-34408b84-e9eceaed.tar.xz
           # tar -xf MobileVLCKit-3.5.1-34408b84-e9eceaed.tar.xz
-          # mv MobileVLCKit-Binary/MobileVLCKit.xcframework .
-          # rm -rf MobileVLCKit-*.tar.xz MobileVLCKit-Binary
 
       - name: Compile
         run: haxelib run lime build ios -D NOVIDEO -final

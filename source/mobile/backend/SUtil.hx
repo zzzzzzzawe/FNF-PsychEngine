@@ -1,16 +1,15 @@
-package backend;
+package mobile.backend;
 
 #if android
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
 import android.Permissions;
+import lime.app.Application;
 #end
 import haxe.io.Path;
 import haxe.CallStack;
-import lime.app.Application;
 import lime.system.System as LimeSystem;
-import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
@@ -21,10 +20,10 @@ using StringTools;
 enum StorageType
 {
 	//DATA;
-    EXTERNAL;
+	EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
-    MEDIA;
+	MEDIA;
 }
 
 /**
@@ -49,7 +48,7 @@ class SUtil
 				daPath = Context.getExternalFilesDir(null);
 			case EXTERNAL_OBB:
 				daPath = Context.getObbDir();
-            case EXTERNAL:
+			case EXTERNAL:
 				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
 			case MEDIA:
 				daPath = Environment.getExternalStorageDirectory() + '/Android/media/' + Application.current.meta.get('packageName');
@@ -60,58 +59,6 @@ class SUtil
 
 		return daPath;
 	}
-
-	/**
-	 * A simple function that checks for game files/folders.
-	 */
-	/*public static function checkFiles():Void
-	{
-		#if mobile
-		if (!FileSystem.exists('assets') && !FileSystem.exists('mods'))
-		{
-			Lib.application.window.alert("Whoops, seems like you didn't extract the files from the .APK!\nPlease copy the files from the .APK to\n"
-				+ Sys.getCwd(), 'Error!');
-			LimeSystem.exit(1);
-		}
-		else if ((FileSystem.exists('assets') && !FileSystem.isDirectory('assets'))
-			&& (FileSystem.exists('mods') && !FileSystem.isDirectory('mods')))
-		{
-			Lib.application.window.alert("Why did you create two files called assets and mods instead of copying the folders from the .APK?, expect a crash.",
-				'Error!');
-			LimeSystem.exit(1);
-		}
-		else
-		{
-			if (!FileSystem.exists('assets'))
-			{
-				Lib.application.window.alert("Whoops, seems like you didn't extract the assets/assets folder from the .APK!\nPlease copy the assets/assets folder from the .APK to\n"
-					+ Sys.getCwd(),
-					'Error!');
-				LimeSystem.exit(1);
-			}
-			else if (FileSystem.exists('assets') && !FileSystem.isDirectory('assets'))
-			{
-				Lib.application.window.alert("Why did you create a file called assets instead of copying the assets directory from the .APK?, expect a crash.",
-					'Error!');
-				LimeSystem.exit(1);
-			}
-
-			if (!FileSystem.exists('mods'))
-			{
-				Lib.application.window.alert("Whoops, seems like you didn't extract the assets/mods folder from the .APK!\nPlease copy the assets/mods folder from the .APK to\n"
-					+ Sys.getCwd(),
-					'Error!');
-				LimeSystem.exit(1);
-			}
-			else if (FileSystem.exists('mods') && !FileSystem.isDirectory('mods'))
-			{
-				Lib.application.window.alert("Why did you create a file called mods instead of copying the mods directory from the .APK?, expect a crash.",
-					'Error!');
-				LimeSystem.exit(1);
-			}
-		}
-		#end
-	}*/
 
 	/**
 	 * Uncaught error handler, original made by: Sqirra-RNG and YoshiCrafter29
@@ -162,14 +109,20 @@ class SUtil
 		}
 		#end
 
-		LimeLogger.println(msg);
-		Lib.application.window.alert(msg, 'Error!');
+		showPopUp(msg, "Error!");
 
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
 		#end
 
+                #if js
+                if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
+                js.Browser.window.location.reload(true);
+                #else
 		LimeSystem.exit(1);
+                #end
 	}
 
 	/**
@@ -210,7 +163,7 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			Lib.application.window.alert(fileName + " file has been saved", "Success!");
+			showPopUp(fileName + " file has been saved", "Success!");
 		}
 		catch (e:Dynamic)
 		{
@@ -225,16 +178,16 @@ class SUtil
 	public static function copyContent(copyPath:String, savePath:String):Void
 	{
 		try {
-			if (!FileSystem.exists(savePath) && LimeAssets.exists(copyPath))
+			if (!FileSystem.exists(savePath) && OpenflAssets.exists(copyPath))
 			{
 				if (!FileSystem.exists(Path.directory(savePath)))
 					mkDirs(Path.directory(savePath));
 				if(copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
-					File.saveBytes(savePath, cast LimeAssets.getFont(copyPath));
+					File.saveBytes(savePath, cast OpenflAssets.getFont(copyPath));
 				else if(copyPath.endsWith('.txt'))
-					File.saveBytes(savePath, cast LimeAssets.getText(copyPath));
+					File.saveBytes(savePath, cast OpenflAssets.getText(copyPath));
 				else
-					File.saveBytes(savePath, LimeAssets.getBytes(copyPath));
+					File.saveBytes(savePath, OpenflAssets.getBytes(copyPath));
 			}
 		}
 		catch (e:Dynamic)
@@ -249,14 +202,24 @@ class SUtil
 
 	#end
 	#if android
-	public static function doPermissionsShit(){
+	public static function doPermissionsShit():Void
+        {
 		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
 			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
 				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
 			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
 				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
-			FlxG.stage.window.alert('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', '');
+			showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
 		}
 	}
 	#end
+
+        public static function showPopUp(message:String, title:String):Void
+        {
+                #if (windows || mobile || js || wasm)
+                Lib.application.window.alert(message, title);
+                #else
+                LimeLogger.println('$title - $message');
+                #end
+        }
 }

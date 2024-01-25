@@ -3,7 +3,6 @@ package psychlua;
 import haxe.extern.EitherType;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-import lime.ui.Haptic;
 
 //
 // Things to trivialize some dumb stuff like splitting strings on older Lua
@@ -11,17 +10,6 @@ import lime.ui.Haptic;
 
 class ExtraFunctions
 {
-	public static var mobileExtraInput(get, null):Dynamic;
-	private static function get_mobileExtraInput():Dynamic{
-		switch (MobileControls.getMode()){
-			case 0 | 1 | 2 | 3: // virtual pad
-				return MusicBeatState.instance.mobileControls.virtualPadExtra;
-			case 4: // hitbox
-				return MusicBeatState.instance.mobileControls.hitbox;
-			default: //keybaord
-				return null;
-		}
-	}
 	public static function implement(funk:FunkinLua)
 		{
 		// Keyboard & Gamepads
@@ -32,8 +20,8 @@ class ExtraFunctions
 						var space = Reflect.getProperty(FlxG.keys.justPressed, 'SPACE');
 						var mobileShit:Bool = false;
 						if (Controls.instance.mobileC)
-							if (mobileExtraInput != null)
-								mobileShit = mobileExtraInput.buttonExtra.justPressed;
+							if (MusicBeatState.instance.mobileControls != null)
+								mobileShit = MusicBeatState.instance.mobileControls.current.buttonExtra.justPressed;
 						return space || mobileShit;
 
 					default:
@@ -47,8 +35,8 @@ class ExtraFunctions
 						var space = Reflect.getProperty(FlxG.keys.pressed, 'SPACE');
 						var mobileShit:Bool = false;
 						if (Controls.instance.mobileC)
-							if (mobileExtraInput != null)
-								mobileShit = mobileExtraInput.buttonExtra.pressed;
+							if (MusicBeatState.instance.mobileControls != null)
+								mobileShit = MusicBeatState.instance.mobileControls.current.buttonExtra.pressed;
 						return space || mobileShit;
 
 					default:
@@ -62,8 +50,8 @@ class ExtraFunctions
 						var space = Reflect.getProperty(FlxG.keys.justReleased, 'SPACE');
 						var mobileShit:Bool = false;
 						if (Controls.instance.mobileC)
-							if (mobileExtraInput != null)
-								mobileShit = mobileExtraInput.buttonExtra.justReleased;
+							if (MusicBeatState.instance.mobileControls != null)
+								mobileShit = MusicBeatState.instance.mobileControls.current.buttonExtra.justReleased;
 						return space || mobileShit;
 
 					default:
@@ -143,50 +131,6 @@ class ExtraFunctions
 				default: return PlayState.instance.controls.justReleased(name);
 			}
 			return false;
-		});
-		funk.set("extraButtonPressed", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.pressed;
-					default:
-						return mobileExtraInput.buttonExtra.pressed;
-				}
-			}
-			return false;
-		});
-
-		funk.set("extraButtonJustPressed", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.justPressed;
-					default:
-						return mobileExtraInput.buttonExtra.justPressed;
-				}
-			}
-			return false;
-		});
-
-		funk.set("extraButtonJustReleased", function(button:String) {
-			button = button.toLowerCase();
-			if (mobileExtraInput != null){
-				switch(button){
-					case 'second':
-						return mobileExtraInput.buttonExtra1.justReleased;
-					default:
-						return mobileExtraInput.buttonExtra.justReleased;
-				}
-			}
-			return false;
-		});
-
-		funk.set("vibrate", function(duration:Null<Int>, ?period:Null<Int>){
-		    if (period == null) period = 0;
-		    if (duration == null) return FunkinLua.luaTrace('vibrate: No duration specified.');
-		    return Haptic.vibrate(period, duration);
 		});
 
 		// Save data management
@@ -332,6 +276,7 @@ class ExtraFunctions
 			var toExclude:Array<Int> = [];
 			for (i in 0...excludeArray.length)
 			{
+				if (exclude == '') break;
 				toExclude.push(Std.parseInt(excludeArray[i].trim()));
 			}
 			return FlxG.random.int(min, max, toExclude);
@@ -341,6 +286,7 @@ class ExtraFunctions
 			var toExclude:Array<Float> = [];
 			for (i in 0...excludeArray.length)
 			{
+				if (exclude == '') break;
 				toExclude.push(Std.parseFloat(excludeArray[i].trim()));
 			}
 			return FlxG.random.float(min, max, toExclude);

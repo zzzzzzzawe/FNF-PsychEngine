@@ -5,6 +5,7 @@ import objects.StrumNote;
 
 class VisualsUISubState extends BaseOptionsMenu
 {
+	public static var pauseMusics:Array<String> = ['None', 'Breakfast', 'Tea Time'];
 	var noteOptionID:Int = -1;
 	var notes:FlxTypedGroup<StrumNote>;
 	var notesTween:Array<FlxTween> = [];
@@ -123,7 +124,7 @@ class VisualsUISubState extends BaseOptionsMenu
 			"Which song do you prefer for the Pause Screen?",
 			'pauseMusic',
 			'string',
-			['None', 'Breakfast', 'Tea Time']);
+			pauseMusics);
 		addOption(option);
 		option.onChange = onChangePauseMusic;
 		
@@ -135,7 +136,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		var option:Option = new Option('Discord Rich Presence',
 			"Uncheck this to prevent accidental leaks, it will hide the Application from your \"Playing\" box on Discord",
 			'discordRPC',

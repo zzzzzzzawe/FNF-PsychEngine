@@ -7,13 +7,13 @@ class FlxAnimateFunctions
 {
 	public static function implement(funk:FunkinLua)
 	{
-		var lua:State = funk.lua;
 		funk.set("makeFlxAnimateSprite", function(tag:String, ?x:Float = 0, ?y:Float = 0, ?loadFolder:String = null) {
 			tag = tag.replace('.', '');
 			var lastSprite = PlayState.instance.variables.get(tag);
 			if(lastSprite != null)
 			{
 				PlayState.instance.remove(lastSprite);
+				lastSprite.kill();
 				lastSprite.destroy();
 			}
 

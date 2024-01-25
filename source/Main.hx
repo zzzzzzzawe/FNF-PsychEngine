@@ -16,6 +16,7 @@ import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
 import openfl.events.KeyboardEvent;
+import mobile.backend.Data;
 #if hl
 import hl.Api;
 #end
@@ -61,10 +62,6 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		#if mobile
-		var path = #if android Path.addTrailingSlash(SUtil.getStorageDirectory()) #else SUtil.getStorageDirectory() #end;
-		Sys.setCwd(path);
-		#end
 		#if (android && EXTERNAL || MEDIA)
 		SUtil.doPermissionsShit();
 		#end
@@ -120,26 +117,27 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
+
+		#if mobile
+		Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
+		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-        #if (openfl >= "9.2.0")
-		addChild(new FlxGame(1280, 720, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-		#else
-		addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-		#end
+
+		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+
 		Achievements.load();
 
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
-		FlxG.game.addChild(fpsVar);
+		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		if(fpsVar != null) {
+		if(fpsVar != null)
 			fpsVar.visible = ClientPrefs.data.showFPS;
-		}
 
 		#if linux
 		var icon = Image.fromFile("icon.png");
@@ -155,22 +153,19 @@ class Main extends Sprite
 		FlxG.mouse.visible = false;
 		#end
 
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		DiscordClient.prepare();
 		#end
 
 		#if mobile
 		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver;
 		#end
+		Data.setup();
 
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
-
-		final scale:Float = Math.min(FlxG.stage.stageWidth / FlxG.width, FlxG.stage.stageHeight / FlxG.height);
-
-		if (fpsVar != null)
-			fpsVar.scaleX = fpsVar.scaleY = (scale > 1 ? scale : 1);
-
+			if(fpsVar != null)
+				fpsVar.positionFPS(10, 3, Math.min(Lib.current.stage.stageWidth / FlxG.width, Lib.current.stage.stageHeight / FlxG.height));
 		     if (FlxG.cameras != null) {
 			   for (cam in FlxG.cameras.list) {
 				if (cam != null && cam.filters != null)

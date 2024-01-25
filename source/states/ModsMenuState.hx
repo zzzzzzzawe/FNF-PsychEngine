@@ -7,14 +7,14 @@ import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
 import openfl.geom.Rectangle;
-import lime.utils.Assets;
+import openfl.utils.Assets;
 import haxe.Json;
 
 import flixel.util.FlxSpriteUtil;
 import objects.AttachedSprite;
 import options.ModSettingsSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import backend.TouchFunctions;
+import mobile.backend.TouchFunctions;
 
 class ModsMenuState extends MusicBeatState
 {
@@ -59,7 +59,7 @@ class ModsMenuState extends MusicBeatState
 		var daButton:String = "BACKSPACE";
 
 		if (controls.mobileC)
-			daButton = B;
+			daButton = 'B';
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 		persistentUpdate = false;
@@ -67,7 +67,7 @@ class ModsMenuState extends MusicBeatState
 		modsList = Mods.parseList();
 		Mods.currentModDirectory = modsList.all[0] != null ? modsList.all[0] : '';
 
-		#if (desktop && !hl)
+		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -862,10 +862,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				#if (windows || mobile)
-				lime.app.Application.current.window.alert(errorMsg, errorTitle);
-				#end
-				trace('$errorTitle - $errorMsg');
+				SUtil.showPopUp(errorMsg, errorTitle);
 			}
 		}
 

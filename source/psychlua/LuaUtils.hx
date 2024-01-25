@@ -23,6 +23,12 @@ typedef LuaTweenOptions = {
 
 class LuaUtils
 {
+	public static final Function_Stop:Dynamic = "##PSYCHLUA_FUNCTIONSTOP";
+	public static final Function_Continue:Dynamic = "##PSYCHLUA_FUNCTIONCONTINUE";
+	public static final Function_StopLua:Dynamic = "##PSYCHLUA_FUNCTIONSTOPLUA";
+	public static final Function_StopHScript:Dynamic = "##PSYCHLUA_FUNCTIONSTOPHSCRIPT";
+	public static final Function_StopAll:Dynamic = "##PSYCHLUA_FUNCTIONSTOPALL";
+
 	public static function getLuaTween(options:Dynamic)
 	{
 		return {
@@ -158,10 +164,7 @@ class LuaUtils
 				{
 					var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 					var errorMsg = 'An error occurred: $e';
-					#if windows
-					lime.app.Application.current.window.alert(errorMsg, errorTitle);
-					#end
-					trace('$errorTitle - $errorMsg');
+					SUtil.showPopUp(errorMsg, errorTitle);
 				}
 			}
 		}
@@ -347,6 +350,7 @@ class LuaUtils
 
 		var target:FlxText = PlayState.instance.modchartTexts.get(tag);
 		PlayState.instance.remove(target, true);
+		target.kill();
 		target.destroy();
 		PlayState.instance.modchartTexts.remove(tag);
 		#end
@@ -360,6 +364,7 @@ class LuaUtils
 
 		var target:ModchartSprite = PlayState.instance.modchartSprites.get(tag);
 		PlayState.instance.remove(target, true);
+		target.kill();
 		target.destroy();
 		PlayState.instance.modchartSprites.remove(tag);
 		#end
@@ -391,6 +396,41 @@ class LuaUtils
 			theTimer.destroy();
 			PlayState.instance.modchartTimers.remove(tag);
 		}
+		#end
+	}
+
+	public static function getBuildTarget():String
+	{
+		#if windows
+		return 'windows';
+		#elseif linux
+		return 'linux';
+		#elseif mac
+		return 'mac';
+		#elseif hl
+		return 'hashlink';
+		#elseif (html5 || emscripten || nodejs || winjs || electron)
+		return 'browser';
+		#elseif android
+		return 'android';
+		#elseif webos
+		return 'webos';
+		#elseif tvos
+		return 'tvos';
+		#elseif watchos
+		return 'watchos';
+		#elseif air
+		return 'air';
+		#elseif flash
+		return 'flash';
+		#elseif (ios || iphonesim)
+		return 'ios';
+		#elseif neko
+		return 'neko';
+		#elseif switch
+		return 'switch';
+		#else
+		return 'unknown';
 		#end
 	}
 
