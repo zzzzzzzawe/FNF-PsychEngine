@@ -1642,19 +1642,12 @@ class PlayState extends MusicBeatState
 	}
 
 	override function closeSubState()
-	{
-		super.closeSubState();
-		
+	{		
 		stagesFunc(function(stage:BaseStage) stage.closeSubState());
 		if (paused)
 		{
 			if (FlxG.sound.music != null && !startingSong)
-			{
-				var vocalsToResync:Array<FlxSound> = [vocals];
-				if(splitVocals)
-					vocalsToResync.push(opponentVocals);
-				resyncVocals(vocalsToResync);
-			}
+				resyncVocals(splitVocals ? [opponentVocals, vocals] : [vocals]);
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
@@ -1666,9 +1659,11 @@ class PlayState extends MusicBeatState
 			#end
 
 			paused = false;
-			mobileControls.visible = #if !android virtualPad.visible = #end true;			callOnScripts('onResume');
+			mobileControls.visible = #if !android virtualPad.visible = #end true;
+			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
+		super.closeSubState();
 	}
 
 	override public function onFocus():Void
@@ -1706,7 +1701,7 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals(vocals:Array<FlxSound>):Void
 	{
-		if(finishTimer != null || vocals == null || !SONG.needsVoices) return;
+		if(finishTimer != null || vocals == null) return;
 
 		for(vocal in vocals){
 			vocal.pause();
@@ -1719,7 +1714,6 @@ class PlayState extends MusicBeatState
 				vocal.time = Conductor.songPosition;
 				#if FLX_PITCH vocal.pitch = playbackRate; #end
 			}
-
 			vocal.play();
 		}
 	}
@@ -3199,12 +3193,8 @@ class PlayState extends MusicBeatState
 		{
 			var timeSub:Float = Conductor.songPosition - Conductor.offset;
 			var syncTime:Float = 20 * playbackRate;
-			if (Math.abs(FlxG.sound.music.time - timeSub) > syncTime){
-				var vocalsToSync:Array<FlxSound> = [vocals];
-				if(splitVocals)
-					vocalsToSync.push(opponentVocals);
-				resyncVocals(vocalsToSync);
-			}
+			if (Math.abs(FlxG.sound.music.time - timeSub) > syncTime)
+				resyncVocals(splitVocals ? [opponentVocals, vocals] : [vocals]);
 			if(Math.abs(vocals.time - timeSub) > syncTime)
 				resyncVocals([vocals]);
 			if(splitVocals && Math.abs(opponentVocals.time - timeSub) > syncTime)
