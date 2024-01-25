@@ -216,19 +216,6 @@ class SUtil
 
         public static function showPopUp(message:String, title:String):Void
         {
-                /*#if ios
-		var application:UIViewController = UIApplication.sharedApplication().keyWindow.rootViewController;
-
-                var alert = UIAlertController.alertControllerWithTitleMessagePreferredStyle(title, message, UIAlertControllerStyle.UIAlertControllerStyleAlert);
-		var action = UIAlertAction.actionWithTitleStyleHandler("OK", UIAlertActionStyle.UIAlertActionStyleDefault,
-			UIAlertActionCall((data:UIAlertAction) -> {
-			//var title = data.title;
-			var label:UILabel = UILabel.alloc().initWithFrame(CGRectMake(100, 100, 200, 40));
-			label.text = "23";
-			label.textColor = UIColor.colorWithRedGreenBlueAlpha(1, 1, 0, 1);
-			application.view.addSubview(label);
-		}));
-		alert.addAction(action);*/
                 #if (windows || mobile || js || wasm)
                 Lib.application.window.alert(message, title);
                 #else

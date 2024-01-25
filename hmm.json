@@ -91,11 +91,6 @@
       "name": "extension-androidtools",
       "type": "haxelib",
       "version": null
-    },
-    {
-      "name": "hx-ios-uikit",
-      "type": "haxelib",
-      "version": null
     }
   ]
 }
