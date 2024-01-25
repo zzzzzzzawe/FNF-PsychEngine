@@ -32,6 +32,12 @@ class VideoFunctions
 			if (tag == null)
 			{
 				PlayState.instance.startVideo(videoName);
+				PlayState.instance.video.onVideoEnd.addOnce(() -> {
+					PlayState.instance.callOnLuas('onVideoEnd', ['']);
+				});
+				PlayState.instance.video.onVideoStart.addOnce(() -> {
+					PlayState.instance.callOnLuas('onVideoStart', ['']);
+				});
 				return true;
 			}
 			else
@@ -43,6 +49,13 @@ class VideoFunctions
 					return false;
 				}
 				video.startVideo(videoPath, loop);
+				video.playbackRate = PlayState.instance.playbackRate;
+				video.onVideoEnd.addOnce(() -> {
+					PlayState.instance.callOnLuas('onVideoEnd', [tag]);
+				});
+				video.onVideoStart.addOnce(() -> {
+					PlayState.instance.callOnLuas('onVideoStart', [tag]);
+				});
 				return true;
 			}
 		});
@@ -82,106 +95,9 @@ class VideoFunctions
 			if (destroy)
 			{
 				video.destroy();
+				video.destroy();
 				PlayState.instance.modchartVideoSprites.remove(tag);
 			}
-		});
-
-		funk.set("addVideoFinishCallback", function(myFunction:Dynamic, ?tag:String = null)
-		{
-			if (myFunction != null)
-			{
-				if (tag == null)
-				{
-					if (PlayState.instance.video == null)
-						return false;
-					PlayState.instance.video.onVideoEnd.add(myFunction);
-					return true;
-				}
-				else
-				{
-					var video = LuaUtils.getVideoSpriteObject(tag);
-					if (video == null)
-					{
-						FunkinLua.luaTrace("addVideoFinishCallback: Video " + tag + " does not exist!", false, false, FlxColor.RED);
-						return false;
-					}
-					video.onVideoEnd.add(myFunction);
-					return true;
-				}
-			}
-			return false;
-		});
-
-		funk.set("addVideoStartCallback", function(myFunction:Dynamic, ?tag:String = null)
-		{
-			if (myFunction != null)
-			{
-				if (tag == null)
-				{
-					if (PlayState.instance.video == null)
-						return false;
-					PlayState.instance.video.onVideoStart.add(myFunction);
-					return true;
-				}
-				else
-				{
-					var video = LuaUtils.getVideoSpriteObject(tag);
-					if (video == null)
-					{
-						FunkinLua.luaTrace("addVideoStartCallback: Video " + tag + " does not exist!", false, false, FlxColor.RED);
-						return false;
-					}
-					video.onVideoStart.add(myFunction);
-					return true;
-				}
-			}
-			return false;
-		});
-
-		funk.set("removeVideoFinishCallbacks", function(?tag:String = null)
-		{
-			if (tag == null)
-			{
-				if (PlayState.instance.video == null)
-					return false;
-				PlayState.instance.video.onVideoEnd.removeAll();
-				return true;
-			}
-			else
-			{
-				var video = LuaUtils.getVideoSpriteObject(tag);
-				if (video == null)
-				{
-					FunkinLua.luaTrace("removeVideoFinishCallbacks: Video " + tag + " does not exist!", false, false, FlxColor.RED);
-					return false;
-				}
-				video.onVideoEnd.removeAll();
-				return true;
-			}
-			return false;
-		});
-
-		funk.set("removeVideoStartCallbacks", function(?tag:String = null)
-		{
-			if (tag == null)
-			{
-				if (PlayState.instance.video == null)
-					return false;
-				PlayState.instance.video.onVideoStart.removeAll();
-				return true;
-			}
-			else
-			{
-				var video = LuaUtils.getVideoSpriteObject(tag);
-				if (video == null)
-				{
-					FunkinLua.luaTrace("removeVideoFinishCallbacks: Video " + tag + " does not exist!", false, false, FlxColor.RED);
-					return false;
-				}
-				video.onVideoStart.removeAll();
-				return true;
-			}
-			return false;
 		});
 	}
 }

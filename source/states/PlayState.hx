@@ -831,12 +831,12 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function getLuaObject(tag:String, text:Bool=true, videoSprites:Bool=true):Dynamic {
+	public function getLuaObject(tag:String, text:Bool=true):Dynamic {
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
-		if(videoSprites && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		if(variables.exists(tag)) return variables.get(tag);
+		if(modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		#end
 		return null;
 	}
@@ -1642,6 +1642,12 @@ class PlayState extends MusicBeatState
 			}
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
+
+			#if VIDEOS_ALLOWED
+			for(video in modchartVideoSprites)
+				if(video != null && members.contains(video))
+					video.paused = true;
+			#end
 		}
 
 		super.openSubState(SubState);
@@ -1659,7 +1665,7 @@ class PlayState extends MusicBeatState
 
 			#if VIDEOS_ALLOWED
 			for(video in modchartVideoSprites)
-				if(video.exists)
+				if(video != null && members.contains(video))
 					video.paused = false;
 			#end
 
@@ -1965,12 +1971,6 @@ class PlayState extends MusicBeatState
 		persistentDraw = true;
 		mobileControls.visible = #if !android virtualPad.visible = #end false;
 		paused = true;
-
-		#if VIDEOS_ALLOWED
-		for(video in modchartVideoSprites)
-			if(video.exists)
-				video.paused = true;
-		#end
 		
 		if(FlxG.sound.music != null) {
 			FlxG.sound.music.pause();
@@ -2044,13 +2044,6 @@ class PlayState extends MusicBeatState
 				#if LUA_ALLOWED
 				modchartTimers.clear();
 				modchartTweens.clear();
-				#end
-
-				#if VIDEOS_ALLOWED
-				for(video in modchartVideoSprites){
-					remove(video, true);
-					video.altDestroy();
-				}
 				#end
 
 				openSubState(new GameOverSubstate());

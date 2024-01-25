@@ -1176,7 +1176,7 @@ class FunkinLua {
 		});
 
 		set("setObjectCamera", function(obj:String, camera:String = '') {
-			var real = game.getLuaObject(obj);
+			var real:FlxBasic = game.getLuaObject(obj);
 			if(real!=null){
 				real.cameras = [LuaUtils.cameraFromString(camera)];
 				return true;

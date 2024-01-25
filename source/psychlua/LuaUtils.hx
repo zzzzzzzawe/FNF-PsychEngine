@@ -232,9 +232,9 @@ class LuaUtils
 		return Reflect.getProperty(leArray, variable);
 	}
 
-	public static function getPropertyLoop(split:Array<String>, ?checkForTextsToo:Bool = true, ?checkForVideos:Bool = true, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
+	public static function getPropertyLoop(split:Array<String>, ?checkForTextsToo:Bool = true, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
 	{
-		var obj:Dynamic = getObjectDirectly(split[0], checkForTextsToo, checkForVideos);
+		var obj:Dynamic = getObjectDirectly(split[0], checkForTextsToo);
 		var end = split.length;
 		if(getProperty) end = split.length-1;
 
@@ -242,7 +242,7 @@ class LuaUtils
 		return obj;
 	}
 
-	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true, ?checkForVideos:Bool = true, ?allowMaps:Bool = false):Dynamic
+	public static function getObjectDirectly(objectName:String, ?checkForTextsToo:Bool = true, ?allowMaps:Bool = false):Dynamic
 	{
 		switch(objectName)
 		{
@@ -250,7 +250,7 @@ class LuaUtils
 				return PlayState.instance;
 			
 			default:
-				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo, checkForVideos);
+				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForTextsToo,);
 				if(obj == null) obj = getVarInArray(getTargetInstance(), objectName, allowMaps);
 				return obj;
 		}
@@ -541,7 +541,6 @@ class LuaUtils
 
 		var target:VideoSpriteManager = PlayState.instance.modchartVideoSprites.get(tag);
 		PlayState.instance.remove(target, true);
-		target.altDestroy();
 		target.destroy();
 		PlayState.instance.modchartVideoSprites.remove(tag);
 		#end
