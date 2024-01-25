@@ -1,5 +1,6 @@
 package mobile.states;
 
+import lime.utils.Assets;
 import flixel.addons.transition.FlxTransitionableState;
 import openfl.utils.Assets as OpenflAssets;
 import flixel.addons.util.FlxAsyncLoop;
@@ -41,7 +42,7 @@ class CopyState extends MusicBeatState
 		checkExistingFiles();
 		if (maxLoopTimes > 0)
 		{
-			trace(locatedFiles);
+			//trace(locatedFiles);
 			shouldCopy = true;
 			SUtil.showPopUp("Seems like you have some missing files that are necessary to run the game\nPress OK to begin the copy process", "Notice!");
 
@@ -174,15 +175,12 @@ class CopyState extends MusicBeatState
 
 	public static function getFile(file:String):String
 	{
-		for (index in 1...8)
-			if (file.contains('/week$index/'))
-				return 'week_assets:$file';
-		if (file.contains('/videos/'))
-			return 'videos:$file';
-		else if (file.contains('/songs/'))
-			return 'songs:$file';
-		else
-			return file;
+		@:privateAccess
+		for(library in Assets.libraries.keys()){
+			if(Assets.exists('$library:$file') && library != 'default')
+				return '$library:$file';
+		}
+		return file;
 	}
 
 	public function createContentFromInternal(file:String = 'assets/file.txt')
