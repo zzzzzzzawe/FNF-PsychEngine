@@ -12,7 +12,6 @@ import haxe.CallStack;
 import lime.system.System as LimeSystem;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
-import openfl.utils.ByteArray;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
 
