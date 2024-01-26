@@ -28,6 +28,7 @@ enum StorageType
 /**
  * A class for mobile
  * @author Mihai Alexandru (M.A. Jigsaw)
+ * @modification's author: Lily (mcagabe19)
  */
 class SUtil
 {
