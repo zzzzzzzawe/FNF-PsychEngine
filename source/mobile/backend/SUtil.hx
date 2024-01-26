@@ -19,7 +19,6 @@ using StringTools;
 
 enum StorageType
 {
-	// DATA;
 	EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
@@ -42,8 +41,6 @@ class SUtil
 		#if android
 		switch (type)
 		{
-			// case DATA:
-			// daPath = Context.getFilesDir();
 			case EXTERNAL_DATA:
 				daPath = Context.getExternalFilesDir(null);
 			case EXTERNAL_OBB:
