@@ -12,6 +12,7 @@ import haxe.CallStack;
 import lime.system.System as LimeSystem;
 import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
+import openfl.utils.ByteArray;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
 
@@ -167,32 +168,6 @@ class SUtil
 			Toast.makeText("Error!\nClouldn't save the file because:\n" + e, Toast.LENGTH_LONG);
 			#else
 			LimeLogger.println("Error!\nClouldn't save the file because:\n" + e);
-			#end
-		}
-	}
-
-	public static function copyContent(copyPath:String, savePath:String):Void
-	{
-		try
-		{
-			if (!FileSystem.exists(savePath) && OpenflAssets.exists(copyPath))
-			{
-				if (!FileSystem.exists(Path.directory(savePath)))
-					mkDirs(Path.directory(savePath));
-				if (copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
-					File.saveBytes(savePath, cast OpenflAssets.getFont(copyPath));
-				else if (copyPath.endsWith('.txt'))
-					File.saveBytes(savePath, cast OpenflAssets.getText(copyPath));
-				else
-					File.saveBytes(savePath, OpenflAssets.getBytes(copyPath));
-			}
-		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			Toast.makeText('Error!\nClouldn\'t copy the $copyPath because:\n' + e, Toast.LENGTH_LONG);
-			#else
-			LimeLogger.println('Error!\nClouldn\'t copy the $copyPath because:\n' + e);
 			#end
 		}
 	}
