@@ -1,4 +1,7 @@
-package options;
+package mobile.options;
+
+import options.BaseOptionsMenu;
+import options.Option;
 
 class MobileOptionsSubState extends BaseOptionsMenu
 {
@@ -33,11 +36,14 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		var option:Option = new Option('Hide Hitbox Hints', 'If checked, makes the hitbox invisible.', 'hideHitboxHints', 'bool');
-		addOption(option);
+		if (MobileControls.mode == 4)
+		{
+			var option:Option = new Option('Hide Hitbox Hints', 'If checked, makes the hitbox invisible.', 'hideHitboxHints', 'bool');
+			addOption(option);
 
-		var option:Option = new Option('Hitbox Position', 'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.', 'hitbox2', 'bool');
-		addOption(option);
+			var option:Option = new Option('Hitbox Position', 'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.', 'hitbox2', 'bool');
+			addOption(option);
+		}
 
 		var option:Option = new Option('Dynamic Controls Color', 'If checked, the mobile controls color will be set to the notes color in your settings.\n(have effect during gameplay only)', 'dynamicColors', 'bool');
 		addOption(option);

@@ -100,47 +100,48 @@ class FlxHitbox extends FlxMobileInputManager
 		hint.scrollFactor.set();
 		hint.alpha = 0.00001;
 		hint.antialiasing = ClientPrefs.data.antialiasing;
-                if (!ClientPrefs.data.hideHitboxHints) {
-		hint.onDown.callback = function()
+		if (!ClientPrefs.data.hideHitboxHints)
 		{
-			if (hintTween != null)
-				hintTween.cancel();
+			hint.onDown.callback = function()
+			{
+				if (hintTween != null)
+					hintTween.cancel();
 
-			hintTween = FlxTween.tween(hint, {alpha: ClientPrefs.data.controlsAlpha}, ClientPrefs.data.controlsAlpha / 100, {
-				ease: FlxEase.circInOut,
-				onComplete: function(twn:FlxTween)
-				{
-					hintTween = null;
-				}
-			});
-		}
-		hint.onUp.callback = function()
-		{
-			if (hintTween != null)
-				hintTween.cancel();
+				hintTween = FlxTween.tween(hint, {alpha: ClientPrefs.data.controlsAlpha}, ClientPrefs.data.controlsAlpha / 100, {
+					ease: FlxEase.circInOut,
+					onComplete: function(twn:FlxTween)
+					{
+						hintTween = null;
+					}
+				});
+			}
+			hint.onUp.callback = function()
+			{
+				if (hintTween != null)
+					hintTween.cancel();
 
-			hintTween = FlxTween.tween(hint, {alpha: 0.00001}, ClientPrefs.data.controlsAlpha / 10, {
-				ease: FlxEase.circInOut,
-				onComplete: function(twn:FlxTween)
-				{
-					hintTween = null;
-				}
-			});
-		}
-		hint.onOut.callback = function()
-		{
-			if (hintTween != null)
-				hintTween.cancel();
+				hintTween = FlxTween.tween(hint, {alpha: 0.00001}, ClientPrefs.data.controlsAlpha / 10, {
+					ease: FlxEase.circInOut,
+					onComplete: function(twn:FlxTween)
+					{
+						hintTween = null;
+					}
+				});
+			}
+			hint.onOut.callback = function()
+			{
+				if (hintTween != null)
+					hintTween.cancel();
 
-			hintTween = FlxTween.tween(hint, {alpha: 0.00001}, ClientPrefs.data.controlsAlpha / 10, {
-				ease: FlxEase.circInOut,
-				onComplete: function(twn:FlxTween)
-				{
-					hintTween = null;
-				}
-			});
+				hintTween = FlxTween.tween(hint, {alpha: 0.00001}, ClientPrefs.data.controlsAlpha / 10, {
+					ease: FlxEase.circInOut,
+					onComplete: function(twn:FlxTween)
+					{
+						hintTween = null;
+					}
+				});
+			}
 		}
-                }
 		#if FLX_DEBUG
 		hint.ignoreDrawDebug = true;
 		#end

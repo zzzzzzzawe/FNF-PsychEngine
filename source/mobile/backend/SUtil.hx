@@ -19,7 +19,7 @@ using StringTools;
 
 enum StorageType
 {
-	//DATA;
+	// DATA;
 	EXTERNAL;
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
@@ -27,7 +27,7 @@ enum StorageType
 }
 
 /**
- * ...
+ * A class for mobile
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
 class SUtil
@@ -42,8 +42,8 @@ class SUtil
 		#if android
 		switch (type)
 		{
-			//case DATA:
-				//daPath = Context.getFilesDir();
+			// case DATA:
+			// daPath = Context.getFilesDir();
 			case EXTERNAL_DATA:
 				daPath = Context.getExternalFilesDir(null);
 			case EXTERNAL_OBB:
@@ -115,14 +115,14 @@ class SUtil
 		DiscordClient.shutdown();
 		#end
 
-                #if js
-                if (FlxG.sound.music != null)
+		#if js
+		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-                js.Browser.window.location.reload(true);
-                #else
+		js.Browser.window.location.reload(true);
+		#else
 		LimeSystem.exit(1);
-                #end
+		#end
 	}
 
 	/**
@@ -154,8 +154,7 @@ class SUtil
 		}
 	}
 
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'you forgot to add something in your code lol'):Void
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'you forgot to add something in your code lol'):Void
 	{
 		try
 		{
@@ -177,14 +176,15 @@ class SUtil
 
 	public static function copyContent(copyPath:String, savePath:String):Void
 	{
-		try {
+		try
+		{
 			if (!FileSystem.exists(savePath) && OpenflAssets.exists(copyPath))
 			{
 				if (!FileSystem.exists(Path.directory(savePath)))
 					mkDirs(Path.directory(savePath));
-				if(copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
+				if (copyPath.endsWith('.otf') || copyPath.endsWith('.ttf'))
 					File.saveBytes(savePath, cast OpenflAssets.getFont(copyPath));
-				else if(copyPath.endsWith('.txt'))
+				else if (copyPath.endsWith('.txt'))
 					File.saveBytes(savePath, cast OpenflAssets.getText(copyPath));
 				else
 					File.saveBytes(savePath, OpenflAssets.getBytes(copyPath));
@@ -199,27 +199,26 @@ class SUtil
 			#end
 		}
 	}
-
 	#end
+
 	#if android
 	public static function doPermissionsShit():Void
-        {
-		if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) {
-			if(!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE))
-				Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
-			if(!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
-				Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
+	{
+		if (!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+		{
+			if (!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE)) Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
+			if (!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
 			showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
 		}
 	}
 	#end
 
-        public static function showPopUp(message:String, title:String):Void
-        {
-                #if (windows || mobile || js || wasm)
-                Lib.application.window.alert(message, title);
-                #else
-                LimeLogger.println('$title - $message');
-                #end
-        }
+	public static function showPopUp(message:String, title:String):Void
+	{
+		#if (windows || mobile || js || wasm)
+		Lib.application.window.alert(message, title);
+		#else
+		LimeLogger.println('$title - $message');
+		#end
+	}
 }
