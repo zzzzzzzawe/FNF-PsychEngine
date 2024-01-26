@@ -100,6 +100,7 @@ class FlxHitbox extends FlxMobileInputManager
 		hint.scrollFactor.set();
 		hint.alpha = 0.00001;
 		hint.antialiasing = ClientPrefs.data.antialiasing;
+                if (!ClientPrefs.data.hideHitboxHints) {
 		hint.onDown.callback = function()
 		{
 			if (hintTween != null)
@@ -139,6 +140,7 @@ class FlxHitbox extends FlxMobileInputManager
 				}
 			});
 		}
+                }
 		#if FLX_DEBUG
 		hint.ignoreDrawDebug = true;
 		#end
