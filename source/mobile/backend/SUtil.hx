@@ -187,7 +187,7 @@ class SUtil
 
 	public static function showPopUp(message:String, title:String):Void
 	{
-		#if (windows || mobile || js || wasm)
+		#if (windows || android || js || wasm)
 		Lib.application.window.alert(message, title);
 		#else
 		LimeLogger.println('$title - $message');
