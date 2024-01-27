@@ -10,38 +10,6 @@ import lime.system.System as LimeSystem;
 	The FPS class provides an easy-to-use monitor to display
 	the current frame rate of an OpenFL project
 **/
-#if cpp
-@:cppNamespaceCode('
-const char *getArch() {
-    #if defined(__x86_64__) || defined(_M_X64)
-    return "x86_64";
-    #elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
-    #ifdef __unix__
-    return "i386";
-    #else
-    return "x86";
-    #endif
-    #elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-    return "armv6";
-    #elif defined(__ARM_ARCH_6T2_) || defined(__ARM_ARCH_6T2_)
-    return "armv6t2";
-    #elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__)
-    return "armv7";
-    #elif defined(__ARM_ARCH_7S__)
-    return "armv7s";
-    #elif defined(__aarch64__) || defined(_M_ARM64)
-    return "aarch64";
-    #elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__POWERPC__) || defined(__ppc__) || defined(__PPC__) || defined(_ARCH_PPC)
-    return "ppc";
-    #elif defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
-    return "ppc64";
-    #elif defined(mips) || defined(__mips__) || defined(__mips)
-    return "mips";
-    #else
-    return null;
-    #endif
-}')
-#end
 class FPSCounter extends TextField
 {
 	/**
@@ -55,7 +23,9 @@ class FPSCounter extends TextField
 	public var memoryMegas(get, never):Float;
 
 	@:noCompletion private var times:Array<Float>;
+
 	public var os:String = '';
+
         #if cpp
         public var arch:String = '';
         #end
@@ -69,8 +39,8 @@ class FPSCounter extends TextField
 			os = '\nOS: ${LimeSystem.platformName} - ${LimeSystem.platformVersion}'; 
 
                 #if cpp
-                if(untyped __cpp__('getArch') != null)
-                       arch = '\nArch: ' + untyped __cpp__('getArch');
+                if (getArch() != null)
+                       arch = '\nArch: ${getArch()}';
                 #end
 
 		positionFPS(x, y);
@@ -126,5 +96,40 @@ class FPSCounter extends TextField
 		scaleX = scaleY = #if mobile (scale > 1 ? scale : 1) #else (scale < 1 ? scale : 1) #end;
 		x = FlxG.game.x + X;
 		y = FlxG.game.y + Y;
+	}
+
+	#if cpp
+	@:functionCode('
+		#if defined(__x86_64__) || defined(_M_X64)
+		return "x86_64";
+		#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
+		#ifdef __unix__
+		return "i386";
+		#else
+		return "x86";
+		#endif
+		#elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
+		return "armv6";
+		#elif defined(__ARM_ARCH_6T2_) || defined(__ARM_ARCH_6T2_)
+		return "armv6t2";
+		#elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__)
+		return "armv7";
+		#elif defined(__ARM_ARCH_7S__)
+		return "armv7s";
+		#elif defined(__aarch64__) || defined(_M_ARM64)
+		return "aarch64";
+		#elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__POWERPC__) || defined(__ppc__) || defined(__PPC__) || defined(_ARCH_PPC)
+		return "ppc";
+		#elif defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
+		return "ppc64";
+		#elif defined(mips) || defined(__mips__) || defined(__mips)
+		return "mips";
+		#endif
+	')
+	#end
+	@:noCompletion
+	private function getArch():cpp.ConstCharStar
+	{
+		return null;
 	}
 }
