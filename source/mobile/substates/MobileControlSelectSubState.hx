@@ -294,9 +294,9 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 	function moveButton(touch:FlxTouch, button:FlxButton):Void
 	{
 		bindButton = button;
+		buttonBinded = bindButton == null ? false : true;
 		bindButton.x = touch.x - Std.int(bindButton.width / 2);
 		bindButton.y = touch.y - Std.int(bindButton.height / 2);
-		buttonBinded = true;
 		updatePosText();
 	}
 }
