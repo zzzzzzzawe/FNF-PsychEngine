@@ -26,22 +26,13 @@ class FPSCounter extends TextField
 
 	public var os:String = '';
 
-        #if cpp
-        public var arch:String = '';
-        #end
-
 	public function new(x:Float = 10, y:Float = 10, color:Int = 0x000000)
 	{
 		super();
 		if(LimeSystem.platformName == LimeSystem.platformVersion || LimeSystem.platformVersion == null)
-			os = '\nOS: ${LimeSystem.platformName}';
+			os = '\nOS: ${LimeSystem.platformName}' #if cpp + ' ${getArch()}' #end;
 		else
-			os = '\nOS: ${LimeSystem.platformName} - ${LimeSystem.platformVersion}'; 
-
-                #if cpp
-                if (getArch() != null)
-                       arch = '\nArch: ${getArch()}';
-                #end
+			os = '\nOS: ${LimeSystem.platformName}' #if cpp + ' ${getArch()}' #end + ' - ${LimeSystem.platformVersion}';
 
 		positionFPS(x, y);
 
@@ -81,8 +72,7 @@ class FPSCounter extends TextField
 		text = 
 		'FPS: $currentFPS' + 
 		'\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}' +
-		os #if cpp + arch #end ;
-		
+		os;
 
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
@@ -126,10 +116,10 @@ class FPSCounter extends TextField
 		return "mips";
 		#endif
 	')
-	#end
 	@:noCompletion
 	private function getArch():cpp.ConstCharStar
 	{
 		return null;
 	}
+        #end
 }
