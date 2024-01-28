@@ -96,6 +96,8 @@ class FPSCounter extends TextField
 		return "aarch64";
                 #elif defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64) || defined(__powerpc64__)
 		return "ppc64";
+                #elif defined(__IA64__) || defined(__ia64__) || defined(__itanium__) || defined(_M_IA64)
+                return "IA-64"
 		#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86) || defined(_M_I86)
 		return "x86";
 		#elif defined(__ARM_ARCH_7S__)
@@ -110,8 +112,6 @@ class FPSCounter extends TextField
 		return "armv6";
 		#elif defined(mips) || defined(__mips__) || defined(__mips)
 		return "mips";
-                #elif defined(__IA64__) || defined(__ia64__) || defined(__itanium__) || defined(_M_IA64)
-                return "IA-64"
                 #elif defined(__sparc__) || defined(__sparc)
                 return "sparc"
                 #elif defined(__sh__)
