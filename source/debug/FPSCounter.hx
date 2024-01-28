@@ -91,9 +91,13 @@ class FPSCounter extends TextField
 	#if cpp
 	@:functionCode('
 		#if defined(__x86_64__) || defined(_M_X64)
+                #if defined(__unix__) && !defined(__ANDROID__)
+		return "amd64";
+		#else
 		return "x86_64";
+                #end
 		#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
-		#ifdef __unix__
+		#if defined(__unix__) && !defined(__ANDROID__)
 		return "i386";
 		#else
 		return "x86";
@@ -107,7 +111,11 @@ class FPSCounter extends TextField
 		#elif defined(__ARM_ARCH_7S__)
 		return "armv7s";
 		#elif defined(__aarch64__) || defined(_M_ARM64)
+                #if defined(__unix__) && !defined(__ANDROID__)
+		return "arm64";
+		#else
 		return "aarch64";
+                #end
 		#elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__POWERPC__) || defined(__ppc__) || defined(__PPC__) || defined(_ARCH_PPC)
 		return "ppc";
 		#elif defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
