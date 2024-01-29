@@ -94,7 +94,6 @@ class CopyState extends MusicBeatState
 				}
 				if (!checkExistingFiles())
 				{
-					trace('reloaded CopyState...');
 					FlxG.resetState();
 					return;
 				}
@@ -106,7 +105,7 @@ class CopyState extends MusicBeatState
 				FlxTween.tween(black, {alpha: 1}, 0.9, {
 					onComplete: function(twn:FlxTween)
 					{
-						System.gc();
+						Paths.clearUnusedMemory();
 						TitleState.ignoreCopy = true;
 						FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
 						MusicBeatState.switchState(new TitleState());
