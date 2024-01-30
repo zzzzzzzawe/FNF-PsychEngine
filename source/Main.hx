@@ -56,7 +56,7 @@ class Main extends Sprite
 		#if cpp
 		cpp.NativeGc.enable(true);
 		#elseif hl
-		hl.Gc.major();
+		hl.Gc.enable(true);
 		#end
 	}
 
