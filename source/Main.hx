@@ -54,9 +54,10 @@ class Main extends Sprite
 	{
 		Lib.current.addChild(new Main());
 		#if cpp
-        cpp.NativeGc.enable(true);
-        cpp.NativeGc.run(true);
-        #end
+		cpp.NativeGc.enable(true);
+		#elseif hl
+		hl.Gc.enable(true);
+		#end
 	}
 
 	public function new()
