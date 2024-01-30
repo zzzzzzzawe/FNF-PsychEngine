@@ -37,8 +37,8 @@ class ModsMenuState extends MusicBeatState
 	var bgDescription:FlxSprite;
 	var bgButtons:FlxSprite;
 
-	var modsGroup:FlxTypedGroup<ModItem>;
-	var curSelectedMod:Int = 0;
+	public static var modsGroup:FlxTypedGroup<ModItem>;
+	public static var curSelectedMod:Int = 0;
 	
 	var hoveringOnMods:Bool = true;
 	var curSelectedButton:Int = 0; ///-1 = Enable/Disable All, -2 = Reload
