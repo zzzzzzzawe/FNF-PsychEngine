@@ -136,7 +136,7 @@ class Main extends Sprite
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
-		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		Lib.current.stage.scaleMode = getStageScaleMode();
 		if(fpsVar != null)
 			fpsVar.visible = ClientPrefs.data.showFPS;
 
@@ -186,8 +186,23 @@ class Main extends Sprite
 		}
 	}
 
-	function toggleFullScreen(event:KeyboardEvent){
+	function toggleFullScreen(event:KeyboardEvent):Void {
 		if(Controls.instance.justReleased('fullscreen'))
 			FlxG.fullscreen = !FlxG.fullscreen;
 	}
+
+        function getStageScaleMode():StageScaleMode {
+                switch (ClientPrefs.data.stageScaleMode) {
+                   case 'EXACT_FIT':
+                        return StageScaleMode.EXACT_FIT;
+                   case 'NO_BORDER':
+                        return StageScaleMode.NO_BORDER;
+                   case 'NO_SCALE':
+                        return StageScaleMode.NO_SCALE;
+                   case 'SHOW_ALL':
+                        return StageScaleMode.SHOW_ALL;
+                   default:
+                        return StageScaleMode.NO_SCALE;
+                }
+        }
 }
