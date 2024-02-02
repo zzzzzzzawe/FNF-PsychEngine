@@ -14,7 +14,7 @@ class MobileFunctions
 	{
 		funk.set('mobileControlsMode', getMobileControlsAsString());
 
-		funk.set("extraButtonPressed", function(button:String)
+		funk.set("extraButtonPressed", (button:String) ->
 		{
 			button = button.toLowerCase();
 			if (MusicBeatState.instance.mobileControls != null)
@@ -30,7 +30,7 @@ class MobileFunctions
 			return false;
 		});
 
-		funk.set("extraButtonJustPressed", function(button:String)
+		funk.set("extraButtonJustPressed", (button:String) ->
 		{
 			button = button.toLowerCase();
 			if (MusicBeatState.instance.mobileControls != null)
@@ -46,7 +46,7 @@ class MobileFunctions
 			return false;
 		});
 
-		funk.set("extraButtonJustReleased", function(button:String)
+		funk.set("extraButtonJustReleased", (button:String) ->
 		{
 			button = button.toLowerCase();
 			if (MusicBeatState.instance.mobileControls != null)
@@ -62,12 +62,12 @@ class MobileFunctions
 			return false;
 		});
 
-		funk.set("vibrate", function(duration:Null<Int>, ?period:Null<Int>)
+		funk.set("vibrate", (duration:Null<Int>, ?period:Null<Int>) ->
 		{
-			if (period == null)
-				period = 0;
 			if (duration == null)
 				return FunkinLua.luaTrace('vibrate: No duration specified.');
+			else if (period == null)
+				period = 0;
 			return Haptic.vibrate(period, duration);
 		});
 
@@ -89,37 +89,34 @@ class MobileFunctions
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
-				FunkinLua.luaTrace('addVirtualPadCamera: VPAD does not exist.');
+				FunkinLua.luaTrace('addVirtualPadCamera: Virtual Pad does not exist.');
 				return;
 			}
 			PlayState.instance.addLuaVirtualPadCamera();
 		});
 
-		funk.set("virtualPadJustPressed", function(button:Dynamic):Bool
+		funk.set("virtualPadJustPressed", (button:Dynamic):Bool ->
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
-				//FunkinLua.luaTrace('virtualPadJustPressed: VPAD does not exist.');
 				return false;
 			}
 			return PlayState.instance.luaVirtualPadJustPressed(button);
 		});
 
-		funk.set("virtualPadPressed", function(button:Dynamic):Bool
+		funk.set("virtualPadPressed", (button:Dynamic):Bool ->
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
-				//FunkinLua.luaTrace('virtualPadPressed: VPAD does not exist.');
 				return false;
 			}
 			return PlayState.instance.luaVirtualPadPressed(button);
 		});
 
-		funk.set("virtualPadJustReleased", function(button:Dynamic):Bool
+		funk.set("virtualPadJustReleased", (button:Dynamic):Bool ->
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
-				//FunkinLua.luaTrace('virtualPadJustReleased: VPAD does not exist.');
 				return false;
 			}
 			return PlayState.instance.luaVirtualPadJustReleased(button);
@@ -128,7 +125,7 @@ class MobileFunctions
 		funk.set("touchJustPressed", TouchFunctions.touchJustPressed);
 		funk.set("touchPressed", TouchFunctions.touchPressed);
 		funk.set("touchJustReleased", TouchFunctions.touchJustReleased);
-		funk.set("touchPressedObject", function(object:String):Bool
+		funk.set("touchPressedObject", (object:String):Bool ->
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
@@ -139,7 +136,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchPressed;
 		});
 
-		funk.set("touchJustPressedObject", function(object:String):Bool
+		funk.set("touchJustPressedObject", (object:String):Bool ->
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
@@ -150,7 +147,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustPressed;
 		});
 
-		funk.set("touchJustReleasedObject", function(object:String):Bool
+		funk.set("touchJustReleasedObject", (object:String):Bool ->
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
@@ -161,7 +158,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustReleased;
 		});
 
-		funk.set("touchOverlapsObject", function(object:String):Bool
+		funk.set("touchOverlapsObject", (object:String):Bool ->
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
