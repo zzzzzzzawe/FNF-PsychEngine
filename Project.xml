@@ -123,6 +123,8 @@
 	<!-- Enables a terminal log prompt on debug builds -->
 	<haxelib name="hxcpp-debug-server" if="debug"/>
 
+	<template path="template/AndroidManifest.xml" rename="android/template/app/src/main/AndroidManifest.xml" if="android" />
+
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<!--Enable the Flixel core recording system-->
