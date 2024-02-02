@@ -75,7 +75,7 @@ class MobileFunctions
 		{
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
 			if(addToCustomSubstate){
-				if(PlayState.instance.luaVirtualPad != null || !PlayState.instance.members.contains(luaVirtualPad))
+				if(PlayState.instance.luaVirtualPad != null || !PlayState.instance.members.contains(PlayState.instance.luaVirtualPad))
 					CustomSubstate.insertLuaVpad(posAtCustomSubstate);
 			} else PlayState.instance.addLuaVirtualPad();
 		});
