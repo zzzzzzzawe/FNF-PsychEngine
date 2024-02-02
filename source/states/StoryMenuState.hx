@@ -325,6 +325,7 @@ class StoryMenuState extends MusicBeatState
 				stopspamming = true;
 			}
 
+			LoadingState.prepareToSong();
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
 				LoadingState.loadAndSwitchState(new PlayState(), true);
