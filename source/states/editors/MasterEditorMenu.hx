@@ -27,6 +27,9 @@ class MasterEditorMenu extends MusicBeatState
 
 	override function create()
 	{
+		#if !officialBuild
+		options.push('Stage Editor');
+		#end
 		FlxG.camera.bgColor = FlxColor.BLACK;
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -125,6 +128,10 @@ class MasterEditorMenu extends MusicBeatState
 					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
 				case 'Note Splash Debug':
 					MusicBeatState.switchState(new NoteSplashDebugState());
+				#if !officialBuild
+				case 'Stage Editor':
+					LoadingState.loadAndSwitchState(new StageEditorState());
+				#end
 			}
 			FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();
