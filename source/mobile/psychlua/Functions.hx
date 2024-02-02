@@ -95,7 +95,7 @@ class MobileFunctions
 			PlayState.instance.addLuaVirtualPadCamera();
 		});
 
-		funk.set("virtualPadJustPressed", (button:Dynamic):Bool ->
+		funk.set("virtualPadJustPressed", function(button:Dynamic):Bool
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
@@ -104,7 +104,7 @@ class MobileFunctions
 			return PlayState.instance.luaVirtualPadJustPressed(button);
 		});
 
-		funk.set("virtualPadPressed", (button:Dynamic):Bool ->
+		funk.set("virtualPadPressed", function(button:Dynamic):Bool
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
@@ -113,7 +113,7 @@ class MobileFunctions
 			return PlayState.instance.luaVirtualPadPressed(button);
 		});
 
-		funk.set("virtualPadJustReleased", (button:Dynamic):Bool ->
+		funk.set("virtualPadJustReleased", function(button:Dynamic):Bool
 		{
 			if (PlayState.instance.luaVirtualPad == null)
 			{
@@ -136,7 +136,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchPressed;
 		});
 
-		funk.set("touchJustPressedObject", (object:String):Bool ->
+		funk.set("touchJustPressedObject", function(object:String):Bool
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
@@ -147,7 +147,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustPressed;
 		});
 
-		funk.set("touchJustReleasedObject", (object:String):Bool ->
+		funk.set("touchJustReleasedObject", function(object:String):Bool
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
@@ -158,7 +158,7 @@ class MobileFunctions
 			return TouchFunctions.touchOverlapObject(obj) && TouchFunctions.touchJustReleased;
 		});
 
-		funk.set("touchOverlapsObject", (object:String):Bool ->
+		funk.set("touchOverlapsObject", function(object:String):Bool
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)
