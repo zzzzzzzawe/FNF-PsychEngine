@@ -4,7 +4,6 @@ import flixel.addons.transition.FlxTransitionableState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
 import flixel.addons.util.FlxAsyncLoop;
-import flixel.util.FlxTimer;
 import openfl.utils.ByteArray;
 import openfl.system.System;
 import states.TitleState;
