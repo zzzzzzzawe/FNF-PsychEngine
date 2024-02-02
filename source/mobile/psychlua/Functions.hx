@@ -1,5 +1,6 @@
 package mobile.psychlua;
 
+import psychlua.CustomSubstate;
 #if LUA_ALLOWED
 import llua.*;
 import llua.Lua;
@@ -70,10 +71,13 @@ class MobileFunctions
 			return Haptic.vibrate(period, duration);
 		});
 
-		funk.set("addVirtualPad", (DPadMode:String, ActionMode:String) ->
+		funk.set("addVirtualPad", (DPadMode:String, ActionMode:String, ?addToCustomSubstate:Bool = false, ?posAtCustomSubstate:Int = -1) ->
 		{
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
-			PlayState.instance.addLuaVirtualPad();
+			if(addToCustomSubstate){
+				if(PlayState.instance.luaVirtualPad != null || !PlayState.instance.members.contains(luaVirtualPad))
+					CustomSubstate.insertLuaVpad(posAtCustomSubstate);
+			} else PlayState.instance.addLuaVirtualPad();
 		});
 
 		funk.set("removeVirtualPad", () ->
