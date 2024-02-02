@@ -125,7 +125,7 @@ class MobileFunctions
 		funk.set("touchJustPressed", TouchFunctions.touchJustPressed);
 		funk.set("touchPressed", TouchFunctions.touchPressed);
 		funk.set("touchJustReleased", TouchFunctions.touchJustReleased);
-		funk.set("touchPressedObject", (object:String):Bool ->
+		funk.set("touchPressedObject", function(object:String):Bool
 		{
 			var obj = PlayState.instance.getLuaObject(object);
 			if (obj == null)

@@ -107,7 +107,7 @@ class CopyState extends MusicBeatState
 					{
 						Paths.clearUnusedMemory();
 						TitleState.ignoreCopy = true;
-						FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
+						//FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
 						MusicBeatState.switchState(new TitleState());
 					},
 					ease: FlxEase.linear,
