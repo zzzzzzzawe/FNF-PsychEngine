@@ -137,7 +137,7 @@ class LuaUtils
 					for (i in 0...parsedJson.length)
 					{
 						var sub:Dynamic = parsedJson[i];
-						if(sub != null && sub.save != null && !settings.exists(sub.save))
+						if(sub != null && sub.save != null && (!settings.exists(sub.save) || settings.get(sub.save) != sub.value))
 						{
 							if(sub.type != 'keybind' && sub.type != 'key')
 							{
