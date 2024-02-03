@@ -16,7 +16,8 @@ class MasterEditorMenu extends MusicBeatState
 		'Menu Character Editor',
 		'Dialogue Editor',
 		'Dialogue Portrait Editor',
-		'Note Splash Debug'
+		'Note Splash Debug'#if !officialBuild ,
+                'Stage Editor' #end
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -27,9 +28,6 @@ class MasterEditorMenu extends MusicBeatState
 
 	override function create()
 	{
-		#if !officialBuild
-		options.push('Stage Editor');
-		#end
 		FlxG.camera.bgColor = FlxColor.BLACK;
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
