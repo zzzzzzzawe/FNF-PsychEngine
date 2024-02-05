@@ -622,6 +622,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		addMobileControls(false);
+                mobileControls.visible = true;
 
 		startCallback();
 		RecalculateRating();
@@ -942,7 +943,6 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
-		mobileControls.visible = true;
 		if(startedCountdown) {
 			callOnScripts('onStartCountdown');
 			return false;
@@ -1958,7 +1958,6 @@ class PlayState extends MusicBeatState
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		persistentDraw = true;
-		mobileControls.visible = #if !android virtualPad.visible = #end false;
 		paused = true;
 
 		#if VIDEOS_ALLOWED
