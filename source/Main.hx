@@ -186,7 +186,7 @@ class Main extends Sprite
 		}
 	}
 
-	function toggleFullScreen(event:KeyboardEvent){
+	function toggleFullScreen(event:KeyboardEvent):Void {
 		if(Controls.instance.justReleased('fullscreen'))
 			FlxG.fullscreen = !FlxG.fullscreen;
 	}
