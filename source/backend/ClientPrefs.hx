@@ -15,7 +15,6 @@ import states.TitleState;
 	public var screensaver:Bool = false;
         public var hideHitboxHints:Bool = false;
         // end of Mobile Controls Releated
-        public var stageScaleMode:String = "NO_SCALE";
 	public var popUpRating:Bool = true;
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;

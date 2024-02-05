@@ -4,8 +4,6 @@ import lime.ui.Haptic;
 
 class GameplaySettingsSubState extends BaseOptionsMenu
 {
-        var stageScaleModes:Array<String> = ["EXACT_FIT", "NO_BORDER", "NO_SCALE", "SHOW_ALL"];
-
 	public function new()
 	{
 		title = 'Gameplay Settings';
@@ -61,11 +59,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 		option.onChange = onChangeVibration;
-
-                #if !officialBuild
-                var option:Option = new Option('Stage Scale Mode', "Testing", 'stageScaleMode', 'string', stageScaleModes);
-                addOption(option);
-                #end
 
 		var option:Option = new Option('Hitsound Volume',
 			'Funny notes does \"Tick!\" when you hit them.',
