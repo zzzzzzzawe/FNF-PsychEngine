@@ -4,7 +4,7 @@ import lime.ui.Haptic;
 
 class GameplaySettingsSubState extends BaseOptionsMenu
 {
-        #if !officialBuild var stageScaleModes:Array<String> = ["EXACT_FIT", "NO_BORDER", "NO_SCALE", "SHOW_ALL"]; #end
+        var stageScaleModes:Array<String> = ["EXACT_FIT", "NO_BORDER", "NO_SCALE", "SHOW_ALL"];
 
 	public function new()
 	{
@@ -63,7 +63,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeVibration;
 
                 #if !officialBuild
-                var option:Option = new Option('Stage Scale Mode', "What scale mode should be?", 'stageScaleMode', 'string', stageScaleModes);
+                var option:Option = new Option('Stage Scale Mode', "Testing", 'stageScaleMode', 'string', stageScaleModes);
                 addOption(option);
                 #end
 
