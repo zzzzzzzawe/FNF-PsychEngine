@@ -137,6 +137,7 @@ class Main extends Sprite
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+                FlxG.game.stage.quality = openfl.display.StageQuality.LOW;
 		if(fpsVar != null)
 			fpsVar.visible = ClientPrefs.data.showFPS;
 
