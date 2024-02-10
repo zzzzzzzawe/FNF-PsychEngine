@@ -186,7 +186,7 @@ class SUtil
 	{
 		#if android
 		Tools.showAlertDialog(title, message, "OK");
-		#if (windows || web)
+		#elseif (windows || web)
 		Lib.application.window.alert(message, title);
 		#else
 		LimeLogger.println('$title - $message');
