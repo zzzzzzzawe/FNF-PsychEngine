@@ -21,6 +21,16 @@ import mobile.flixel.input.FlxMobileInputID;
 import mobile.backend.Data;
 import mobile.backend.SUtil;
 
+//Android
+#if android
+import android.content.Context;
+import android.widget.Toast;
+import android.os.Environment;
+import android.Permissions;
+import android.Settings;
+import android.Tools;
+#end
+
 #if sys
 import sys.*;
 import sys.io.*;
