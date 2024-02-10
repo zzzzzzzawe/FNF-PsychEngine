@@ -1,11 +1,6 @@
 package mobile.backend;
 
 #if android
-import android.content.Context;
-import android.widget.Toast;
-import android.os.Environment;
-import android.Permissions;
-import android.Settings;
 import lime.app.Application;
 #end
 import haxe.io.Path;
@@ -189,7 +184,9 @@ class SUtil
 
 	public static function showPopUp(message:String, title:String):Void
 	{
-		#if (windows || android || js || wasm)
+		#if android
+		Tools.showAlertDialog(title, message, "OK");
+		#if (windows || web)
 		Lib.application.window.alert(message, title);
 		#else
 		LimeLogger.println('$title - $message');
