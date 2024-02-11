@@ -3,7 +3,7 @@ package lime.utils;
 import openfl.Lib;
 #if android
 import android.widget.Toast;
-import android.Tools;
+//import android.Tools;
 #end
 import haxe.PosInfos;
 import lime.system.System;
@@ -65,9 +65,9 @@ class Log
 				}
 				#end
 
-				#if android
-				Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
-				#elseif (windows || web)
+				/*#if android
+				Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);*/
+				#if (windows || android || web)
 				Lib.application.window.alert(message, 'Error!');
 				#else
 				println('Error! - $message');
