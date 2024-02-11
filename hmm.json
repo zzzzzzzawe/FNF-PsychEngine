@@ -54,7 +54,7 @@
     {
       "name": "SScript",
       "type": "haxelib",
-      "version": "10.0.618-beta"
+      "version": null
     },
     {
       "name": "hxcpp-debug-server",
