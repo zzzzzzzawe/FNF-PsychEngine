@@ -39,9 +39,9 @@ class SUtil
 		switch (type)
 		{
 			case EXTERNAL_DATA:
-				daPath = Context.getExternalFilesDir(null);
+				daPath = AndroidContext.getExternalFilesDir(null);
 			case EXTERNAL_OBB:
-				daPath = Context.getObbDir();
+				daPath = AndroidContext.getObbDir();
 			case EXTERNAL:
 				daPath = Environment.getExternalStorageDirectory() + '/.' + Application.current.meta.get('file');
 			case MEDIA:
@@ -96,7 +96,7 @@ class SUtil
 		catch (e:Dynamic)
 		{
 			#if (android && debug)
-			Toast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, Toast.LENGTH_LONG);
+			AndroidToast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, AndroidToast.LENGTH_LONG);
 			#else
 			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
 			#end
@@ -161,7 +161,7 @@ class SUtil
 		catch (e:Dynamic)
 		{
 			#if (android && debug)
-			Toast.makeText("Error!\nClouldn't save the file because:\n" + e, Toast.LENGTH_LONG);
+			AndroidToast.makeText("Error!\nClouldn't save the file because:\n" + e, AndroidToast.LENGTH_LONG);
 			#else
 			LimeLogger.println("Error!\nClouldn't save the file because:\n" + e);
 			#end
@@ -172,12 +172,12 @@ class SUtil
 	#if android
 	public static function doPermissionsShit():Void
 	{
-		if (!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) && !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE) && !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
 		{
-			Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
-			Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
+			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
+			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
 			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens', 'Notice!');
-                        if (!Environment.isExternalStorageManager()) Settings.requestSetting("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
+                        if (!Environment.isExternalStorageManager()) AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
 		}
 	}
 	#end
@@ -185,7 +185,7 @@ class SUtil
 	public static function showPopUp(message:String, title:String):Void
 	{
 		#if android
-		Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
+		AndroidTools.showAlertDialog(title, message, {name: "OK", func: null}, null);
 		#elseif (windows || web)
 		Lib.application.window.alert(message, title);
 		#else

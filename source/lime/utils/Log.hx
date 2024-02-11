@@ -4,7 +4,7 @@ import openfl.Lib;
 #if android
 import android.widget.Toast;
 #if !macro
-import android.Tools;
+import android.Tools as AndroidTools;
 #end
 #end
 import haxe.PosInfos;
@@ -60,7 +60,7 @@ class Log
 				catch (e:Dynamic)
 				{
 					#if (android && debug)
-					Toast.makeText("Error!\nCouldn't save the crash log because:\n" + e, Toast.LENGTH_LONG);
+					AndroidToast.makeText("Error!\nCouldn't save the crash log because:\n" + e, AndroidToast.LENGTH_LONG);
 					#else
 					println("Error!\nCouldn't save the crash log because:\n" + e);
 					#end
@@ -68,7 +68,7 @@ class Log
 				#end
 
 				#if (android && !macro)
-				Tools.showAlertDialog('Error!', message, {name: "OK", func: null}, null);
+				AndroidTools.showAlertDialog('Error!', message, {name: "OK", func: null}, null);
 				#elseif (windows || web)
 				Lib.application.window.alert(message, 'Error!');
 				#else
