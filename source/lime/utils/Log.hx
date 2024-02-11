@@ -68,7 +68,7 @@ class Log
 				#end
 
 				#if (android && !macro)
-				Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
+				Tools.showAlertDialog('Error!', message, {name: "OK", func: null}, null);
 				#elseif (windows || web)
 				Lib.application.window.alert(message, 'Error!');
 				#else
