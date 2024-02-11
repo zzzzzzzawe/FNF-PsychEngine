@@ -185,7 +185,7 @@ class SUtil
 	public static function showPopUp(message:String, title:String):Void
 	{
 		#if android
-		Tools.showAlertDialog(title, message, "OK");
+		Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
 		#elseif (windows || web)
 		Lib.application.window.alert(message, title);
 		#else
