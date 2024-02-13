@@ -2,7 +2,7 @@ package lime.utils;
 
 import openfl.Lib;
 #if android
-import android.widget.Toast;
+import android.widget.Toast as AndroidToast;
 /*#if !macro
 import android.Tools as AndroidTools;
 #end*/
