@@ -77,7 +77,7 @@ jobs:
 
       - name: Make Ipa
         run: |
-          cd export/release/ios/build/Release-iphoneos
+          cd export/release/ios/build/*-iphoneos
           mkdir Payload
           mv *.app Payload
           zip -r PsychEngine.ipa Payload
