@@ -10,7 +10,7 @@ import lime.system.System as LimeSystem;
 	The FPS class provides an easy-to-use monitor to display
 	the current frame rate of an OpenFL project
 **/
-#if (!windows && cpp)
+#if (!windows || mingw && cpp)
 @:headerInclude('sys/utsname.h')
 #end
 class FPSCounter extends TextField
@@ -34,9 +34,9 @@ class FPSCounter extends TextField
 		super();
 
 		if (LimeSystem.platformName == LimeSystem.platformVersion || LimeSystem.platformVersion == null)
-			os = '\nOS: ${LimeSystem.platformName}' #if (!windows && cpp) + ' ${getArch()}' #end;
+			os = '\nOS: ${LimeSystem.platformName}' #if cpp + ' ${getArch()}' #end;
 		else
-			os = '\nOS: ${LimeSystem.platformName}' #if (!windows && cpp) + ' ${getArch()}' #end + ' - ${LimeSystem.platformVersion}';
+			os = '\nOS: ${LimeSystem.platformName}' #if cpp + ' ${getArch()}' #end + ' - ${LimeSystem.platformVersion}';
 
 		positionFPS(x, y);
 
@@ -92,12 +92,37 @@ class FPSCounter extends TextField
 		y = FlxG.game.y + Y;
 	}
 
-	#if (!windows && cpp)
+	#if cpp
+	#if (windows && !mingw)
+	@:functionCode('
+		#include <windows.h>
+		
+		SYSTEM_INFO osInfo;
+    GetSystemInfo(&osInfo);
+
+    switch(osInfo.wProcessorArchitecture)
+    {
+    case 9:
+        return "x86_64";
+    case 5:
+        return "ARM";
+    case 12:
+        return "ARM64";
+    case 6:
+        return "IA-64";
+    case 0:
+        return "x86";
+    default:
+        return "unknown";
+    }
+	')
+	#else
 	@:functionCode('
 		struct utsname osInfo{};
 		uname(&osInfo);
 		return ::String(osInfo.machine);
 	')
+	#end
 	@:noCompletion
 	private function getArch():String
 	{
