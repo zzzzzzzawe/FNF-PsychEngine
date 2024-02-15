@@ -182,14 +182,14 @@ class SUtil
 	}
 	#end
 
-	public static function showPopUp(message:String, title:String):Void
-	{
-		#if android
-		AndroidTools.showAlertDialog(title, message, {name: "OK", func: null}, null);
-		#elseif (windows || web)
-		Lib.application.window.alert(message, title);
-		#else
-		LimeLogger.println('$title - $message');
-		#end
-	}
+	public static function showPopUp(message:String, title:String #if android , ?positiveText:String = "OK", ?negativeText:String #end):Void
+        {
+                #if android
+                AndroidTools.showAlertDialog(title, message, {name: positiveText, func: null}, {name: negativeText, func: null} );
+                #elseif (windows || web)
+                Lib.application.window.alert(message, title);
+                #else
+                LimeLogger.println('$title - $message');
+                #end
+        }
 }
