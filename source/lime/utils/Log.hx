@@ -2,8 +2,7 @@ package lime.utils;
 
 #if android
 import android.widget.Toast as AndroidToast;
-#end
-#if !android
+#else
 import mobile.backend.SUtil;
 #end
 import haxe.PosInfos;
