@@ -1,14 +1,10 @@
 package lime.utils;
 
-import openfl.Lib;
 #if android
 import android.widget.Toast as AndroidToast;
-#if !macro
-import android.Tools as AndroidTools;
 #end
-#end
+import backend.Utils;
 import haxe.PosInfos;
-import lime.system.System;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
@@ -67,13 +63,7 @@ class Log
 				}
 				#end
 
-				#if (android && !macro)
-				AndroidTools.showAlertDialog('Error!', message, {name: "OK", func: null}, null);
-				#elseif (windows || web)
-				Lib.application.window.alert(message, 'Error!');
-				#else
-				println('Error! - $message');
-				#end
+				Utils.showPopUp(message, 'Error!');
 
 				#if js
 				if (FlxG.sound.music != null)
@@ -81,7 +71,7 @@ class Log
 				
 				js.Browser.window.location.reload(true);
 				#else
-				System.exit(1);
+				lime.system.System.exit(1);
 				#end
 			}
 			else
