@@ -184,10 +184,9 @@ class SUtil
 
 	public static function showPopUp(message:String, title:String):Void
 	{
-		/*#if android
+		#if android
 		AndroidTools.showAlertDialog(title, message, null, null);
-		#elseif (windows || web)*/
-                #if (windows || android || web)
+		#elseif (windows || web)
 		Lib.application.window.alert(message, title);
 		#else
 		LimeLogger.println('$title - $message');
