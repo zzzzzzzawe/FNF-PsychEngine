@@ -2,8 +2,9 @@ package lime.utils;
 
 #if android
 import android.widget.Toast as AndroidToast;
-#end
+#else
 import mobile.backend.SUtil;
+#end
 import haxe.PosInfos;
 #if sys
 import sys.io.File;
@@ -63,7 +64,11 @@ class Log
 				}
 				#end
 
+                                #if android
+                                openfl.Lib.application.window.alert(message, 'Error!');
+                                #else
 				SUtil.showPopUp(message, 'Error!');
+                                #end
 
 				#if js
 				if (FlxG.sound.music != null)

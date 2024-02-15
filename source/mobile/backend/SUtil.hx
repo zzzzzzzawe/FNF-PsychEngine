@@ -10,21 +10,6 @@ import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-// These imports mostly due lime.utils.Log guh
-#if android
-import android.content.Context as AndroidContext;
-import android.widget.Toast as AndroidToast;
-import android.os.Environment as AndroidEnvironment;
-import android.Permissions as AndroidPermissions;
-import android.Settings as AndroidSettings;
-#if !macro
-import android.Tools as AndroidTools;
-#end
-#end
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
 
 using StringTools;
 
@@ -199,7 +184,7 @@ class SUtil
 
 	public static function showPopUp(message:String, title:String #if android , ?positiveText:String = "OK", ?negativeText:String #end):Void
         {
-                #if (android && !macro)
+                #if android
                 AndroidTools.showAlertDialog(title, message, {name: positiveText, func: null}, {name: negativeText, func: null} );
                 #elseif (windows || web)
                 Lib.application.window.alert(message, title);
