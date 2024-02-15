@@ -13,7 +13,7 @@ import lime.system.System as LimeSystem;
 #if (!windows || mingw && cpp)
 @:headerInclude('sys/utsname.h')
 #elseif (windows && cpp)
-@:headerInclude('windows.h')
+@:cppFileCode('#include <windows.h>')
 #end
 class FPSCounter extends TextField
 {
