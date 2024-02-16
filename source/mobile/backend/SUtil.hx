@@ -105,7 +105,7 @@ class SUtil
 		}
 		#end
 
-		showPopUp(msg, "Error!");
+		showPopUp(msg, "Error!"#if android , "OK", () -> LimeSystem.exit(0)#end);
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -184,10 +184,10 @@ class SUtil
 	}
 	#end
 
-	public static function showPopUp(message:String, title:String #if android , ?positiveText:String = "OK", ?negativeText:String #end):Void
+	public static function showPopUp(message:String, title:String #if android , ?positiveText:String = "OK", ?positiveFunc:Void->Void #end):Void
         {
                 #if android
-                AndroidTools.showAlertDialog(title, message, {name: positiveText, func: null}, {name: negativeText, func: null} );
+                AndroidTools.showAlertDialog(title, message, {name: positiveText, func: positiveFunc}, null);
                 #elseif (windows || web)
                 Lib.application.window.alert(message, title);
                 #else
