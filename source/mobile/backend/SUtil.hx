@@ -10,8 +10,10 @@ import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import openfl.Lib;
-
-using StringTools;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 enum StorageType
 {
