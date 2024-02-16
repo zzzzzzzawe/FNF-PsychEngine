@@ -116,7 +116,7 @@ class SUtil
 			FlxG.sound.music.stop();
 
 		js.Browser.window.location.reload(true);
-		#else
+		#elseif !android
 		LimeSystem.exit(1);
 		#end
 	}
