@@ -77,14 +77,6 @@ class Main extends Sprite
 		")
 		#end
 
-		#if cpp
-		@:privateAccess
-		untyped __global__.__hxcpp_set_critical_error_handler(mobile.backend.CrashHandler.onCriticalError);
-		#elseif hl
-		@:privateAccess
-		Api.setErrorHandler(mobile.backend.CrashHandler.onCriticalError);
-		#end
-
 		if (stage != null)
 		{
 			init();
