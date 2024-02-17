@@ -39,7 +39,8 @@ enum FlxActionMode
 {
 	A;
 	B;
-	B_X;
+        P;
+        B_C;
 	A_B;
 	A_B_C;
 	A_B_E;
@@ -51,8 +52,7 @@ enum FlxActionMode
 	DIALOGUE_PORTRAIT;
 	MENU_CHARACTER;
 	NOTE_SPLASH_DEBUG;
-	P;
-	B_C;
+        CHART_EDITOR;
 	NONE;
 }
 

@@ -326,6 +326,7 @@ class ChartingState extends MusicBeatState
 		\n
 		\nC - Test your chart inside Chart Editor
 		\nA - Play your chart
+                \nUp/Down (Right Side) - Decrease/Increase Note Sustain Length
 		\nX - Stop/Resume song";
                 } else {
 		text =
@@ -385,7 +386,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-        addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+        addVirtualPad(LEFT_FULL, CHART_EDITOR);
 				
 		super.create();
 	}
@@ -1914,11 +1915,11 @@ class ChartingState extends MusicBeatState
 			}
 
 			if(curSelectedNote != null && curSelectedNote[1] > -1) {
-				if (FlxG.keys.justPressed.E)
+				if (virtualPad.buttonDown2.justPressed || FlxG.keys.justPressed.E)
 				{
 					changeNoteSustain(Conductor.stepCrochet);
 				}
-				if (FlxG.keys.justPressed.Q)
+				if (virtualPad.buttonUp2.justPressed || FlxG.keys.justPressed.Q)
 				{
 					changeNoteSustain(-Conductor.stepCrochet);
 				}
@@ -3331,3 +3332,4 @@ class AttachedFlxText extends FlxText
 		}
 	}
 }
+
