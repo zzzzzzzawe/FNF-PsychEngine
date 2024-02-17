@@ -10,7 +10,7 @@ import lime.system.System as LimeSystem;
 	The FPS class provides an easy-to-use monitor to display
 	the current frame rate of an OpenFL project
 **/
-#if (!windows || mingw && cpp)
+#if (!windows && cpp)
 @:headerInclude('sys/utsname.h')
 #elseif (windows && cpp)
 @:cppFileCode('#include <windows.h>')
@@ -95,7 +95,7 @@ class FPSCounter extends TextField
 	}
 
 	#if cpp
-	#if (windows && !mingw)
+	#if windows
 	@:functionCode('
 		SYSTEM_INFO osInfo;
 

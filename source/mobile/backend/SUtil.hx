@@ -7,6 +7,10 @@ import haxe.Exception;
 import haxe.io.Path;
 import lime.system.System as LimeSystem;
 import lime.utils.Log as LimeLogger;
+#if sys
+import sys.io.File;
+import sys.FileSystem;
+#end
 
 /**
  * A storage class for mobile.

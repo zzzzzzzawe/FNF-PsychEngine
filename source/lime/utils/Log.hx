@@ -1,7 +1,7 @@
 package lime.utils;
 
 #if !android
-import backend.Utils;
+import mobile.backend.SUtil;
 #end
 import haxe.Exception;
 import haxe.PosInfos;
@@ -56,7 +56,7 @@ class Log
 				#if android
 				openfl.Lib.application.window.alert(message, 'Error!');
 				#else
-				Utils.showPopUp(message, 'Error!');
+				SUtil.showPopUp(message, 'Error!');
 				#end
 
 				#if js

@@ -409,8 +409,10 @@ class LoadingState extends MusicBeatState
 
 		// for images, they get to have their own thread
 		for (image in imagesToPrepare)
+			#if (target.threaded)
 			Thread.create(() -> {
 				mutex.acquire();
+			#end
 				try {
 					var bitmap:BitmapData;
 					var file:String = null;
@@ -442,7 +444,9 @@ class LoadingState extends MusicBeatState
 							return;
 						}
 					}
+					#if (target.threaded)
 					mutex.release();
+					#end
 
 					if (bitmap != null) requestedBitmaps.set(file, bitmap);
 					else trace('oh no the image is null NOOOO ($image)');
@@ -452,13 +456,17 @@ class LoadingState extends MusicBeatState
 					trace('ERROR! fail on preloading image $image');
 				}
 				loaded++;
+			#if (target.threaded)
 			});
+			#end
 	}
 
 	static function initThread(func:Void->Dynamic, traceData:String)
 	{
+		#if (target.threaded)
 		Thread.create(() -> {
 			mutex.acquire();
+		#end
 			try {
 				var ret:Dynamic = func();
 				mutex.release();
@@ -471,7 +479,9 @@ class LoadingState extends MusicBeatState
 				trace('ERROR! fail on preloading $traceData');
 			}
 			loaded++;
+		#if (target.threaded)
 		});
+		#end
 	}
 
 	inline private static function preloadCharacter(char:String, ?prefixVocals:String)
