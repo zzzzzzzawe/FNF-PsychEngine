@@ -1513,7 +1513,7 @@ class ChartingState extends MusicBeatState
 			#end
 		}
 		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+		addVirtualPad(LEFT_FULL, CHART_EDITOR);
 		super.closeSubState();
 	}
 
