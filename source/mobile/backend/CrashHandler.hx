@@ -4,16 +4,23 @@ import haxe.CallStack;
 import haxe.Exception;
 import openfl.errors.Error;
 import openfl.events.ErrorEvent;
-import openfl.events.UncaughtErrorEvent;
 import lime.utils.Log as LimeLogger;
+import openfl.events.UncaughtErrorEvent;
 import lime.system.System as LimeSystem;
 
 class CrashHandler
 {
 	public static function init():Void
+	{
 		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
+		#if cpp
+		untyped __global__.__hxcpp_set_critical_error_handler(onCriticalError);
+		#elseif hl
+		hl.Api.setErrorHandler(onCriticalError);
+		#end
+	}
 
-	public static function onError(event:UncaughtErrorEvent):Void
+	private static function onError(event:UncaughtErrorEvent):Void
 	{
 		event.preventDefault();
 		event.stopImmediatePropagation();
@@ -36,7 +43,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line]');
+					log.push('$file [line $line column $column]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
@@ -74,7 +81,7 @@ class CrashHandler
 		#end
 	}
 
-	public static inline function onCriticalError(error:Dynamic):Void
+	private static inline function onCriticalError(error:Dynamic):Void
 	{
 		final log:Array<String> = [Std.isOfType(error, String) ? error : Std.string(error)];
 
@@ -87,7 +94,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line]');
+					log.push('$file [line $line column $column]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
