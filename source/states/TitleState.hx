@@ -23,6 +23,8 @@ import states.MainMenuState;
 #if mobile
 import mobile.states.CopyState;
 #end
+import mobile.backend.VirtualPadDatas;
+
 
 typedef TitleData =
 {
@@ -167,6 +169,7 @@ class TitleState extends MusicBeatState
 			}
 			persistentUpdate = true;
 			persistentDraw = true;
+			VirtualPadDatas.init();
 		}
 
 		if (FlxG.save.data.weekCompleted != null)
