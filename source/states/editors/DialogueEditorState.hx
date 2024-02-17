@@ -140,10 +140,12 @@ class DialogueEditorState extends MusicBeatState
 		lineInputText = new FlxUIInputText(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
 		blockPressWhileTypingOn.push(lineInputText);
 
+		#if !mobile
 		var loadButton:FlxButton = new FlxButton(20, lineInputText.y + 25, "Load Dialogue", function() {
 			loadDialogue();
 		});
-		var saveButton:FlxButton = new FlxButton(loadButton.x + 120, loadButton.y, "Save Dialogue", function() {
+		#end
+		var saveButton:FlxButton = new FlxButton(loadButton.x + #if mobile 60 #else 120 #end, loadButton.y, "Save Dialogue", function() {
 			saveDialogue();
 		});
 
