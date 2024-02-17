@@ -17,9 +17,6 @@ import lime.app.Application;
 import states.TitleState;
 import openfl.events.KeyboardEvent;
 import mobile.backend.Data;
-#if hl
-import hl.Api;
-#end
 #if linux
 import lime.graphics.Image;
 
