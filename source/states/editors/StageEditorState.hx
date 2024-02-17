@@ -1,5 +1,6 @@
 package states.editors;
 
+#if !officialBuild
 import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.FlxState;
@@ -27,7 +28,6 @@ import lime.system.Clipboard;
 import flixel.animation.FlxAnimation;
 import flash.net.FileFilter;
 import objects.Character;
-#if !officialBuild
 class StageEditorState extends MusicBeatState
 {
 	var layers:Array<String>;

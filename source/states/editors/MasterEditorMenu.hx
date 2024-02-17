@@ -16,7 +16,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Menu Character Editor',
 		'Dialogue Editor',
 		'Dialogue Portrait Editor',
-		'Note Splash Debug'#if !officialBuild ,
+		'Note Splash Debug'#if (!officialBuild && !html5) ,
                 'Stage Editor' #end
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
@@ -126,7 +126,7 @@ class MasterEditorMenu extends MusicBeatState
 					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
 				case 'Note Splash Debug':
 					MusicBeatState.switchState(new NoteSplashDebugState());
-				#if !officialBuild
+				#if (!officialBuild && !html5)
 				case 'Stage Editor':
 					LoadingState.loadAndSwitchState(new StageEditorState());
 				#end

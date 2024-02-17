@@ -13,8 +13,10 @@ import backend.Song;
 import backend.StageData;
 import objects.Character;
 
+#if (target.threaded)
 import sys.thread.Thread;
 import sys.thread.Mutex;
+#end
 
 class LoadingState extends MusicBeatState
 {
@@ -22,7 +24,9 @@ class LoadingState extends MusicBeatState
 	public static var loadMax:Int = 0;
 
 	static var requestedBitmaps:Map<String, BitmapData> = [];
+        #if (target.threaded)
 	static var mutex:Mutex = new Mutex();
+        #end
 
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -283,7 +287,7 @@ class LoadingState extends MusicBeatState
 					songsToPrepare = [];
 					break;
 				}
-				else Sys.sleep(0.01);
+				else #if sys Sys.sleep(0.01) #else haxe.Timer.delay(null, Std.int(0.01)) #end;
 			}
 		}
 		return target;
@@ -364,6 +368,7 @@ class LoadingState extends MusicBeatState
 
 	static function clearInvalidFrom(arr:Array<String>, prefix:String, ext:String, type:AssetType, ?library:String = null)
 	{
+                #if MODS_ALLOWED
 		for (i in 0...arr.length)
 		{
 			var folder:String = arr[i];
@@ -395,6 +400,7 @@ class LoadingState extends MusicBeatState
 			}
 			else i++;
 		}
+                #end
 	}
 
 	public static function startThreads()
@@ -431,7 +437,9 @@ class LoadingState extends MusicBeatState
 					{
 						file = Paths.getPath('images/$image.png', IMAGE);
 						if (Paths.currentTrackedAssets.exists(file)) {
+                                                        #if (target.threaded)
 							mutex.release();
+                                                        #end
 							loaded++;
 							return;
 						}
@@ -439,7 +447,9 @@ class LoadingState extends MusicBeatState
 							bitmap = OpenFlAssets.getBitmapData(file);
 						else {
 							trace('no such image $image exists');
+                                                        #if (target.threaded)
 							mutex.release();
+                                                        #end
 							loaded++;
 							return;
 						}
@@ -452,7 +462,9 @@ class LoadingState extends MusicBeatState
 					else trace('oh no the image is null NOOOO ($image)');
 				}
 				catch(e:Dynamic) {
+                                        #if (target.threaded)
 					mutex.release();
+                                        #end
 					trace('ERROR! fail on preloading image $image');
 				}
 				loaded++;
@@ -469,13 +481,17 @@ class LoadingState extends MusicBeatState
 		#end
 			try {
 				var ret:Dynamic = func();
+        			#if (target.threaded)
 				mutex.release();
+			        #end
 
 				if (ret != null) trace('finished preloading $traceData');
 				else trace('ERROR! fail on preloading $traceData');
 			}
 			catch(e:Dynamic) {
+        			#if (target.threaded)
 				mutex.release();
+			        #end
 				trace('ERROR! fail on preloading $traceData');
 			}
 			loaded++;
