@@ -128,18 +128,21 @@ class WeekEditorState extends MusicBeatState
 		UI_box.selected_tab_id = 'Week';
 		add(UI_box);
 
+		#if !mobile
 		var loadWeekButton:FlxButton = new FlxButton(0, 650, "Load Week", function() {
 			loadWeek();
 		});
 		loadWeekButton.screenCenter(X);
 		loadWeekButton.x -= 120;
 		add(loadWeekButton);
+		#end
 		
 		var freeplayButton:FlxButton = new FlxButton(0, 650, "Freeplay", function() {
 			MusicBeatState.switchState(new WeekEditorFreeplayState(weekFile));
 			
 		});
 		freeplayButton.screenCenter(X);
+		#if mobile freeplayButton.x -= 120; #end
 		add(freeplayButton);
 	
 		var saveWeekButton:FlxButton = new FlxButton(0, 650, "Save Week", function() {
@@ -642,18 +645,21 @@ class WeekEditorFreeplayState extends MusicBeatState
 		blackBlack.alpha = 0.6;
 		add(blackBlack);
 
+		#if !mobile
 		var loadWeekButton:FlxButton = new FlxButton(0, 685, "Load Week", function() {
 			WeekEditorState.loadWeek();
 		});
 		loadWeekButton.screenCenter(X);
 		loadWeekButton.x -= 120;
 		add(loadWeekButton);
+		#end
 		
 		var storyModeButton:FlxButton = new FlxButton(0, 685, "Story Mode", function() {
 			MusicBeatState.switchState(new WeekEditorState(weekFile));
 			
 		});
 		storyModeButton.screenCenter(X);
+		#if mobile storyModeButton.x -= 120; #end
 		add(storyModeButton);
 	
 		var saveWeekButton:FlxButton = new FlxButton(0, 685, "Save Week", function() {
