@@ -388,11 +388,13 @@ class DialogueCharacterEditorState extends MusicBeatState
 		var reloadImageButton:FlxButton = new FlxButton(10, scaleStepper.y + 60, "Reload Image", function() {
 			reloadCharacter();
 		});
-		
+
+		#if !mobile
 		var loadButton:FlxButton = new FlxButton(reloadImageButton.x + 100, reloadImageButton.y, "Load Character", function() {
 			loadCharacter();
 		});
-		var saveButton:FlxButton = new FlxButton(loadButton.x, reloadImageButton.y - 25, "Save Character", function() {
+		#end
+		var saveButton:FlxButton = new FlxButton(loadButton.x, reloadImageButton.y #if !mobile - 25 #end, "Save Character", function() {
 			saveCharacter();
 		});
 		tab_group.add(reloadImageButton);
