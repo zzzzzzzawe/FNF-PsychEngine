@@ -1,10 +1,9 @@
 package lime.utils;
 
-#if android
-import android.widget.Toast as AndroidToast;
-#else
-import mobile.backend.SUtil;
+#if !android
+import backend.Utils;
 #end
+import haxe.Exception;
 import haxe.PosInfos;
 #if sys
 import sys.io.File;
@@ -48,32 +47,22 @@ class Log
 					if (!FileSystem.exists('logs'))
 						FileSystem.createDirectory('logs');
 
-					File.saveContent('logs/'
-						+ Date.now().toString().replace(' ', '-').replace(':', "'")
-						+ '.txt',
-						message
-						+ '\n');
+					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', message + '\n');
 				}
-				catch (e:Dynamic)
-				{
-					#if (android && debug)
-					AndroidToast.makeText("Error!\nCouldn't save the crash log because:\n" + e, AndroidToast.LENGTH_LONG);
-					#else
-					println("Error!\nCouldn't save the crash log because:\n" + e);
-					#end
-				}
+				catch (e:Exception)
+					trace('Couldn\'t save error message. (${e.message})', null);
 				#end
 
-                                #if android
-                                openfl.Lib.application.window.alert(message, 'Error!');
-                                #else
-				SUtil.showPopUp(message, 'Error!');
-                                #end
+				#if android
+				openfl.Lib.application.window.alert(message, 'Error!');
+				#else
+				Utils.showPopUp(message, 'Error!');
+				#end
 
 				#if js
 				if (FlxG.sound.music != null)
 					FlxG.sound.music.stop();
-				
+
 				js.Browser.window.location.reload(true);
 				#else
 				lime.system.System.exit(1);
@@ -175,7 +164,9 @@ class Log
 		}
 		if (untyped #if haxe4 js.Syntax.code #else __js__ #end ("console").log == null)
 		{
-			untyped #if haxe4 js.Syntax.code #else __js__ #end ("console").log = function() {};
+			untyped #if haxe4 js.Syntax.code #else __js__ #end ("console").log = function()
+			{
+			};
 		}
 		#end
 	}

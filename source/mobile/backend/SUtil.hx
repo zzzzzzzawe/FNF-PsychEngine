@@ -3,36 +3,18 @@ package mobile.backend;
 #if android
 import lime.app.Application;
 #end
+import haxe.Exception;
 import haxe.io.Path;
-import haxe.CallStack;
 import lime.system.System as LimeSystem;
-import openfl.utils.Assets as OpenflAssets;
 import lime.utils.Log as LimeLogger;
-import openfl.events.UncaughtErrorEvent;
-import openfl.Lib;
-#if sys
-import sys.FileSystem;
-import sys.io.File;
-#end
-
-enum StorageType
-{
-	EXTERNAL;
-	EXTERNAL_DATA;
-	EXTERNAL_OBB;
-	MEDIA;
-}
 
 /**
- * A class for mobile
- * @author Mihai Alexandru (M.A. Jigsaw)
- * @modification's author: Lily (mcagabe19)
+ * A storage class for mobile.
+ * @author Mihai Alexandru (M.A. Jigsaw) and Lily (mcagabe19)
  */
 class SUtil
 {
-	/**
-	 * This returns the external storage path that the game will use by the type.
-	 */
+	#if sys
 	public static function getStorageDirectory(type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA MEDIA #else EXTERNAL_DATA #end):String
 	{
 		var daPath:String = '';
@@ -56,75 +38,6 @@ class SUtil
 		return daPath;
 	}
 
-	/**
-	 * Uncaught error handler, original made by: Sqirra-RNG and YoshiCrafter29
-	 */
-	public static function uncaughtErrorHandler():Void
-	{
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
-	}
-
-	private static function onError(error:UncaughtErrorEvent):Void
-	{
-		final log:Array<String> = [error.error];
-
-		for (item in CallStack.exceptionStack(true))
-		{
-			switch (item)
-			{
-				case CFunction:
-					log.push('C Function');
-				case Module(m):
-					log.push('Module [$m]');
-				case FilePos(s, file, line, column):
-					log.push('$file [line $line]');
-				case Method(classname, method):
-					log.push('$classname [method $method]');
-				case LocalFunction(name):
-					log.push('Local Function [$name]');
-			}
-		}
-
-		final msg:String = log.join('\n');
-
-		#if sys
-		try
-		{
-			if (!FileSystem.exists('logs'))
-				FileSystem.createDirectory('logs');
-
-			File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg + '\n');
-		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			AndroidToast.makeText("Error!\nCouldn't save the crash dump because:\n" + e, AndroidToast.LENGTH_LONG);
-			#else
-			LimeLogger.println("Error!\nCouldn't save the crash dump because:\n" + e);
-			#end
-		}
-		#end
-
-		showPopUp(msg, "Error!"#if android , "OK", () -> LimeSystem.exit(0)#end);
-
-		#if DISCORD_ALLOWED
-		DiscordClient.shutdown();
-		#end
-
-		#if js
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
-
-		js.Browser.window.location.reload(true);
-		#elseif !android
-		LimeSystem.exit(1);
-		#end
-	}
-
-	/**
-	 * This is mostly a fork of https://github.com/openfl/hxp/blob/master/src/hxp/System.hx#L595
-	 */
-	#if sys
 	public static function mkDirs(directory:String):Void
 	{
 		var total:String = '';
@@ -150,7 +63,7 @@ class SUtil
 		}
 	}
 
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'you forgot to add something in your code lol'):Void
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'you forgot to add something in your code :3'):Void
 	{
 		try
 		{
@@ -158,16 +71,10 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			showPopUp(fileName + " file has been saved", "Success!");
+			showPopUp(fileName + " file has been saved.", "Success!");
 		}
-		catch (e:Dynamic)
-		{
-			#if (android && debug)
-			AndroidToast.makeText("Error!\nClouldn't save the file because:\n" + e, AndroidToast.LENGTH_LONG);
-			#else
-			LimeLogger.println("Error!\nClouldn't save the file because:\n" + e);
-			#end
-		}
+		catch (e:Exception)
+			showPopUp("File couldn't be saved.\n(${e.message})", "Error!");
 	}
 	#end
 
@@ -189,9 +96,17 @@ class SUtil
                 #if android
                 AndroidTools.showAlertDialog(title, message, {name: positiveText, func: positiveFunc}, null);
                 #elseif (windows || web)
-                Lib.application.window.alert(message, title);
+                openfl.Lib.application.window.alert(message, title);
                 #else
                 LimeLogger.println('$title - $message');
                 #end
         }
+}
+
+enum StorageType
+{
+	EXTERNAL;
+	EXTERNAL_DATA;
+	EXTERNAL_OBB;
+	MEDIA;
 }

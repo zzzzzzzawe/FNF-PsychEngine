@@ -66,7 +66,7 @@ class Main extends Sprite
 		#if (android && EXTERNAL || MEDIA)
 		SUtil.doPermissionsShit();
 		#end
-		SUtil.uncaughtErrorHandler();
+		mobile.backend.CrashHandler.init();
 
 		#if windows
 		@:functionCode("
@@ -79,10 +79,10 @@ class Main extends Sprite
 
 		#if cpp
 		@:privateAccess
-		untyped __global__.__hxcpp_set_critical_error_handler(SUtil.onError);
+		untyped __global__.__hxcpp_set_critical_error_handler(mobile.backend.CrashHandler.onCriticalError);
 		#elseif hl
 		@:privateAccess
-		Api.setErrorHandler(SUtil.onError);
+		Api.setErrorHandler(mobile.backend.CrashHandler.onCriticalError);
 		#end
 
 		if (stage != null)
