@@ -43,8 +43,6 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 
 	public static var initialized:Bool = false;
-	
-	public static var ignoreCopy:Bool = false;
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -92,11 +90,6 @@ class TitleState extends MusicBeatState
             Sys.exit(1);
         }
             #end
-		#end
-
-		#if mobile
-		if(!CopyState.checkExistingFiles() && !ignoreCopy)
-			FlxG.switchState(new CopyState());
 		#end
 
 		Mods.loadTopMod();
@@ -180,7 +173,7 @@ class TitleState extends MusicBeatState
 		#elseif CHARTING
 		MusicBeatState.switchState(new ChartingState());
 		#else
-		if(#if mobile CopyState.checkExistingFiles() && #end FlxG.save.data.flashing == null && !FlashingState.leftState) {
+		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			controls.isInSubstate = false; //idfk what's wrong
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;

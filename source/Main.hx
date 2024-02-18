@@ -17,6 +17,7 @@ import lime.app.Application;
 import states.TitleState;
 import openfl.events.KeyboardEvent;
 import mobile.backend.MobileData;
+import mobile.states.CopyState;
 #if linux
 import lime.graphics.Image;
 
@@ -27,7 +28,7 @@ import lime.graphics.Image;
 #end
 class Main extends Sprite
 {
-	var game = {
+	public static var game = {
 		width: 1280, // WINDOW width
 		height: 720, // WINDOW height
 		initialState: TitleState, // initial game state
@@ -117,6 +118,11 @@ class Main extends Sprite
 		ClientPrefs.loadDefaultKeys();
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
+
+		#if mobile
+		if(!CopyState.checkExistingFiles())
+			game.initialState = CopyState
+		#end
 
 		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 

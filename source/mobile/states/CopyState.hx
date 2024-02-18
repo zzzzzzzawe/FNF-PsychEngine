@@ -5,7 +5,6 @@ import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
 import flixel.addons.util.FlxAsyncLoop;
 import openfl.utils.ByteArray;
-import openfl.system.System;
 import states.TitleState;
 import haxe.io.Path;
 #if (target.threaded)
@@ -57,7 +56,7 @@ class CopyState extends MusicBeatState
 			add(loadedText);
 
 			#if (target.threaded)
-			Thread.create(() -> {
+			Thread.createWithEventLoop(() -> {
 			#end
 				var ticks:Int = 15;
 				if (maxLoopTimes <= 15)
@@ -71,9 +70,8 @@ class CopyState extends MusicBeatState
 		}
 		else
 		{
-			TitleState.ignoreCopy = true;
-			FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;
-			MusicBeatState.switchState(new TitleState());
+			Main.game.initialState = TitleState;
+			FlxG.resetGame();
 		}
 
 		super.create();
@@ -93,13 +91,15 @@ class CopyState extends MusicBeatState
 					File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-CopyState' + '.txt', failedFiles.join('\n'));
 				}
 				canUpdate = false;
-				FlxG.sound.play(Paths.sound('confirmMenu'));
-				new FlxTimer().start(0.4, (tmr:FlxTimer) ->
-				{
-					Paths.clearUnusedMemory();
-					TitleState.ignoreCopy = true;
-					MusicBeatState.switchState(new TitleState());
-				});
+				FlxG.sound.play(Paths.sound('confirmMenu')).onComplete = () -> {
+					var black = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+					black.alpha = 0;
+					FlxTween.tween(black, {alpha: 1}, 1.3, {ease: FlxEase.sineOut, onComplete: (twn:FlxTween) -> {
+						Main.game.initialState = TitleState;
+						FlxG.resetGame();
+					}});
+					add(black);
+				};
 			}
 			if (maxLoopTimes == 0)
 				loadedText.text = "Completed!";
