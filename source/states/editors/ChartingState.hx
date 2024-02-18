@@ -322,6 +322,7 @@ class ChartingState extends MusicBeatState
 		"Up/Down - Change Conductor's strum time
 		\nLeft/Right - Go to the previous/next section
 		\nHold Y to move 4x faster
+                \nHold F and touch on an arrow to select it
 		\nZ/D - Zoom in/out
 		\n
 		\nC - Test your chart inside Chart Editor
@@ -1746,7 +1747,7 @@ class ChartingState extends MusicBeatState
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.justReleased)
+			if (touch.justPressed)
 			{
 				if (touch.overlaps(curRenderedNotes))
 				{
@@ -1754,8 +1755,11 @@ class ChartingState extends MusicBeatState
 					{
 						if (touch.overlaps(note))
 						{
-							deleteNote(note);
-						}
+                                                        if (virtualPad.buttonF.pressed)
+                                                                selectNote(note);
+                                                        else
+							        deleteNote(note);
+                                                }
 					});
 				}
 				else
@@ -1770,6 +1774,12 @@ class ChartingState extends MusicBeatState
 					}
 				}
 			}
+                        /*else if (touch.justPressed) {
+                               if (touch.overlaps(curRenderedNotes)) {
+                                        curRenderedNotes.forEachAlive(function(note:Note) {
+                                                if (touch.overlaps(note)) {
+                                                         if (virtualPad.buttonF.pressed) {
+                                                                  selectNote(note);}}});}}*/
 
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
@@ -1797,7 +1807,7 @@ class ChartingState extends MusicBeatState
 				{
 					if (FlxG.mouse.overlaps(note))
 					{
-						if (FlxG.keys.pressed.CONTROL)
+						if (virtualPad.buttonF.pressed || FlxG.keys.pressed.CONTROL)
 						{
 							selectNote(note);
 						}

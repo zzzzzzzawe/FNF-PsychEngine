@@ -394,11 +394,11 @@ class DialogueCharacterEditorState extends MusicBeatState
 			loadCharacter();
 		});
 		#end
-		var saveButton:FlxButton = new FlxButton(loadButton.x, reloadImageButton.y #if !mobile - 25 #end, "Save Character", function() {
+		var saveButton:FlxButton = new FlxButton(#if !mobile loadButton.x #else reloadImageButton.x + 100 #end, reloadImageButton.y #if !mobile - 25 #end, "Save Character", function() {
 			saveCharacter();
 		});
 		tab_group.add(reloadImageButton);
-		tab_group.add(loadButton);
+		#if !mobile tab_group.add(loadButton); #end
 		tab_group.add(saveButton);
 		UI_mainbox.addGroup(tab_group);
 	}

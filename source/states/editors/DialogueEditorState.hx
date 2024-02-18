@@ -145,7 +145,7 @@ class DialogueEditorState extends MusicBeatState
 			loadDialogue();
 		});
 		#end
-		var saveButton:FlxButton = new FlxButton(loadButton.x + #if mobile 60 #else 120 #end, loadButton.y, "Save Dialogue", function() {
+		var saveButton:FlxButton = new FlxButton(#if mobile 90, lineInputText.y + 25 #else loadButton.x + 120, loadButton.y #end, "Save Dialogue", function() {
 			saveDialogue();
 		});
 
@@ -158,7 +158,7 @@ class DialogueEditorState extends MusicBeatState
 		tab_group.add(speedStepper);
 		tab_group.add(soundInputText);
 		tab_group.add(lineInputText);
-		tab_group.add(loadButton);
+		#if !mobile tab_group.add(loadButton); #end
 		tab_group.add(saveButton);
 		UI_box.addGroup(tab_group);
 	}
