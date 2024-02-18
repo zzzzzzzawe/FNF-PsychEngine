@@ -21,7 +21,7 @@
 		{
 			"button": "buttonY",
 			"graphic": "y",
-			"x": 1148,
+			"x": 1022,
 			"y": 465,
 			"width": 132,
 			"height": 127,
@@ -30,8 +30,8 @@
 		{
 			"button": "buttonB",
 			"graphic": "b",
-			"x": 1148,
-			"y": 585,
+			"x": 1022,
+            "y": 585,
 			"width": 132,
 			"height": 127,
 			"color": "0xFFCB00"

@@ -183,6 +183,9 @@ class ChartingState extends MusicBeatState
 	var text:String = "";
 	public static var vortex:Bool = false;
 	public var mouseQuant:Bool = false;
+
+	public var holded:Bool = false;
+	public var noteHoldTimer:FlxTimer = new FlxTimer();
 	override function create()
 	{
 		if (PlayState.SONG != null)
@@ -1710,6 +1713,15 @@ class ChartingState extends MusicBeatState
 	{
 		curStep = recalculateSteps();
 
+		for(touch in FlxG.touches.list){
+			if(touch.justPressed)
+				noteHoldTimer.start(2.5, (tmr:FlxTimer) -> holded = true);
+			if(touch.justReleased){
+				noteHoldTimer.cancel();
+				holded = false;
+			}
+		}
+
 		if(FlxG.sound.music.time < 0) {
 			FlxG.sound.music.pause();
 			FlxG.sound.music.time = 0;
@@ -1756,11 +1768,11 @@ class ChartingState extends MusicBeatState
 					{
 						if (touch.overlaps(note))
 						{
-                                                        if (virtualPad.buttonF.pressed)
-                                                                selectNote(note);
-                                                        else
-							        deleteNote(note);
-                                                }
+                            if (holded)
+                                selectNote(note);
+                            else
+								deleteNote(note);
+                    	}
 					});
 				}
 				else
