@@ -74,10 +74,13 @@ class MobileFunctions
 		funk.set("addVirtualPad", (DPadMode:String, ActionMode:String, ?addToCustomSubstate:Bool = false, ?posAtCustomSubstate:Int = -1) ->
 		{
 			PlayState.instance.makeLuaVirtualPad(DPadMode, ActionMode);
-			if(addToCustomSubstate){
-				if(PlayState.instance.luaVirtualPad != null || !PlayState.instance.members.contains(PlayState.instance.luaVirtualPad))
+			if (addToCustomSubstate)
+			{
+				if (PlayState.instance.luaVirtualPad != null || !PlayState.instance.members.contains(PlayState.instance.luaVirtualPad))
 					CustomSubstate.insertLuaVpad(posAtCustomSubstate);
-			} else PlayState.instance.addLuaVirtualPad();
+			}
+			else
+				PlayState.instance.addLuaVirtualPad();
 		});
 
 		funk.set("removeVirtualPad", () ->

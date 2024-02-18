@@ -67,7 +67,8 @@ class SUtil
 		}
 	}
 
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'you forgot to add something in your code :3'):Void
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
+			fileData:String = 'you forgot to add something in your code :3'):Void
 	{
 		try
 		{
@@ -85,26 +86,29 @@ class SUtil
 	#if android
 	public static function doPermissionsShit():Void
 	{
-		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE) && !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
+		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE)
+			&& !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
 		{
 			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
 			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
-			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens', 'Notice!');
-                        if (!AndroidEnvironment.isExternalStorageManager()) AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
+			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
+				'Notice!');
+			if (!AndroidEnvironment.isExternalStorageManager())
+				AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
 		}
 	}
 	#end
 
-	public static function showPopUp(message:String, title:String #if android , ?positiveText:String = "OK", ?positiveFunc:Void->Void #end):Void
-        {
-                #if android
-                AndroidTools.showAlertDialog(title, message, {name: positiveText, func: positiveFunc}, null);
-                #elseif (windows || web)
-                openfl.Lib.application.window.alert(message, title);
-                #else
-                LimeLogger.println('$title - $message');
-                #end
-        }
+	public static function showPopUp(message:String, title:String #if android, ?positiveText:String = "OK", ?positiveFunc:Void->Void #end):Void
+	{
+		#if android
+		AndroidTools.showAlertDialog(title, message, {name: positiveText, func: positiveFunc}, null);
+		#elseif (windows || web)
+		openfl.Lib.application.window.alert(message, title);
+		#else
+		LimeLogger.println('$title - $message');
+		#end
+	}
 }
 
 enum StorageType

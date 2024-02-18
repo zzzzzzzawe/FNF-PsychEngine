@@ -48,19 +48,27 @@ class FlxVirtualPad extends FlxMobileInputManager
 	{
 		super();
 
-        if(DPad != "NONE"){
-            for(buttonData in MobileData.dpadModes.get(DPad).buttons){
-                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
-                add(Reflect.field(this, buttonData.button));
-            }
-        }
+		if (DPad != "NONE")
+		{
+			for (buttonData in MobileData.dpadModes.get(DPad).buttons)
+			{
+				Reflect.setField(this, buttonData.button,
+					createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic,
+						CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
+				add(Reflect.field(this, buttonData.button));
+			}
+		}
 
-        if(Action != "NONE"){
-            for(buttonData in MobileData.actionModes.get(Action).buttons){
-                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
-                add(Reflect.field(this, buttonData.button));
-            }
-        }
+		if (Action != "NONE")
+		{
+			for (buttonData in MobileData.actionModes.get(Action).buttons)
+			{
+				Reflect.setField(this, buttonData.button,
+					createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic,
+						CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
+				add(Reflect.field(this, buttonData.button));
+			}
+		}
 
 		switch (Extra)
 		{
@@ -141,8 +149,8 @@ class FlxVirtualPad extends FlxMobileInputManager
 	{
 		super.destroy();
 
-		for(field in Reflect.fields(this))
-			if(Std.isOfType(Reflect.field(this, field), FlxButton))
+		for (field in Reflect.fields(this))
+			if (Std.isOfType(Reflect.field(this, field), FlxButton))
 				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
 	}
 }
