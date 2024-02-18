@@ -1715,7 +1715,7 @@ class ChartingState extends MusicBeatState
 
 		for(touch in FlxG.touches.list){
 			if(touch.justPressed)
-				noteHoldTimer.start(2.5, (tmr:FlxTimer) -> holded = true);
+				noteHoldTimer.start(0.8, (tmr:FlxTimer) -> holded = true);
 			if(touch.justReleased){
 				noteHoldTimer.cancel();
 				holded = false;
@@ -1756,43 +1756,42 @@ class ChartingState extends MusicBeatState
 		}
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
+		FlxG.watch.addQuick('holded for 0.8 seconds ', holded);
 
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.justPressed)
+			if (touch.overlaps(curRenderedNotes))
 			{
-				if (touch.overlaps(curRenderedNotes))
+				curRenderedNotes.forEachAlive(function(note:Note)
 				{
-					curRenderedNotes.forEachAlive(function(note:Note)
+					if (touch.overlaps(note))
 					{
-						if (touch.overlaps(note))
-						{
-                            if (holded)
-                                selectNote(note);
-                            else if(touch.justReleased && !holded)
-								deleteNote(note);
-                    	}
-					});
-				}
-				else
+                        if (holded && touch.pressed/* && curSelectedNote != curRenderedNotes.members.indexOf(note)*/)
+                            selectNote(note);
+                        else if(touch.justReleased && !holded)
+							deleteNote(note);
+                	}
+				});
+			}
+			else
+			{
+				if (touch.x > gridBG.x
+					&& touch.x < gridBG.x + gridBG.width
+					&& touch.y > gridBG.y
+					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom]
+					&& touch.justPressed)
 				{
-					if (touch.x > gridBG.x
-						&& touch.x < gridBG.x + gridBG.width
-						&& touch.y > gridBG.y
-						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-					{
-						FlxG.log.add('added note');
-						addNote();
-					}
+					FlxG.log.add('added note');
+					addNote();
 				}
 			}
-                        /*else if (touch.justPressed) {
-                               if (touch.overlaps(curRenderedNotes)) {
-                                        curRenderedNotes.forEachAlive(function(note:Note) {
-                                                if (touch.overlaps(note)) {
-                                                         if (virtualPad.buttonF.pressed) {
-                                                                  selectNote(note);}}});}}*/
+                    /*else if (touch.justPressed) {
+                           if (touch.overlaps(curRenderedNotes)) {
+                                    curRenderedNotes.forEachAlive(function(note:Note) {
+                                            if (touch.overlaps(note)) {
+                                                     if (virtualPad.buttonF.pressed) {
+                                                              selectNote(note);}}});}}*/
 
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
