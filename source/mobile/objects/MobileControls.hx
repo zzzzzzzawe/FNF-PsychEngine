@@ -8,7 +8,7 @@ import mobile.flixel.FlxButton;
 
 class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager>
 {
-	public var virtualPad:FlxVirtualPad = new FlxVirtualPad(NONE, NONE, NONE);
+	public var virtualPad:FlxVirtualPad = new FlxVirtualPad('NONE', 'NONE', NONE);
 	public var hitbox:FlxHitbox = new FlxHitbox(NONE);
 	// YOU CAN'T CHANGE PROPERTIES USING THIS EXCEPT WHEN IN RUNTIME!!
 	public var current:CurrentManager;
@@ -44,22 +44,22 @@ class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager>
 
 	private function initControler(virtualPadMode:Int = 0, ?extra:Bool = true):Void
 	{
-		var extraAction = Data.extraActions.get(ClientPrefs.data.extraButtons);
+		var extraAction = MobileData.extraActions.get(ClientPrefs.data.extraButtons);
 		if (!extra)
 			extraAction = NONE;
 		switch (virtualPadMode)
 		{
 			case 0:
-				virtualPad = new FlxVirtualPad(RIGHT_FULL, NONE, extraAction);
+				virtualPad = new FlxVirtualPad('RIGHT_FULL', 'NONE', extraAction);
 				add(virtualPad);
 			case 1:
-				virtualPad = new FlxVirtualPad(LEFT_FULL, NONE, extraAction);
+				virtualPad = new FlxVirtualPad('LEFT_FULL', 'NONE', extraAction);
 				add(virtualPad);
 			case 2:
-				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad(RIGHT_FULL, NONE, extraAction));
+				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad('RIGHT_FULL', 'NONE', extraAction));
 				add(virtualPad);
 			case 3:
-				virtualPad = new FlxVirtualPad(BOTH, NONE, extraAction);
+				virtualPad = new FlxVirtualPad('BOTH', 'NONE', extraAction);
 				add(virtualPad);
 			case 4:
 				hitbox = new FlxHitbox(extraAction);

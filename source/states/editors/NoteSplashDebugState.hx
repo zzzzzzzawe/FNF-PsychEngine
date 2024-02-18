@@ -191,7 +191,7 @@ class NoteSplashDebugState extends MusicBeatState
 		loadFrames();
 		changeSelection();
 		super.create();
-		addVirtualPad(NOTE_SPLASH_DEBUG, NOTE_SPLASH_DEBUG);
+		addVirtualPad('NOTE_SPLASH_DEBUG', 'NOTE_SPLASH_DEBUG');
 		FlxG.mouse.visible = true;
 	}
 

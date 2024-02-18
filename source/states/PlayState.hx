@@ -648,7 +648,7 @@ class PlayState extends MusicBeatState
 		cachePopUpScore();
 
 		#if (!android)
-		addVirtualPad(NONE, P);
+		addVirtualPad('NONE', 'P');
     	addVirtualPadCamera(false);
 		#end
 
@@ -3712,7 +3712,7 @@ class PlayState extends MusicBeatState
 		if(!variables.exists("luaVirtualPad"))
 			variables.set("luaVirtualPad", luaVirtualPad);
 
-		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode), NONE);
+		luaVirtualPad = new FlxVirtualPad(DPadMode, ActionMode, NONE);
 		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
 	}
 	

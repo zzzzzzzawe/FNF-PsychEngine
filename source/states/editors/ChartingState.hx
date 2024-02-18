@@ -387,7 +387,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-        addVirtualPad(LEFT_FULL, CHART_EDITOR);
+        addVirtualPad('LEFT_FULL', 'CHART_EDITOR');
 				
 		super.create();
 	}
@@ -1514,7 +1514,7 @@ class ChartingState extends MusicBeatState
 			#end
 		}
 		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, CHART_EDITOR);
+		addVirtualPad('LEFT_FULL', 'CHART_EDITOR');
 		super.closeSubState();
 	}
 

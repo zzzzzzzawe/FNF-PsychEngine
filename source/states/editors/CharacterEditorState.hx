@@ -157,7 +157,7 @@ class CharacterEditorState extends MusicBeatState
 		updateHealthBar();
 		character.finishAnimation();
 
-		addVirtualPad(LEFT_FULL, CHARACTER_EDITOR);
+		addVirtualPad('LEFT_FULL', 'CHARACTER_EDITOR');
 		addVirtualPadCamera(false);
 
 		if(ClientPrefs.data.cacheOnGPU) Paths.clearUnusedMemory();

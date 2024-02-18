@@ -6,32 +6,25 @@ import sys.FileSystem;
 import sys.io.File;
 import haxe.io.Path;
 
-class VirtualPadDatas {
+class MobileData {
     public static var actionModes:Map<String, VirtualPadButtonsData> = new Map();
     public static var dpadModes:Map<String, VirtualPadButtonsData> = new Map();
+	public static var extraActions:Map<String, ExtraActions> = new Map();
     public static var virtualPadConfig:VirtualPadData = {image: 'virtualpad', alpha: ClientPrefs.data.controlsAlpha};
 
     public static function init(){
-        /*for(file in FileSystem.readDirectory(Paths.getPath('data/mobile/DPadModes'))){
+        for(file in FileSystem.readDirectory(Paths.getPath('data/mobile/DPadModes'))){
             if(Path.extension(file) == 'json'){
-                var str = File.getContent(Paths.json(file.replace('.json', '')));
-                // some sort of variables stuff
-                str.replace('screenWidth', Std.string(FlxG.width));
-                str.replace('screenHeight', Std.string(FlxG.height));
+                var str = File.getContent(Paths.json(Path.join(['mobile/DPadModes/', Path.withoutExtension(file)])));
                 var json:VirtualPadButtonsData = cast Json.parse(str);
-                dpadModes.set(Path.withoutDirectory(file), json);
+                dpadModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
             }
-        }*/
+        }
 
         for(file in FileSystem.readDirectory(Paths.getPath('data/mobile/ActionModes'))){
             if(Path.extension(file) == 'json'){
                 var str = File.getContent(Paths.json(Path.join(['mobile/ActionModes/', Path.withoutExtension(file)])));
-                // some sort of variables stuff
-                str.replace('screenWidth', Std.string(FlxG.width));
-                str.replace('screenHeight', Std.string(FlxG.height));
-                trace(str);
                 var json:VirtualPadButtonsData = cast Json.parse(str);
-                trace(json.buttons[0].x);
                 actionModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
             }
         }
@@ -43,6 +36,9 @@ class VirtualPadDatas {
             if(json.alpha != null)
                 virtualPadConfig.alpha = json.alpha;
         }
+
+        for (data in ExtraActions.createAll())
+			extraActions.set(data.getName(), data);
     }
 }
 
@@ -63,4 +59,11 @@ typedef ButtonsData = {
 typedef VirtualPadData = {
     image:String,
     ?alpha:Float
+}
+
+enum ExtraActions
+{
+	SINGLE;
+	DOUBLE;
+	NONE;
 }

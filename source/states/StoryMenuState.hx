@@ -175,7 +175,7 @@ class StoryMenuState extends MusicBeatState
 		changeWeek();
 		changeDifficulty();
 
-		addVirtualPad(LEFT_FULL, A_B_X_Y);
+		addVirtualPad('LEFT_FULL', 'A_B_X_Y');
 
 		super.create();
 	}
@@ -185,7 +185,7 @@ class StoryMenuState extends MusicBeatState
 		changeWeek();
 		super.closeSubState();
 		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, A_B_X_Y);
+		addVirtualPad('LEFT_FULL', 'A_B_X_Y');
 	}
 
 	override function update(elapsed:Float)

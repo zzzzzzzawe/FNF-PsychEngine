@@ -189,8 +189,8 @@ class NotesSubState extends MusicBeatSubstate
 		controllerPointer.visible = controls.controllerMode;
 		_lastControllerMode = controls.controllerMode;
 
-        addVirtualPad(NONE, B_C);
-                virtualPad.buttonB.x = FlxG.width - 132;
+        addVirtualPad('NONE', 'B_C');
+        virtualPad.buttonB.x = FlxG.width - 132;
 		virtualPad.buttonC.x = 0;
 		virtualPad.buttonC.y = FlxG.height - 135;
 	}

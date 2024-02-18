@@ -56,7 +56,7 @@ class OptionsState extends MusicBeatState
 		bg.screenCenter();
 		add(bg);
 
-		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press ' + controls.mobileC ? 'C' : 'CTRL' + ' to Go Mobile Controls Menu', 16);
+		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press ${controls.mobileC ? 'C' : 'CTRL'} to Go Mobile Controls Menu', 16);
 		tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		tipText.borderSize = 1.25;
 		tipText.scrollFactor.set();
@@ -82,7 +82,7 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
-		addVirtualPad(UP_DOWN, A_B_C);
+		addVirtualPad('UP_DOWN', 'A_B_C');
 
 		#if (target.threaded)
 		Thread.create(()->{
@@ -110,7 +110,7 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.loadPrefs();
 		controls.isInSubstate = false;
         removeVirtualPad();
-		addVirtualPad(UP_DOWN, A_B_C);
+		addVirtualPad('UP_DOWN', 'A_B_C');
 		persistentUpdate = true;
 	}
 

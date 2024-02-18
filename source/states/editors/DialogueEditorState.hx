@@ -94,7 +94,7 @@ class DialogueEditorState extends MusicBeatState
 		daText.setScale(0.7);
 		add(daText);
 		changeText();
-		addVirtualPad(LEFT_FULL, A_B_X_Y);
+		addVirtualPad('LEFT_FULL', 'A_B_X_Y');
 		super.create();
 	}
 

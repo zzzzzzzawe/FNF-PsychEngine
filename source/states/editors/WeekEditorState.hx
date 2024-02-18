@@ -105,7 +105,7 @@ class WeekEditorState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 
-		addVirtualPad(UP_DOWN, B);
+		addVirtualPad('UP_DOWN', 'B');
 
 		super.create();
 	}
@@ -621,7 +621,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 
 		addEditorBox();
 		changeSelection();
-		addVirtualPad(UP_DOWN, B);
+		addVirtualPad('UP_DOWN', 'B');
 		super.create();
 	}
 	

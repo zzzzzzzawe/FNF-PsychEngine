@@ -180,7 +180,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		updateTexts();
 
-		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+		addVirtualPad('LEFT_FULL', 'A_B_C_X_Y_Z');
 		super.create();
 	}
 
@@ -189,7 +189,7 @@ class FreeplayState extends MusicBeatState
 		persistentUpdate = true;
 		super.closeSubState();
 		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+		addVirtualPad('LEFT_FULL', 'A_B_C_X_Y_Z');
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)

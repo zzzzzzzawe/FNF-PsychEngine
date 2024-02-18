@@ -131,7 +131,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
-		addVirtualPad(LEFT_FULL, A_B_C);
+		addVirtualPad('LEFT_FULL', 'A_B_C');
 		addVirtualPadCamera(false);
 
 		changeSelection();
@@ -303,7 +303,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			nextAccept -= 1;
 		}
 		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
-		addVirtualPad(LEFT_FULL, A_B_C);
+		addVirtualPad('LEFT_FULL', 'A_B_C');
 		addVirtualPadCamera(false);
 		}
 		super.update(elapsed);
