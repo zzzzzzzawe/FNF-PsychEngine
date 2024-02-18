@@ -5,7 +5,6 @@ import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
 import flixel.addons.util.FlxAsyncLoop;
 import openfl.utils.ByteArray;
-import states.TitleState;
 import haxe.io.Path;
 #if (target.threaded)
 import sys.thread.Thread;
@@ -70,7 +69,6 @@ class CopyState extends MusicBeatState
 		}
 		else
 		{
-			Main.game.initialState = TitleState;
 			FlxG.resetGame();
 		}
 
@@ -95,7 +93,6 @@ class CopyState extends MusicBeatState
 					var black = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 					black.alpha = 0;
 					FlxTween.tween(black, {alpha: 1}, 1.3, {ease: FlxEase.sineOut, onComplete: (twn:FlxTween) -> {
-						Main.game.initialState = TitleState;
 						FlxG.resetGame();
 					}});
 					add(black);

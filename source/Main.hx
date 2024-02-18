@@ -28,7 +28,7 @@ import lime.graphics.Image;
 #end
 class Main extends Sprite
 {
-	public static var game = {
+	var game = {
 		width: 1280, // WINDOW width
 		height: 720, // WINDOW height
 		initialState: TitleState, // initial game state
@@ -119,12 +119,7 @@ class Main extends Sprite
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
-		#if mobile
-		if(!CopyState.checkExistingFiles())
-			game.initialState = CopyState;
-		#end
-
-		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
+		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, #if mobile (!CopyState.checkExistingFiles()) ? CopyState : #end game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		Achievements.load();
 		MobileData.init();
