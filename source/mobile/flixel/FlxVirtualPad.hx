@@ -38,8 +38,6 @@ class FlxVirtualPad extends FlxMobileInputManager
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
-	var storedButtonsIDs:Map<String, Array<FlxMobileInputID>> = new Map<String, Array<FlxMobileInputID>>();
-
 	/**
 	 * Create a gamepad.
 	 *
@@ -50,22 +48,16 @@ class FlxVirtualPad extends FlxMobileInputManager
 	{
 		super();
 
-		for (button in Reflect.fields(this))
-		{
-			if(Std.isOfType(Reflect.field(this, button), FlxButton))
-				storedButtonsIDs.set(button, Reflect.getProperty(Reflect.field(this, button), 'IDs'));
-		}
-
         if(DPad != "NONE"){
             for(buttonData in MobileData.dpadModes.get(DPad).buttons){
-                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color)));
+                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
                 add(Reflect.field(this, buttonData.button));
             }
         }
 
         if(Action != "NONE"){
             for(buttonData in MobileData.actionModes.get(Action).buttons){
-                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color)));
+                Reflect.setField(this, buttonData.button, createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic, CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
                 add(Reflect.field(this, buttonData.button));
             }
         }
@@ -126,7 +118,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		}
 	}
 
-	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF):FlxButton
+	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF, ?IDs:Array<FlxMobileInputID>):FlxButton
 	{
 		var button = new FlxButton(X, Y);
 		button.frames = FlxTileFrames.fromFrame(Paths.getSparrowAtlas('virtualpad').getByName(Graphic), FlxPoint.get(Width, Height));
@@ -138,6 +130,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		button.color = Color;
 		button.antialiasing = ClientPrefs.data.antialiasing;
 		button.tag = Graphic.toUpperCase();
+		button.IDs = IDs;
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end
@@ -151,12 +144,5 @@ class FlxVirtualPad extends FlxMobileInputManager
 		for(field in Reflect.fields(this))
 			if(Std.isOfType(Reflect.field(this, field), FlxButton))
 				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
-	}
-
-	override public function updateTrackedButtons() {
-		for(button in Reflect.fields(this))
-			if(Std.isOfType(Reflect.field(this, button), FlxButton))
-				Reflect.setProperty(Reflect.getProperty(this, button), 'IDs', storedButtonsIDs.get(button));
-		super.updateTrackedButtons();
 	}
 }
