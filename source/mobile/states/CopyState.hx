@@ -1,5 +1,6 @@
 package mobile.states;
 
+import states.TitleState;
 import flixel.addons.transition.FlxTransitionableState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenflAssets;
@@ -69,7 +70,7 @@ class CopyState extends MusicBeatState
 		}
 		else
 		{
-			FlxG.resetGame();
+			MusicBeatState.switchState(new TitleState());
 		}
 
 		super.create();
@@ -90,12 +91,7 @@ class CopyState extends MusicBeatState
 				}
 				canUpdate = false;
 				FlxG.sound.play(Paths.sound('confirmMenu')).onComplete = () -> {
-					var black = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-					black.alpha = 0;
-					FlxTween.tween(black, {alpha: 1}, 1.3, {ease: FlxEase.sineOut, onComplete: (twn:FlxTween) -> {
-						FlxG.resetGame();
-					}});
-					add(black);
+					MusicBeatState.switchState(new TitleState());
 				};
 			}
 			if (maxLoopTimes == 0)
