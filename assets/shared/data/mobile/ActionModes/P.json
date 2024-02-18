@@ -1,0 +1,13 @@
+{
+	"buttons": [
+        {
+		"button": "buttonP",
+        "graphic": "x",
+        "x": 1148,
+        "y": 0,
+        "width": 132,
+        "height": 127,
+        "color": "0x99062D"
+        }
+	]
+}
