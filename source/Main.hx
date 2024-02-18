@@ -118,16 +118,15 @@ class Main extends Sprite
 		ClientPrefs.loadDefaultKeys();
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-
-                #if android
-                FlxG.android.preventDefaultKeys = [BACK];
-                #end
-
+		
 		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, #if mobile (!CopyState.checkExistingFiles()) ? CopyState : #end game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-
+		
 		Achievements.load();
 		MobileData.init();
-
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
+		
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
