@@ -16,7 +16,6 @@ import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
 import openfl.events.KeyboardEvent;
-import mobile.backend.MobileData;
 import mobile.states.CopyState;
 #if linux
 import lime.graphics.Image;
@@ -122,7 +121,6 @@ class Main extends Sprite
 		addChild(new FlxGame(#if (openfl >= "9.2.0") 1280, 720 #else game.width, game.height #end, #if mobile CopyState.checkExistingFiles() ? game.initialState : CopyState #else game.initialState #end, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 		
 		Achievements.load();
-		MobileData.init();
 		#if android
 		FlxG.android.preventDefaultKeys = [BACK];
 		#end
