@@ -23,7 +23,6 @@ import states.MainMenuState;
 #if mobile
 import mobile.states.CopyState;
 #end
-import mobile.backend.MobileData;
 
 typedef TitleData =
 {
