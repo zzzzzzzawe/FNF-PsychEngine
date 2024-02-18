@@ -321,6 +321,7 @@ class ChartingState extends MusicBeatState
 		text =
 		"Up/Down - Change Conductor's strum time
 		\nLeft/Right - Go to the previous/next section
+                \nG - Reset Song Playback Rate
 		\nHold Y to move 4x faster
                 \nHold F and touch on an arrow to select it
 		\nZ/D - Zoom in/out
@@ -2204,7 +2205,7 @@ class ChartingState extends MusicBeatState
 			playbackSpeed -= 0.01;
 		if (!holdingShift && pressedRB || holdingShift && holdingRB)
 			playbackSpeed += 0.01;
-		if (FlxG.keys.pressed.ALT && (pressedLB || pressedRB || holdingLB || holdingRB))
+		if ((virtualPad.buttonG.justPressed) || (FlxG.keys.pressed.ALT && (pressedLB || pressedRB || holdingLB || holdingRB)))
 			playbackSpeed = 1;
 		//
 
