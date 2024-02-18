@@ -326,7 +326,7 @@ class ChartingState extends MusicBeatState
 		\nLeft/Right - Go to the previous/next section
                 \nG - Reset Song Playback Rate
 		\nHold Y to move 4x faster
-                \nHold F and touch on an arrow to select it
+                \nHold  on a arrow to select it
 		\nZ/D - Zoom in/out
 		\n
 		\nC - Test your chart inside Chart Editor
