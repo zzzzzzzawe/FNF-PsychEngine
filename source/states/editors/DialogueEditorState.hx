@@ -145,7 +145,7 @@ class DialogueEditorState extends MusicBeatState
 			loadDialogue();
 		});
 		#end
-		var saveButton:FlxButton = new FlxButton(#if mobile 90, lineInputText.y + 25 #else loadButton.x + 120, loadButton.y #end, "Save Dialogue", function() {
+		var saveButton:FlxButton = new FlxButton(#if mobile 85, lineInputText.y + 25 #else loadButton.x + 120, loadButton.y #end, "Save Dialogue", function() {
 			saveDialogue();
 		});
 
