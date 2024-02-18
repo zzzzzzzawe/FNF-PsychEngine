@@ -1770,7 +1770,7 @@ class ChartingState extends MusicBeatState
 						{
                             if (holded)
                                 selectNote(note);
-                            else
+                            else if(touch.justReleased && !holded)
 								deleteNote(note);
                     	}
 					});
