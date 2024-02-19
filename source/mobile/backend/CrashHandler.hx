@@ -10,6 +10,9 @@ import lime.system.System as LimeSystem;
 
 class CrashHandler
 {
+	#if android
+	var showedPopUp:Bool = false;
+	#end
 	public static function init():Void
 	{
 		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
@@ -43,7 +46,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line column $column]');
+					log.push('$file [line $line]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
@@ -65,7 +68,15 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})', null);
 		#end
 
-		SUtil.showPopUp(msg, "Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		#if android
+		if (!showedPopUp)
+		{
+			showedPopUp = true;
+		#end
+			SUtil.showPopUp(msg, "Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		#if android
+		}
+		#end
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -94,7 +105,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line column $column]');
+					log.push('$file [line $line]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
@@ -116,7 +127,15 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})', null);
 		#end
 
-		SUtil.showPopUp(msg, "Critical Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		#if android
+		if (!showedPopUp)
+		{
+			showedPopUp = true;
+		#end
+			SUtil.showPopUp(msg, "Critical Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		#if android
+		}
+		#end
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
