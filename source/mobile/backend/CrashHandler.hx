@@ -11,7 +11,7 @@ import lime.system.System as LimeSystem;
 class CrashHandler
 {
 	#if android
-	var showedPopUp:Bool = false;
+	var errored:Bool = false;
 	#end
 	public static function init():Void
 	{
@@ -25,6 +25,9 @@ class CrashHandler
 
 	private static function onError(event:UncaughtErrorEvent):Void
 	{
+		#if android
+		if (!errored) {
+		#end
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
@@ -68,15 +71,7 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})', null);
 		#end
 
-		#if android
-		if (!showedPopUp)
-		{
-			showedPopUp = true;
-		#end
-			SUtil.showPopUp(msg, "Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
-		#if android
-		}
-		#end
+		SUtil.showPopUp(msg, "Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -89,11 +84,17 @@ class CrashHandler
 		js.Browser.window.location.reload(true);
 		#elseif !android
 		LimeSystem.exit(1);
+		#elseif android
+		errored = true;
+		}
 		#end
 	}
 
 	private static inline function onCriticalError(error:Dynamic):Void
 	{
+		#if android
+		if (!errored) {
+		#end
 		final log:Array<String> = [Std.isOfType(error, String) ? error : Std.string(error)];
 
 		for (item in CallStack.exceptionStack(true))
@@ -127,15 +128,7 @@ class CrashHandler
 			trace('Couldn\'t save error message. (${e.message})', null);
 		#end
 
-		#if android
-		if (!showedPopUp)
-		{
-			showedPopUp = true;
-		#end
-			SUtil.showPopUp(msg, "Critical Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
-		#if android
-		}
-		#end
+		SUtil.showPopUp(msg, "Critical Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -148,6 +141,9 @@ class CrashHandler
 		js.Browser.window.location.reload(true);
 		#elseif !android
 		LimeSystem.exit(1);
+		#elseif android
+		errored = true;
+		}
 		#end
 	}
 }
