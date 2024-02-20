@@ -197,11 +197,8 @@ class NotesSubState extends MusicBeatSubstate
 
 	function updateTip()
 	{
-		if (controls.mobileC) {
-		// do sex
-		} else {
-		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
-                }
+		if(!controls.mobileC) {
+			tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
 	}
 
 	var _storedColor:FlxColor;

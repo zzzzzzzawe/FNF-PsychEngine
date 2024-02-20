@@ -1761,20 +1761,7 @@ class ChartingState extends MusicBeatState
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.overlaps(curRenderedNotes))
-			{
-				curRenderedNotes.forEachAlive(function(note:Note)
-				{
-					if (touch.overlaps(note))
-					{
-                        if (holded && touch.pressed/* && curSelectedNote != curRenderedNotes.members.indexOf(note)*/)
-                            selectNote(note);
-                        else if(touch.justReleased && !holded)
-							deleteNote(note);
-                	}
-				});
-			}
-			else
+			if (!touch.overlaps(curRenderedNotes))
 			{
 				if (touch.x > gridBG.x
 					&& touch.x < gridBG.x + gridBG.width
@@ -1784,7 +1771,21 @@ class ChartingState extends MusicBeatState
 				{
 					FlxG.log.add('added note');
 					addNote();
+					return;
 				}
+			}
+			else
+			{
+				curRenderedNotes.forEachAlive(function(note:Note)
+				{
+					if (touch.overlaps(note))
+					{
+                        if (holded && touch.pressed && (curSelectedNote[0] != note.strumTime && curSelectedNote[1] != note.noteData))
+                            selectNote(note);
+                        else if(touch.justReleased && !holded)
+							deleteNote(note);
+                	}
+				});
 			}
                     /*else if (touch.justPressed) {
                            if (touch.overlaps(curRenderedNotes)) {
