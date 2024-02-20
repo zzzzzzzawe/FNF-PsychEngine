@@ -10,6 +10,9 @@ import lime.system.System as LimeSystem;
 
 class CrashHandler
 {
+	#if android
+	var errored:Bool = false;
+	#end
 	public static function init():Void
 	{
 		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
@@ -22,6 +25,9 @@ class CrashHandler
 
 	private static function onError(event:UncaughtErrorEvent):Void
 	{
+		#if android
+		if (!errored) {
+		#end
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
@@ -43,7 +49,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line column $column]');
+					log.push('$file [line $line]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
@@ -78,11 +84,17 @@ class CrashHandler
 		js.Browser.window.location.reload(true);
 		#elseif !android
 		LimeSystem.exit(1);
+		#elseif android
+		errored = true;
+		}
 		#end
 	}
 
 	private static inline function onCriticalError(error:Dynamic):Void
 	{
+		#if android
+		if (!errored) {
+		#end
 		final log:Array<String> = [Std.isOfType(error, String) ? error : Std.string(error)];
 
 		for (item in CallStack.exceptionStack(true))
@@ -94,7 +106,7 @@ class CrashHandler
 				case Module(m):
 					log.push('Module [$m]');
 				case FilePos(s, file, line, column):
-					log.push('$file [line $line column $column]');
+					log.push('$file [line $line]');
 				case Method(classname, method):
 					log.push('$classname [method $method]');
 				case LocalFunction(name):
@@ -129,6 +141,9 @@ class CrashHandler
 		js.Browser.window.location.reload(true);
 		#elseif !android
 		LimeSystem.exit(1);
+		#elseif android
+		errored = true;
+		}
 		#end
 	}
 }
