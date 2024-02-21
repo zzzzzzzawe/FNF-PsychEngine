@@ -11,7 +11,7 @@ import lime.system.System as LimeSystem;
 class CrashHandler
 {
 	#if android
-	var errored:Bool = false;
+	static var errored:Bool = false;
 	#end
 	public static function init():Void
 	{
@@ -62,10 +62,10 @@ class CrashHandler
 		#if sys
 		try
 		{
-			if (!FileSystem.exists('crash'))
-				FileSystem.createDirectory('crash');
+			if (!FileSystem.exists('logs'))
+				FileSystem.createDirectory('logs');
 
-			File.saveContent('crash/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg);
+			File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg);
 		}
 		catch (e:Exception)
 			trace('Couldn\'t save error message. (${e.message})', null);
