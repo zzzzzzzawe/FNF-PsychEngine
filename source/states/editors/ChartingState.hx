@@ -1767,7 +1767,7 @@ class ChartingState extends MusicBeatState
 					&& touch.x < gridBG.x + gridBG.width
 					&& touch.y > gridBG.y
 					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom]
-					&& touch.justPressed)
+					&& touch.justReleased)
 				{
 					FlxG.log.add('added note');
 					addNote();
