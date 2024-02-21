@@ -269,8 +269,7 @@ class SharedObject extends EventDispatcher
 	@:noCompletion private static function __getPath(localPath:String, name:String):String
 	{
 		#if lime
-		#if !mobile
-		var path = System.applicationStorageDirectory + "/" + localPath + "/";
+		var path = #if mobile Sys.getCwd() + "__sol/" #else System.applicationStorageDirectory + '/' #end + localPath + "/";
 
 		name = StringTools.replace(name, "//", "/");
 		name = StringTools.replace(name, "//", "/");
@@ -297,9 +296,8 @@ class SharedObject extends EventDispatcher
 
 			name += split[split.length - 1];
 		}
-		#end
 
-		return #if mobile SUtil.getStorageDirectory() + '/' #else path #end + name + ".sol";
+		return path + name + ".sol";
 		#else
 		return name + ".sol";
 		#end
