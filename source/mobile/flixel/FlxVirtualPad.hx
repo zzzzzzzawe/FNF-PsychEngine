@@ -1,9 +1,15 @@
 package mobile.flixel;
 
+import haxe.io.Path;
 import flixel.graphics.frames.FlxTileFrames;
 import mobile.flixel.input.FlxMobileInputManager;
 import mobile.flixel.FlxButton;
 import flixel.math.FlxPoint;
+import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.graphics.FlxGraphic;
+import openfl.utils.Assets;
+import openfl.utils.AssetType;
+import openfl.display.BitmapData;
 
 /**
  * A gamepad.
@@ -129,7 +135,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF, ?IDs:Array<FlxMobileInputID>):FlxButton
 	{
 		var button = new FlxButton(X, Y);
-		button.frames = FlxTileFrames.fromFrame(Paths.getSparrowAtlas('virtualpad').getByName(Graphic), FlxPoint.get(Width, Height));
+		button.frames = FlxTileFrames.fromFrame(getSparrowAtlas('mobile/images/virtualpad').getByName(Graphic), FlxPoint.get(Width, Height));
 		button.resetSizeFromFrame();
 		button.solid = false;
 		button.immovable = true;
@@ -152,5 +158,47 @@ class FlxVirtualPad extends FlxMobileInputManager
 		for (field in Reflect.fields(this))
 			if (Std.isOfType(Reflect.field(this, field), FlxButton))
 				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
+	}
+
+	function getSparrowAtlas(key:String):FlxAtlasFrames
+	{
+		var file:String = '';
+		var bitmap:BitmapData = null;
+		#if MODS_ALLOWED
+		file = Paths.modsImages(key);
+		if (Paths.currentTrackedAssets.exists(file))
+		{
+			Paths.localTrackedAssets.push(file);
+			bitmap = Paths.currentTrackedAssets.get(file).bitmap;
+		}
+		else if (FileSystem.exists(file))
+			bitmap = BitmapData.fromFile(file);
+		else
+		#end
+		{
+			file = Paths.getSharedPath(key + '.png');
+			if (Paths.currentTrackedAssets.exists(file))
+			{
+				Paths.localTrackedAssets.push(file);
+				bitmap = Paths.currentTrackedAssets.get(file).bitmap;
+			}
+			else if (Assets.exists(file, IMAGE))
+				bitmap = Assets.getBitmapData(file);
+		}
+
+		var imageLoaded:FlxGraphic = Paths.cacheBitmap(file, bitmap, false);
+		#if MODS_ALLOWED
+
+		var xml:String = '';
+		if(FileSystem.exists(Paths.modsXml(key))){
+			xml = Paths.modsXml(key);
+		} else if(FileSystem.exists(Path.withoutExtension(file) + '.xml')){
+			xml = Path.withoutExtension(file) + '.xml';
+		}
+
+		return FlxAtlasFrames.fromSparrow(imageLoaded, File.getContent(xml));
+		#else
+		return FlxAtlasFrames.fromSparrow(imageLoaded, Paths.getPath('mobile/$key.xml'));
+		#end
 	}
 }
