@@ -11,7 +11,7 @@ import lime.system.System as LimeSystem;
 class CrashHandler
 {
 	#if android
-	var errored:Bool = false;
+	static var errored:Bool = false;
 	#end
 	public static function init():Void
 	{
