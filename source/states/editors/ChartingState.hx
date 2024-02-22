@@ -186,6 +186,8 @@ class ChartingState extends MusicBeatState
 
 	public var holded:Bool = false;
 	public var noteHoldTimer:FlxTimer = new FlxTimer();
+	public var lastNoteData:Array<Dynamic> = [true, null];
+
 	override function create()
 	{
 		if (PlayState.SONG != null)
@@ -1761,31 +1763,33 @@ class ChartingState extends MusicBeatState
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (!touch.overlaps(curRenderedNotes))
-			{
-				if (touch.x > gridBG.x
-					&& touch.x < gridBG.x + gridBG.width
-					&& touch.y > gridBG.y
-					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom]
-					&& touch.justReleased)
-				{
-					FlxG.log.add('added note');
-					addNote();
-					return;
-				}
-			}
-			else
+			if (touch.overlaps(curRenderedNotes))
 			{
 				curRenderedNotes.forEachAlive(function(note:Note)
 				{
 					if (touch.overlaps(note))
 					{
-                        if (holded && touch.pressed && (curSelectedNote[0] != note.strumTime && curSelectedNote[1] != note.noteData))
+                        if (holded && touch.pressed)
                             selectNote(note);
-                        else if(touch.justReleased && !holded)
+                        else if(touch.justReleased && !holded){
+							if(!lastNoteData[0] && note == lastNoteData[1]) return;
 							deleteNote(note);
+						}
                 	}
 				});
+				if(touch.justReleased) lastNoteData[0] = true;
+			}
+			else
+			{
+				if (touch.x > gridBG.x
+					&& touch.x < gridBG.x + gridBG.width
+					&& touch.y > gridBG.y
+					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom]
+					&& touch.justPressed)
+				{
+					FlxG.log.add('added note');
+					addNote();
+				}
 			}
                     /*else if (touch.justPressed) {
                            if (touch.overlaps(curRenderedNotes)) {
@@ -3132,6 +3136,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 		updateNoteUI();
+		lastNoteData = [false, curRenderedNotes.members[curRenderedNotes.members.length]]; // should be giving the last added note ig?
 	}
 
 	// will figure this out l8r
