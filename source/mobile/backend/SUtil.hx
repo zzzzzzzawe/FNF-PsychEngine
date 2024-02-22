@@ -51,7 +51,9 @@ class SUtil
 		var parts:Array<String> = directory.split('/');
 		if (parts.length > 0 && parts[0].indexOf(':') > -1)
 			parts.shift();
-
+#if mobile
+                Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
+                #end
 		for (part in parts)
 		{
 			if (part != '.' && part != '')
@@ -91,13 +93,19 @@ class SUtil
 		{
 			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
 			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
-			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
+			openfl.Lib.application.window.alert('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
 				'Notice!');
 			if (!AndroidEnvironment.isExternalStorageManager())
 				AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
-		}
-                        if (!FileSystem.exists(Sys.getCwd()) || Sys.getCwd() == '/') {
-			    openfl.Lib.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else Sys.getCwd() #end + "\nPress OK to close the game", "Error!"); LimeSystem.exit(0);}
+		} else {
+                try {
+                if (!FileSystem.exists(Sys.getCwd()))
+                    FileSystem.createDirectory(Sys.getCwd());
+                }
+                catch(e:Dynamic) {
+			    openfl.Lib.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else Sys.getCwd() #end + "\nPress OK to close the game", "Error!");
+                LimeSystem.exit(1);
+                }}
 	}
 	#end
 
