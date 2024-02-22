@@ -57,7 +57,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		if (DPad != "NONE")
 		{
 			if (!MobileData.dpadModes.exists(DPad))
-				throw 'The Virtual Pad DPad Mode $DPad Does Not Exist.';
+				throw 'The virtualPad dpadMode "$DPad" doesn\'nt exists.';
 			for (buttonData in MobileData.dpadModes.get(DPad).buttons)
 			{
 				Reflect.setField(this, buttonData.button,
@@ -70,7 +70,7 @@ class FlxVirtualPad extends FlxMobileInputManager
 		if (Action != "NONE")
 		{
 			if (!MobileData.actionModes.exists(Action))
-				throw 'The Virtual Pad Action Mode $Action Does Not Exist.';
+				throw 'The virtualPad actionMode "$Action" doesn\'nt exists.';
 			for (buttonData in MobileData.actionModes.get(Action).buttons)
 			{
 				Reflect.setField(this, buttonData.button,
