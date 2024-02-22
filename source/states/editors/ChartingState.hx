@@ -183,11 +183,6 @@ class ChartingState extends MusicBeatState
 	var text:String = "";
 	public static var vortex:Bool = false;
 	public var mouseQuant:Bool = false;
-
-	public var holded:Bool = false;
-	public var noteHoldTimer:FlxTimer = new FlxTimer();
-	public var lastNoteData:Array<Dynamic> = [true, null];
-
 	override function create()
 	{
 		if (PlayState.SONG != null)
@@ -328,7 +323,7 @@ class ChartingState extends MusicBeatState
 		\nLeft/Right - Go to the previous/next section
                 \nG - Reset Song Playback Rate
 		\nHold Y to move 4x faster
-                \nHold  on a arrow to select it
+                \nHold F and touch on an arrow to select it
 		\nZ/D - Zoom in/out
 		\n
 		\nC - Test your chart inside Chart Editor
@@ -1715,15 +1710,6 @@ class ChartingState extends MusicBeatState
 	{
 		curStep = recalculateSteps();
 
-		for(touch in FlxG.touches.list){
-			if(touch.justPressed)
-				noteHoldTimer.start(0.8, (tmr:FlxTimer) -> holded = true);
-			if(touch.justReleased){
-				noteHoldTimer.cancel();
-				holded = false;
-			}
-		}
-
 		if(FlxG.sound.music.time < 0) {
 			FlxG.sound.music.pause();
 			FlxG.sound.music.time = 0;
@@ -1758,45 +1744,43 @@ class ChartingState extends MusicBeatState
 		}
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
-		FlxG.watch.addQuick('holded for 0.8 seconds ', holded);
 
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.overlaps(curRenderedNotes))
+			if (touch.justPressed)
 			{
-				curRenderedNotes.forEachAlive(function(note:Note)
+				if (touch.overlaps(curRenderedNotes))
 				{
-					if (touch.overlaps(note))
+					curRenderedNotes.forEachAlive(function(note:Note)
 					{
-                        if (holded && touch.pressed)
-                            selectNote(note);
-                        else if(touch.justReleased && !holded){
-							if(!lastNoteData[0] && note == lastNoteData[1]) return;
-							deleteNote(note);
-						}
-                	}
-				});
-				if(touch.justReleased) lastNoteData[0] = true;
-			}
-			else
-			{
-				if (touch.x > gridBG.x
-					&& touch.x < gridBG.x + gridBG.width
-					&& touch.y > gridBG.y
-					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom]
-					&& touch.justPressed)
+						if (touch.overlaps(note))
+						{
+                                                        if (virtualPad.buttonF.pressed)
+                                                                selectNote(note);
+                                                        else
+							        deleteNote(note);
+                                                }
+					});
+				}
+				else
 				{
-					FlxG.log.add('added note');
-					addNote();
+					if (touch.x > gridBG.x
+						&& touch.x < gridBG.x + gridBG.width
+						&& touch.y > gridBG.y
+						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+					{
+						FlxG.log.add('added note');
+						addNote();
+					}
 				}
 			}
-                    /*else if (touch.justPressed) {
-                           if (touch.overlaps(curRenderedNotes)) {
-                                    curRenderedNotes.forEachAlive(function(note:Note) {
-                                            if (touch.overlaps(note)) {
-                                                     if (virtualPad.buttonF.pressed) {
-                                                              selectNote(note);}}});}}*/
+                        /*else if (touch.justPressed) {
+                               if (touch.overlaps(curRenderedNotes)) {
+                                        curRenderedNotes.forEachAlive(function(note:Note) {
+                                                if (touch.overlaps(note)) {
+                                                         if (virtualPad.buttonF.pressed) {
+                                                                  selectNote(note);}}});}}*/
 
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
@@ -3136,7 +3120,6 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 		updateNoteUI();
-		lastNoteData = [false, curRenderedNotes.members[curRenderedNotes.members.length]]; // should be giving the last added note ig?
 	}
 
 	// will figure this out l8r
@@ -3360,4 +3343,3 @@ class AttachedFlxText extends FlxText
 		}
 	}
 }
-
