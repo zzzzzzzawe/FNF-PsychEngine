@@ -56,6 +56,8 @@ class FlxVirtualPad extends FlxMobileInputManager
 
 		if (DPad != "NONE")
 		{
+			if (!MobileData.dpadModes.exists(DPad))
+				throw 'The Virtual Pad DPad Mode $DPad Does Not Exist.';
 			for (buttonData in MobileData.dpadModes.get(DPad).buttons)
 			{
 				Reflect.setField(this, buttonData.button,
@@ -67,6 +69,8 @@ class FlxVirtualPad extends FlxMobileInputManager
 
 		if (Action != "NONE")
 		{
+			if (!MobileData.actionModes.exists(Action))
+				throw 'The Virtual Pad Action Mode $Action Does Not Exist.';
 			for (buttonData in MobileData.actionModes.get(Action).buttons)
 			{
 				Reflect.setField(this, buttonData.button,
@@ -188,17 +192,15 @@ class FlxVirtualPad extends FlxMobileInputManager
 
 		var imageLoaded:FlxGraphic = Paths.cacheBitmap(file, bitmap, false);
 		#if MODS_ALLOWED
-
 		var xml:String = '';
-		if(FileSystem.exists(Paths.modsXml(key))){
+		if (FileSystem.exists(Paths.modsXml(key)))
 			xml = Paths.modsXml(key);
-		} else if(FileSystem.exists(Path.withoutExtension(file) + '.xml')){
+		else if (FileSystem.exists(Path.withoutExtension(file) + '.xml'))
 			xml = Path.withoutExtension(file) + '.xml';
-		}
 
 		return FlxAtlasFrames.fromSparrow(imageLoaded, File.getContent(xml));
 		#else
-		return FlxAtlasFrames.fromSparrow(imageLoaded, Paths.getPath('mobile/$key.xml'));
+		return FlxAtlasFrames.fromSparrow(imageLoaded, Paths.getPath('$key.xml'));
 		#end
 	}
 }

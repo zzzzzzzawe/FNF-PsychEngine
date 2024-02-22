@@ -15,23 +15,29 @@ class MobileData
 
 	public static function init()
 	{
-		for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/DPadModes')))
+		if (FileSystem.exists(Paths.getSharedPath('mobile/DPadModes')))
 		{
-			if (Path.extension(file) == 'json')
+			for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/DPadModes')))
 			{
-				var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/DPadModes/', Path.withoutDirectory(file)])));
-				var json:VirtualPadButtonsData = cast Json.parse(str);
-				dpadModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
+				if (Path.extension(file) == 'json')
+				{
+					var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/DPadModes/', Path.withoutDirectory(file)])));
+					var json:VirtualPadButtonsData = cast Json.parse(str);
+					dpadModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
+				}
 			}
 		}
 
-		for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/ActionModes')))
+		if (FileSystem.exists(Paths.getSharedPath('mobile/ActionModes')))
 		{
-			if (Path.extension(file) == 'json')
+			for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/ActionModes')))
 			{
-				var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/ActionModes/', Path.withoutDirectory(file)])));
-				var json:VirtualPadButtonsData = cast Json.parse(str);
-				actionModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
+				if (Path.extension(file) == 'json')
+				{
+					var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/ActionModes/', Path.withoutDirectory(file)])));
+					var json:VirtualPadButtonsData = cast Json.parse(str);
+					actionModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
+				}
 			}
 		}
 
