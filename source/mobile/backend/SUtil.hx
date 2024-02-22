@@ -96,8 +96,8 @@ class SUtil
 			if (!AndroidEnvironment.isExternalStorageManager())
 				AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
 		}
-                        if (!FileSystem.exists(Sys.getCwd) || Sys.getCwd() == '/') {
-			    openfl.Lib.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #else "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #end + "\nPress OK to close the game", "Error!"); LimeSystem.exit(0);}
+                        if (!FileSystem.exists(Sys.getCwd()) || Sys.getCwd() == '/') {
+			    openfl.Lib.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else Sys.getCwd() #end + "\nPress OK to close the game", "Error!"); LimeSystem.exit(0);}
 	}
 	#end
 
