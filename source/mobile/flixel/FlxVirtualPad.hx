@@ -15,8 +15,7 @@ import openfl.display.BitmapData;
  * A gamepad.
  * It's easy to customize the layout.
  *
- * @original author Ka Wing Chin & Mihai Alexandru
- * @modification's author: Karim Akra & Lily (mcagabe19)
+ * @author Ka Wing Chin, Mihai Alexandru, Karim Akra & Lily (mcagabe19)
  */
 class FlxVirtualPad extends FlxMobileInputManager
 {
