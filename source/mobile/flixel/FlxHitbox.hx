@@ -9,8 +9,7 @@ import openfl.display.Shape;
  * A zone with 4 hint's (A hitbox).
  * It's really easy to customize the layout.
  *
- * @author: Mihai Alexandru
- * @modification's author: Karim Akra & Lily (mcagabe19)
+ * @author: Mihai Alexandru, Karim Akra & Lily (mcagabe19)
  */
 class FlxHitbox extends FlxMobileInputManager
 {

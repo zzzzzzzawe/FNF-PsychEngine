@@ -90,6 +90,15 @@
 			"height": 127,
 			"color": "0xFF00FFFF"
 		},
+		{
+			"button": "buttonF",
+			"graphic": "f",
+			"x": 1022,
+			"y": 339,
+			"width": 132,
+			"height": 127,
+			"color": "0xB1FC00"
+		},
         {
         	"button": "buttonG",
         	"graphic": "g",
