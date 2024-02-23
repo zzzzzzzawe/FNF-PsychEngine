@@ -453,7 +453,7 @@ class ShaderFunctions
         #end
 	}
 	
-	#if (!flash && sys)
+	#if (!flash && MODS_ALLOWED && sys)
 	public static function getShader(obj:String):FlxRuntimeShader
 	{
 		if (storedFilters.exists(obj))
@@ -472,12 +472,12 @@ class ShaderFunctions
 		return cast (target.shader, FlxRuntimeShader);
 	}
 
+	#end
 	public static function getCam(obj:String):Dynamic {
         if (obj.toLowerCase().trim() == "global")
 		    return FlxG.game;
 	    return LuaUtils.cameraFromString(obj);
     }
-	#end
 
 	#if CUSTOM_SHADERS_ALLOWED
 	public static function resetShader(shader:Effect, tag:String){

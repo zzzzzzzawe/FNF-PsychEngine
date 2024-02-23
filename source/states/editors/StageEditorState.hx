@@ -497,6 +497,7 @@ class StageEditorState extends MusicBeatState
 		var directoryLayer:String = "images/" + assetName + ".png";
 		if (assetName != null && assetName.length > 0)
 		{
+			#if MODS_ALLOWED
 			if (FileSystem.exists(Paths.modFolders(directoryLayer)))
 			{
 				visualLayers[Std.int(layerStepper.value)].loadGraphic(Paths.image(assetName));
@@ -509,6 +510,7 @@ class StageEditorState extends MusicBeatState
 			{
 				visualLayers[Std.int(layerStepper.value)].visible = false;
 			}
+			#end
 			if (Paths.fileExists(directoryLayer, IMAGE))
 			{
 				visualLayers[Std.int(layerStepper.value)].loadGraphic(Paths.getPath(directoryLayer, IMAGE));

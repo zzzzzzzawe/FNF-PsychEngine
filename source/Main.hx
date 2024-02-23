@@ -60,9 +60,9 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-                #if mobile
-                Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
-                #end
+        #if mobile
+        Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
+        #end
 		#if (android && EXTERNAL || MEDIA)
 		SUtil.doPermissionsShit();
 		#end
@@ -168,6 +168,10 @@ class Main extends Sprite
 			if (FlxG.game != null)
 			resetSpriteCache(FlxG.game);
 		});
+
+		#if debug
+		FlxG.console.registerClass(openfl.utils.Assets);
+		#end
 	}
 
 	static function resetSpriteCache(sprite:Sprite):Void {
