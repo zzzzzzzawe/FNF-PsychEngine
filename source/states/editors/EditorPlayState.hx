@@ -36,7 +36,7 @@ class EditorPlayState extends MusicBeatSubstate
 	var strumLineNotes:FlxTypedGroup<StrumNote>;
 	var opponentStrums:FlxTypedGroup<StrumNote>;
 	var playerStrums:FlxTypedGroup<StrumNote>;
-	var grpNoteSplashes:FlxTypedGroup<NoteSplash>(8);
+	var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 	
 	var combo:Int = 0;
 	var lastRating:FlxSprite;
