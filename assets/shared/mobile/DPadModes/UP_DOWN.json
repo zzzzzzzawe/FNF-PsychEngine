@@ -1,22 +1,22 @@
 {
-	"buttons": [
-		{
-			"button": "buttonUp",
-			"graphic": "up",
-			"x": 0,
-			"y": 465,
-			"width": 132,
-			"height": 127,
-			"color": "0xFF12FA05"
-		},
-		{
-			"button": "buttonDown",
-			"graphic": "down",
-			"x": 0,
-			"y": 585,
-			"width": 132,
-			"height": 127,
-			"color": "0xFF00FFFF"
-		}
-	]
+  "buttons": [
+    {
+      "button": "buttonUp",
+      "graphic": "up",
+      "x": 0,
+      "y": 465,
+      "width": 132,
+      "height": 127,
+      "color": "0xFF12FA05"
+    },
+    {
+      "button": "buttonDown",
+      "graphic": "down",
+      "x": 0,
+      "y": 585,
+      "width": 132,
+      "height": 127,
+      "color": "0xFF00FFFF"
+    }
+  ]
 }

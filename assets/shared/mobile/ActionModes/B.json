@@ -1,13 +1,13 @@
 {
-	"buttons": [
-        {
-		"button": "buttonB",
-        "graphic": "b",
-        "x": 1148,
-        "y": 585,
-        "width": 132,
-        "height": 127,
-        "color": "0xFFCB00"
-        }
-	]
+  "buttons": [
+    {
+      "button": "buttonB",
+      "graphic": "b",
+      "x": 1148,
+      "y": 585,
+      "width": 132,
+      "height": 127,
+      "color": "0xFFCB00"
+    }
+  ]
 }
