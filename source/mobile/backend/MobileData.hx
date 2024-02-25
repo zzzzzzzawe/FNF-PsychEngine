@@ -47,7 +47,7 @@ class MobileData
 					var str = File.getContent(file);
 					var json:VirtualPadButtonsData = cast Json.parse(str);
 					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(file));
-					if (!map.exists(mapKey)) // prevents overriding default vpads
+					//if (!map.exists(mapKey)) // prevents overriding default vpads
 						map.set(mapKey, json);
 				}
 			}
