@@ -6,7 +6,7 @@
       "x": 896,
       "y": 0,
       "width": 132,
-      "height": 127,
+      "height": 125,
       "color": "0x44FF00"
     },
     {
@@ -15,7 +15,7 @@
       "x": 1022,
       "y": 0,
       "width": 132,
-      "height": 127,
+      "height": 125,
       "color": "0xFFCB00"
     },
     {
@@ -24,7 +24,7 @@
       "x": 1148,
       "y": 0,
       "width": 132,
-      "height": 127,
+      "height": 125,
       "color": "0xFF0000"
     }
   ]
