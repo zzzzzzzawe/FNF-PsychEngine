@@ -98,11 +98,11 @@ class FlxVirtualPad extends FlxMobileInputManager {
 
 		switch (Extra) {
 			case SINGLE:
-				add(buttonExtra = createButton(0, FlxG.height - 135, 132, 127, 's', 0xFF0066FF));
+				add(buttonExtra = createButton(0, FlxG.height - (135 +2), 132, 125, 's', 0xFF0066FF));
 				setExtrasPos();
 			case DOUBLE:
-				add(buttonExtra = createButton(0, FlxG.height - 135, 132, 125, 's', 0xFF0066FF));
-				add(buttonExtra2 = createButton(FlxG.width - 132, FlxG.height - 135, 132, 125, 'g', 0xA6FF00));
+				add(buttonExtra = createButton(0, FlxG.height - (135 +2), 132, 125, 's', 0xFF0066FF));
+				add(buttonExtra2 = createButton(FlxG.width - (132 +2), FlxG.height - 135, 132, 125, 'g', 0xA6FF00));
 				setExtrasPos();
 			case NONE: // nothing
 		}
