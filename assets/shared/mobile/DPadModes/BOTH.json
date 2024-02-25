@@ -4,7 +4,7 @@
       "button": "buttonUp",
       "graphic": "up",
       "x": 105,
-      "y": 375,
+      "y": 377,
       "width": 132,
       "height": 125,
       "color": "0xFF12FA05"
@@ -13,7 +13,7 @@
       "button": "buttonLeft",
       "graphic": "left",
       "x": 0,
-      "y": 477,
+      "y": 479,
       "width": 132,
       "height": 125,
       "color": "0xFFC24B99"
@@ -22,7 +22,7 @@
       "button": "buttonRight",
       "graphic": "right",
       "x": 207,
-      "y": 477,
+      "y": 479,
       "width": 132,
       "height": 125,
       "color": "0xFFF9393F"
@@ -31,7 +31,7 @@
       "button": "buttonDown",
       "graphic": "down",
       "x": 105,
-      "y": 585,
+      "y": 587,
       "width": 132,
       "height": 125,
       "color": "0xFF00FFFF"
@@ -40,7 +40,7 @@
       "button": "buttonUp2",
       "graphic": "up",
       "x": 1022,
-      "y": 312,
+      "y": 314,
       "width": 132,
       "height": 125,
       "color": "0xFF12FA05"
@@ -49,7 +49,7 @@
       "button": "buttonLeft2",
       "graphic": "left",
       "x": 896,
-      "y": 411,
+      "y": 413,
       "width": 132,
       "height": 125,
       "color": "0xFFC24B99"
@@ -58,7 +58,7 @@
       "button": "buttonRight2",
       "graphic": "right",
       "x": 1148,
-      "y": 411,
+      "y": 413,
       "width": 132,
       "height": 125,
       "color": "0xFFF9393F"
@@ -67,7 +67,7 @@
       "button": "buttonDown2",
       "graphic": "down",
       "x": 1022,
-      "y": 519,
+      "y": 521,
       "width": 132,
       "height": 125,
       "color": "0xFF00FFFF"
