@@ -15,30 +15,12 @@ class MobileData
 
 	public static function init()
 	{
-		if (FileSystem.exists(Paths.getSharedPath('mobile/DPadModes')))
+		readDirectory(Paths.getSharedPath('mobile/DPadModes'), dpadModes);
+		readDirectory(Paths.getSharedPath('mobile/ActionModes'), actionModes);
+		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'mobile/'))
 		{
-			for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/DPadModes')))
-			{
-				if (Path.extension(file) == 'json')
-				{
-					var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/DPadModes/', Path.withoutDirectory(file)])));
-					var json:VirtualPadButtonsData = cast Json.parse(str);
-					dpadModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
-				}
-			}
-		}
-
-		if (FileSystem.exists(Paths.getSharedPath('mobile/ActionModes')))
-		{
-			for (file in FileSystem.readDirectory(Paths.getSharedPath('mobile/ActionModes')))
-			{
-				if (Path.extension(file) == 'json')
-				{
-					var str = File.getContent(Paths.getSharedPath(Path.join(['mobile/ActionModes/', Path.withoutDirectory(file)])));
-					var json:VirtualPadButtonsData = cast Json.parse(str);
-					actionModes.set(Path.withoutDirectory(Path.withoutExtension(file)), json);
-				}
-			}
+			readDirectory(Path.join([folder, 'DPadModes']), dpadModes);
+			readDirectory(Path.join([folder, 'ActionModes']), actionModes);
 		}
 
 		if (FileSystem.exists(Paths.getSharedPath('data/mobile/config.json')))
@@ -52,6 +34,23 @@ class MobileData
 
 		for (data in ExtraActions.createAll())
 			extraActions.set(data.getName(), data);
+	}
+
+	public static function readDirectory(folder:String, map:Dynamic)
+	{
+		if (FileSystem.exists(folder))
+			for (file in FileSystem.readDirectory(folder))
+			{
+				if (Path.extension(file) == 'json')
+				{
+					var file = Path.join([folder, Path.withoutDirectory(file)]);
+					var str = File.getContent(file);
+					var json:VirtualPadButtonsData = cast Json.parse(str);
+					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(file));
+					if (!map.exists(mapKey)) // prevents overriding default vpads
+						map.set(mapKey, json);
+				}
+			}
 	}
 }
 
