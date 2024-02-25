@@ -4,7 +4,7 @@
       "button": "buttonUp",
       "graphic": "up",
       "x": 0,
-      "y": 465,
+      "y": 467,
       "width": 132,
       "height": 125,
       "color": "0xFF12FA05"
@@ -13,7 +13,7 @@
       "button": "buttonDown",
       "graphic": "down",
       "x": 0,
-      "y": 585,
+      "y": 587,
       "width": 132,
       "height": 125,
       "color": "0xFF00FFFF"

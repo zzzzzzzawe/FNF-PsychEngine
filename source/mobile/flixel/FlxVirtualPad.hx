@@ -79,7 +79,7 @@ class FlxVirtualPad extends FlxMobileInputManager {
 				throw 'The virtualPad dpadMode "$DPad" doesn\'nt exists.';
 			for (buttonData in MobileData.dpadModes.get(DPad).buttons) {
 				Reflect.setField(this, buttonData.button,
-					createButton(buttonData.x, buttonData.y +2, buttonData.width, buttonData.height, buttonData.graphic,
+					createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic,
 						CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
 				add(Reflect.field(this, buttonData.button));
 			}
@@ -90,7 +90,7 @@ class FlxVirtualPad extends FlxMobileInputManager {
 				throw 'The virtualPad actionMode "$Action" doesn\'nt exists.';
 			for (buttonData in MobileData.actionModes.get(Action).buttons) {
 				Reflect.setField(this, buttonData.button,
-					createButton(buttonData.x, buttonData.y +2, buttonData.width, buttonData.height, buttonData.graphic,
+					createButton(buttonData.x, buttonData.y, buttonData.width, buttonData.height, buttonData.graphic,
 						CoolUtil.colorFromString(buttonData.color), Reflect.getProperty(this, buttonData.button).IDs));
 				add(Reflect.field(this, buttonData.button));
 			}
@@ -98,11 +98,11 @@ class FlxVirtualPad extends FlxMobileInputManager {
 
 		switch (Extra) {
 			case SINGLE:
-				add(buttonExtra = createButton(0, FlxG.height - (135 +2), 132, 125, 's', 0xFF0066FF));
+				add(buttonExtra = createButton(0, FlxG.height - 137, 132, 125, 's', 0xFF0066FF));
 				setExtrasPos();
 			case DOUBLE:
-				add(buttonExtra = createButton(0, FlxG.height - (135 +2), 132, 125, 's', 0xFF0066FF));
-				add(buttonExtra2 = createButton(FlxG.width - (132 +2), FlxG.height - 135, 132, 125, 'g', 0xA6FF00));
+				add(buttonExtra = createButton(0, FlxG.height - 137, 132, 125, 's', 0xFF0066FF));
+				add(buttonExtra2 = createButton(FlxG.width - 132, FlxG.height - 137, 132, 125, 'g', 0xA6FF00));
 				setExtrasPos();
 			case NONE: // nothing
 		}

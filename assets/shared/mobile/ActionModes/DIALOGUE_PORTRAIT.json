@@ -4,7 +4,7 @@
       "button": "buttonX",
       "graphic": "x",
       "x": 896,
-      "y": 0,
+      "y": 2,
       "width": 132,
       "height": 125,
       "color": "0x99062D"
@@ -13,7 +13,7 @@
       "button": "buttonC",
       "graphic": "c",
       "x": 896,
-      "y": 125,
+      "y": 127,
       "width": 132,
       "height": 125,
       "color": "0x44FF00"
@@ -22,7 +22,7 @@
       "button": "buttonY",
       "graphic": "y",
       "x": 1022,
-      "y": 0,
+      "y": 2,
       "width": 132,
       "height": 125,
       "color": "0x4A35B9"
@@ -31,7 +31,7 @@
       "button": "buttonB",
       "graphic": "b",
       "x": 1022,
-      "y": 125,
+      "y": 127,
       "width": 132,
       "height": 125,
       "color": "0xFFCB00"
@@ -40,7 +40,7 @@
       "button": "buttonZ",
       "graphic": "z",
       "x": 1148,
-      "y": 0,
+      "y": 2,
       "width": 132,
       "height": 125,
       "color": "0xCCB98E"
@@ -49,7 +49,7 @@
       "button": "buttonA",
       "graphic": "a",
       "x": 1148,
-      "y": 125,
+      "y": 127,
       "width": 132,
       "height": 125,
       "color": "0xFF0000"
