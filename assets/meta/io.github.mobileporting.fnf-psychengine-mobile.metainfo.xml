@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.shadowmario.fnf-psychengine</id>
-  <launchable type="desktop-id">io.github.shadowmario.fnf-psychengine.desktop</launchable>
+  <id>io.github.mobileporting.fnf-psychengine-mobile</id>
+  <launchable type="desktop-id">io.github.mobileporting.fnf-psychengine-mobile.desktop</launchable>
   <name>PsychEngine</name>
-  <developer id="github.com/shadowmario">
-    <name>ShadowMario</name>
-    <contact>https://github.com/ShadowMario/</contact>
+  <developer id="github.com/mcagabe19">
+    <name>mcagabe19</name>
+    <contact>https://github.com/mcagabe19/</contact>
   </developer>
   <summary>Mobile port of Friday Night Funkin' Psych Engine</summary>
   <metadata_license>CC0-1.0</metadata_license>
