@@ -336,9 +336,6 @@ class ModsMenuState extends MusicBeatState
 		if(controls.BACK && hoveringOnMods && !exiting)
 		{
 			exiting = true;
-			if(colorTween != null) {
-				colorTween.cancel();
-			}
 			saveTxt();
 
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -690,18 +687,13 @@ class ModsMenuState extends MusicBeatState
 		}
 	}
 
-	var colorTween:FlxTween = null;
 	function updateModDisplayData()
 	{
 		var curMod:ModItem = modsGroup.members[curSelectedMod];
 		if(curMod == null) return;
 
-		if(colorTween != null)
-		{
-			colorTween.cancel();
-			colorTween.destroy();
-		}
-		colorTween = FlxTween.color(bg, 1, bg.color, curMod.bgColor, {onComplete: function(twn:FlxTween) colorTween = null});
+		FlxTween.cancelTweensOf(bg);
+		FlxTween.color(bg, 1, bg.color, curMod.bgColor);
 
 		if(Math.abs(centerMod - curSelectedMod) > 2)
 		{
