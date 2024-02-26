@@ -2572,24 +2572,10 @@ class PlayState extends MusicBeatState
 			if (PlayState.isPixelStage) uiPostfix = '-pixel';
 		}
 
-<<<<<<< HEAD
-		for (rating in ratingsData){
-			var ratingImage:String = uiPrefix + rating.image + uiSuffix;
-			var leRating = new FlxSprite().loadGraphic(Paths.image(ratingImage));
-			ratingsCache.set(ratingImage, leRating);
-		}
-
-		for (ratingNum in 0...10){
-			var ratingImage:String = uiPrefix + 'num' + ratingNum + uiSuffix;
-			var leRating = new FlxSprite().loadGraphic(Paths.image(ratingImage));
-			ratingsCache.set(ratingImage, leRating);
-		}
-=======
 		for (rating in ratingsData)
 			Paths.image(uiPrefix + rating.image + uiPostfix);
 		for (i in 0...10)
 			Paths.image(uiPrefix + 'num' + i + uiPostfix);
->>>>>>> upstream/experimental
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -2653,31 +2639,6 @@ class PlayState extends MusicBeatState
 			rating.y -= ClientPrefs.data.comboOffset[1];
 			rating.antialiasing = antialias;
 
-<<<<<<< HEAD
-			var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'combo' + uiSuffix));
-			comboSpr.screenCenter();
-			comboSpr.x = placement;
-			comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
-			comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
-			comboSpr.visible = (!ClientPrefs.data.hideHud && showCombo);
-			comboSpr.x += ClientPrefs.data.comboOffset[0];
-			comboSpr.y -= ClientPrefs.data.comboOffset[1];
-			comboSpr.antialiasing = antialias;
-			comboSpr.y += 60;
-			comboSpr.velocity.x += FlxG.random.int(1, 10) * playbackRate;
-			comboGroup.add(rating);
-
-			if (!PlayState.isPixelStage)
-			{
-				rating.setGraphicSize(Std.int(rating.width * 0.7));
-				comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.7));
-			}
-			else
-			{
-				rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.85));
-				comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.85));
-			}
-=======
 		rating.loadGraphic(Paths.image(uiPrefix + daRating.image + uiPostfix));
 		rating.screenCenter();
 		rating.x = placement - 40;
@@ -2702,7 +2663,6 @@ class PlayState extends MusicBeatState
 		comboSpr.y += 60;
 		comboSpr.velocity.x += FlxG.random.int(1, 10) * playbackRate;
 		comboGroup.add(rating);
->>>>>>> upstream/experimental
 
 			comboSpr.updateHitbox();
 			rating.updateHitbox();
@@ -2729,18 +2689,12 @@ class PlayState extends MusicBeatState
 				numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 				numScore.y += 80 - ClientPrefs.data.comboOffset[3];
 
-<<<<<<< HEAD
-				if (!PlayState.isPixelStage) numScore.setGraphicSize(Std.int(numScore.width * 0.5));
-				else numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom));
-				numScore.updateHitbox();
-=======
 		for (i in seperatedScore)
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'num' + Std.int(i) + uiPostfix));
 			numScore.screenCenter();
 			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
->>>>>>> upstream/experimental
 
 				numScore.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 				numScore.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
