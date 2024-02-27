@@ -104,7 +104,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 				nuhuh.cameras = [ui];
 				add(nuhuh);
 				FlxTween.tween(nuhuh, {alpha: 0}, 3.4, {
-					ease: FlxEase.quadInOut,
+					ease: FlxEase.circOut,
 					onComplete: (twn:FlxTween) ->
 					{
 						nuhuh.destroy();
@@ -115,8 +115,38 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 				return;
 			}
 			MobileControls.mode = curOption;
-			if (options[curOption] == 'Pad-Custom')
+			if (options[curOption] == 'Pad-Custom'){
+				var buttonsPos:Array<FlxPoint> = [];
+				var buttonsPosDupsCheck:Array<FlxPoint> = [];
+				control.virtualPad.forEachAlive((button:FlxButton) -> {
+					if(button.IDs != null)
+						buttonsPos.push(FlxPoint.get(button.x, button.y));
+				});
+				for(point in buttonsPos){
+					if(!buttonsPosDupsCheck.contains(point))
+						buttonsPosDupsCheck.push(point);
+					else {
+						var fucku = new FlxText(0, 0, FlxG.width / 2, "Not So Fast You Silly Cheater!\nChange Your Controls :3");
+						fucku.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, FlxTextAlign.CENTER);
+						fucku.screenCenter();
+						fucku.cameras = [ui];
+						add(fucku);
+						FlxTween.tween(fucku, {alpha: 0}, 3.4, {
+							ease: FlxEase.circOut,
+							onComplete: (twn:FlxTween) ->
+							{
+								fucku.destroy();
+								remove(fucku);
+							}
+						});
+						control.destroy();
+						remove(control);
+						changeControls();
+						return;
+					}
+				}
 				MobileControls.setCustomMode(control.virtualPad);
+			}
 			controls.isInSubstate = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			close();
@@ -189,7 +219,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 		super.update(elapsed);
 	}
 
-	function changeControls(?type:Int = null, ?extraMode:Bool = false)
+	function changeControls(?type:Int, ?extraMode:Bool = false)
 	{
 		if (type == null)
 			type = curOption;
