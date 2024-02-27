@@ -114,32 +114,32 @@ class FlxVirtualPad extends FlxMobileInputManager {
 	public function setExtrasDefaultPos() {
 		var int:Int = 0;
 
-		if (FlxG.save.data.extraData == null)
-			FlxG.save.data.extraData = new Array();
+		if (MobileControls.save.data.extraData == null)
+			MobileControls.save.data.extraData = new Array();
 
 		for (button in Reflect.fields(this)) {
 			if (button.toLowerCase().contains('extra') && Std.isOfType(Reflect.field(this, button), FlxButton)) {
 				var daButton = Reflect.field(this, button);
-				if (FlxG.save.data.extraData[int] == null)
-					FlxG.save.data.extraData.push(FlxPoint.get(daButton.x, daButton.y));
+				if (MobileControls.save.data.extraData[int] == null)
+					MobileControls.save.data.extraData.push(FlxPoint.get(daButton.x, daButton.y));
 				else
-					FlxG.save.data.extraData[int] = FlxPoint.get(daButton.x, daButton.y);
+					MobileControls.save.data.extraData[int] = FlxPoint.get(daButton.x, daButton.y);
 				++int;
 			}
 		}
-		FlxG.save.flush();
+		MobileControls.save.flush();
 	}
 
 	public function setExtrasPos() {
 		var int:Int = 0;
-		if (FlxG.save.data.extraData == null)
+		if (MobileControls.save.data.extraData == null)
 			return;
 
 		for (button in Reflect.fields(this)) {
 			if (button.toLowerCase().contains('extra') && Std.isOfType(Reflect.field(this, button), FlxButton)) {
 				var daButton = Reflect.field(this, button);
-				daButton.x = FlxG.save.data.extraData[int].x;
-				daButton.y = FlxG.save.data.extraData[int].y;
+				daButton.x = MobileControls.save.data.extraData[int].x;
+				daButton.y = MobileControls.save.data.extraData[int].y;
 				int++;
 			}
 		}
