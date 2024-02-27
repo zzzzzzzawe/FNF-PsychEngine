@@ -126,7 +126,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 					if(!buttonsPosDupsCheck.contains(point))
 						buttonsPosDupsCheck.push(point);
 					else {
-						var fucku = new FlxText(0, 0, FlxG.width / 2, "Not So Fast You Silly Cheater!\nChange Your Controls :3");
+						var fucku = new FlxText(0, 0, FlxG.width / 2, "Not So Fast You Silly Cheater!\nDon't Think About Doing This Ever Again :3");
 						fucku.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, FlxTextAlign.CENTER);
 						fucku.screenCenter();
 						fucku.cameras = [ui];
