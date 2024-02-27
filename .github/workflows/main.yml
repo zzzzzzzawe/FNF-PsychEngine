@@ -76,7 +76,7 @@ jobs:
           haxelib install hmm --quiet
           haxelib run hmm install --quiet
           haxelib remove linc_luajit
-          haxelib git https://github.com/mcagabe19-stuff/linc_luajit
+          haxelib git linc_luajit https://github.com/mcagabe19-stuff/linc_luajit
 
       - name: Compile
         run: haxelib run lime build rpi -D rpi -final
