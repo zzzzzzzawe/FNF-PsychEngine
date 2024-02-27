@@ -75,7 +75,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build rpi -D rpi -final
+        run: haxelib run lime build rpi -armv7 -D rpi -final
 
       - name: Upload Artifact
         if: ${{ success() }}
