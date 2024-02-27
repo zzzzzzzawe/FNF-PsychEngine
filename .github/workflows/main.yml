@@ -25,7 +25,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
-          name: windowsBuild-${{ matrix.storage-type }}
+          name: windowsBuild
           path: export\release\windows\bin\*
           if-no-files-found: error
   Linux:
@@ -53,7 +53,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
-          name: linuxBuild-${{ matrix.storage-type }}
+          name: linuxBuild
           path: export/release/linux/bin/*
           if-no-files-found: error
   RPi:
@@ -81,7 +81,7 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
-          name: RPiBuild-${{ matrix.storage-type }}
+          name: RPiBuild
           path: export/rpi/linux/bin/*
           if-no-files-found: error
   Android:
