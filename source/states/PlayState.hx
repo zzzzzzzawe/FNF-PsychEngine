@@ -2627,7 +2627,7 @@ class PlayState extends MusicBeatState
 			antialias = !isPixelStage;
 		}
 		if(ClientPrefs.data.popUpRating) {
-			rating.loadGraphicFromSprite(ratingsCache.get(uiPrefix + daRating.image + uiSuffix));
+			rating.loadGraphicFromSprite(ratingsCache.get(uiPrefix + daRating.image + uiPostfix));
 			rating.screenCenter();
 			rating.x = placement - 40;
 			rating.y -= 60;
@@ -2684,7 +2684,7 @@ class PlayState extends MusicBeatState
 			for (i in seperatedScore)
 			{
 				var numScore:FlxSprite = new FlxSprite();
-				numScore.loadGraphicFromSprite(ratingsCache.get(uiPrefix + 'num' + Std.int(i) + uiSuffix));
+				numScore.loadGraphicFromSprite(ratingsCache.get(uiPrefix + 'num' + Std.int(i) + uiPostfix));
 				numScore.screenCenter();
 				numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 				numScore.y += 80 - ClientPrefs.data.comboOffset[3];
@@ -2731,6 +2731,7 @@ class PlayState extends MusicBeatState
 				startDelay: Conductor.crochet * 0.002 / playbackRate
 			});
 		}
+            }
 	}
 
 	public var strumsBlocked:Array<Bool> = [];
