@@ -39,8 +39,8 @@ jobs:
           cd ~
           git clone --quiet https://github.com/emscripten-core/emsdk.git > /dev/null
           cd emsdk
-          ./emsdk install latest
-          ./emsdk activate latest
+          ./emsdk install 3.1.10
+          ./emsdk activate 3.1.10
           chmod +x ./emsdk_env.sh && echo 'source "/home/runner/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
           echo "EMSDK=$HOME/emsdk:$HOME/emsdk/upstream/emscripten" >> $GITHUB_ENV
 
