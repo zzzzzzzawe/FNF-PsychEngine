@@ -35,12 +35,11 @@ body:
       label: "What is your build target?"
       options:
         - "Desktop (Linux, Windows or Mac)"
-        - "Emscripten"
         - "Android"
         - "iOS"
         - "HashLink"
         - "Flash/AIR"
-        - "Unknown/I don't know"
+        - "Other/Unknown/I don't know"
     validations:
       required: true
 
