@@ -32,7 +32,7 @@ class MobileData
 		#if MODS_ALLOWED if(FileSystem.exists(folder)) #end
 			for (file in Paths.readDirectory(folder))
 			{
-				var fileWithNoLib:String = file.contains(':') ? file.split(':')[1]) : file;
+				var fileWithNoLib:String = file.contains(':') ? file.split(':')[1] : file;
 				if (Path.extension(fileWithNoLib) == 'json')
 				{
 				 	#if MODS_ALLOWED file = Path.join([folder, Path.withoutDirectory(file)]); #end
