@@ -119,11 +119,6 @@ class Main extends Sprite
 
 		#if desktop FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, toggleFullScreen); #end
 
-		#if linux
-		var icon = Image.fromFile("icon.png");
-		Lib.current.stage.window.setIcon(icon);
-		#end
-
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
 		#if mobile LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver; #end
