@@ -29,10 +29,10 @@ class MobileData
 
 	public static function readDirectory(folder:String, map:Dynamic)
 	{
-		if (#if MODS_ALLOWED FileSystem.exists(folder) #else Assets.exists(folder) #end)
+		#if MODS_ALLOWED if(FileSystem.exists(folder)) #end
 			for (file in Paths.readDirectory(folder))
 			{
-				if (Path.extension(file) == 'json')
+				if (Path.extension(file.split(':')[1]) == 'json')
 				{
 				 	#if MODS_ALLOWED file = Path.join([folder, Path.withoutDirectory(file)]); #end
 					var str = #if MODS_ALLOWED File.getContent(file) #else Assets.getText(file) #end;
