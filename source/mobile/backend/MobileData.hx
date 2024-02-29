@@ -32,17 +32,14 @@ class MobileData
 		#if MODS_ALLOWED if(FileSystem.exists(folder)) #end
 			for (file in Paths.readDirectory(folder))
 			{
-				trace(file);
-				if (Path.extension(file.split(':')[1]) == 'json')
-				{
+				#if MODS_ALLOWED if (Path.extension(file.split(':')[1]) == 'json'){ #end
 				 	#if MODS_ALLOWED file = Path.join([folder, Path.withoutDirectory(file)]); #end
 					var str = #if MODS_ALLOWED File.getContent(file) #else Assets.getText(file) #end;
-					trace(str);
 					var json:VirtualPadButtonsData = cast Json.parse(str);
 					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(file.split(':')[1]));
 					trace(mapKey);
 					map.set(mapKey, json);
-				}
+				#if MODS_ALLOWED } #end
 			}
 	}
 }
