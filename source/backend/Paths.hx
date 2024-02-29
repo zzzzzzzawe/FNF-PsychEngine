@@ -342,6 +342,28 @@ class Paths
 		return false;
 	}
 
+	public static function readDirectory(directory:String):Array<String>
+	{
+		#if MODS_ALLOWED
+		return FileSystem.readDirectory(directory);
+		#else
+		var dirsWithNoLibrary = Assets.list().filter(folder -> folder.startsWith(directory));
+		var dirsWithLibrary:Array<String> = [];
+		for(dir in dirsWithNoLibrary)
+		{
+			@:privateAccess
+			for(library in lime.utils.Assets.libraries.keys())
+			{
+				if(Assets.exists('$library:$dir') && library != 'default' && (!dirsWithLibrary.contains('$library:$dir') || !dirsWithLibrary.contains(dir)))
+					dirsWithLibrary.push('$library:$dir');
+				else if(Assets.exists(dir) && !dirsWithLibrary.contains(dir))
+						dirsWithLibrary.push(dir);
+			}
+		}
+		return dirsWithLibrary;
+		#end
+	}
+
 	static public function getAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
 		var useMod = false;
