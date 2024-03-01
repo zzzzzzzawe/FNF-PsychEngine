@@ -2568,10 +2568,14 @@ class PlayState extends MusicBeatState
 			if (PlayState.isPixelStage) uiPostfix = '-pixel';
 		}
 
-		for (rating in ratingsData)
-			Paths.image(uiPrefix + rating.image + uiPostfix);
-		for (i in 0...10)
-			Paths.image(uiPrefix + 'num' + i + uiPostfix);
+		for (rating in ratingsData){
+			var ratingName = uiPrefix + rating.image + uiPostfix;
+			ratingsCache.set(ratingName, new FlxSprite().loadGraphic(Paths.image(ratingName)));
+		}
+		for (i in 0...10){
+			var ratingName = uiPrefix + 'num' + Std.int(i) + uiPostfix;
+			ratingsCache.set(ratingName, new FlxSprite().loadGraphic(Paths.image(ratingName)));
+		}
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -2624,7 +2628,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (ClientPrefs.data.popUpRating){
-		rating.loadGraphic(Paths.image(uiPrefix + daRating.image + uiPostfix));
+		rating.loadGraphicFromSprite(ratingsCache.get(uiPrefix + daRating.image + uiPostfix));
 		rating.screenCenter();
 		rating.x = placement - 40;
 		rating.y -= 60;
@@ -2679,7 +2683,7 @@ class PlayState extends MusicBeatState
 
 		for (i in seperatedScore)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + 'num' + Std.int(i) + uiPostfix));
+			var numScore:FlxSprite = new FlxSprite().loadGraphicFromSprite(ratingsCache.get(uiPrefix + 'num' + Std.int(i) + uiPostfix));
 			numScore.screenCenter();
 			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
