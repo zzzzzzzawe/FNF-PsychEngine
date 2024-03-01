@@ -75,8 +75,10 @@ class TitleState extends MusicBeatState
 	{
 		Paths.clearStoredMemory();
 
+		#if MODS_ALLOWED
 		Mods.pushGlobalMods();
 		Mods.loadTopMod();
+		#end
 
 		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;

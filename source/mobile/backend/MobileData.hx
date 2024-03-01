@@ -29,15 +29,17 @@ class MobileData
 
 	public static function readDirectory(folder:String, map:Dynamic)
 	{
-		if (#if MODS_ALLOWED FileSystem.exists(folder) #else Assets.exists(folder) #end)
+		#if MODS_ALLOWED if(FileSystem.exists(folder)) #end
 			for (file in Paths.readDirectory(folder))
 			{
-				if (Path.extension(file) == 'json')
+				var fileWithNoLib:String = file.contains(':') ? file.split(':')[1] : file;
+				if (Path.extension(fileWithNoLib) == 'json')
 				{
 				 	#if MODS_ALLOWED file = Path.join([folder, Path.withoutDirectory(file)]); #end
 					var str = #if MODS_ALLOWED File.getContent(file) #else Assets.getText(file) #end;
 					var json:VirtualPadButtonsData = cast Json.parse(str);
-					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(file.split(':')[1]));
+					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(fileWithNoLib));
+					trace(mapKey);
 					map.set(mapKey, json);
 				}
 			}
