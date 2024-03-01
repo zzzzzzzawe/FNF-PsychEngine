@@ -645,7 +645,7 @@ class PlayState extends MusicBeatState
 
 		#if (!android)
 		addVirtualPad('NONE', 'P');
-    	addVirtualPadCamera(false);
+    		addVirtualPadCamera(false);
 		#end
 
 		super.create();
@@ -2623,18 +2623,6 @@ class PlayState extends MusicBeatState
 			antialias = !isPixelStage;
 		}
 		if(ClientPrefs.data.popUpRating) {
-			rating.loadGraphicFromSprite(ratingsCache.get(uiPrefix + daRating.image + uiPostfix));
-			rating.screenCenter();
-			rating.x = placement - 40;
-			rating.y -= 60;
-			rating.acceleration.y = 550 * playbackRate * playbackRate;
-			rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
-			rating.velocity.x -= FlxG.random.int(0, 10) * playbackRate;
-			rating.visible = (!ClientPrefs.data.hideHud && showRating);
-			rating.x += ClientPrefs.data.comboOffset[0];
-			rating.y -= ClientPrefs.data.comboOffset[1];
-			rating.antialiasing = antialias;
-
 		rating.loadGraphic(Paths.image(uiPrefix + daRating.image + uiPostfix));
 		rating.screenCenter();
 		rating.x = placement - 40;
@@ -2680,7 +2668,7 @@ class PlayState extends MusicBeatState
 			for (i in seperatedScore)
 			{
 				var numScore:FlxSprite = new FlxSprite();
-				numScore.loadGraphicFromSprite(ratingsCache.get(uiPrefix + 'num' + Std.int(i) + uiPostfix));
+				numScore.loadGraphic(Paths.image(uiPrefix + 'num' + i + uiPostfix));
 				numScore.screenCenter();
 				numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 				numScore.y += 80 - ClientPrefs.data.comboOffset[3];
