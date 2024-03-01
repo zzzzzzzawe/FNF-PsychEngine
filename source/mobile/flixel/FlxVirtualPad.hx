@@ -65,7 +65,7 @@ class FlxVirtualPad extends FlxMobileInputManager {
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
-	public static var minDistance:Float = 40.0;
+	public static var minDistance:Float = -40.0;
 
 	/**
 	 * Create a gamepad.
