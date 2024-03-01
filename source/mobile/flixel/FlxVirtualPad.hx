@@ -65,6 +65,8 @@ class FlxVirtualPad extends FlxMobileInputManager {
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
+	public static var minDistance:Float = 40.0;
+
 	/**
 	 * Create a gamepad.
 	 *
@@ -109,6 +111,35 @@ class FlxVirtualPad extends FlxMobileInputManager {
 
 		scrollFactor.set();
 		updateTrackedButtons();
+	}
+
+	override public function destroy() {
+		super.destroy();
+
+		for (field in Reflect.fields(this))
+			if (Std.isOfType(Reflect.field(this, field), FlxButton))
+				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
+	}
+
+	override function update(elapsed:Float) {
+		if(members.length >= 1){
+			forEachAlive((button1:FlxButton) -> {
+				forEachAlive((button2:FlxButton) -> {
+					if(button1 != button2){
+						 var distanceBetween = button1.point.dist(button2.point);
+						 if (distanceBetween < minDistance) {
+							var overlap = minDistance - distanceBetween;
+							var angle = Math.atan2(button1.y - button2.y, button1.x - button2.x);
+							button1.x += Math.cos(angle) * (overlap / 2);
+							button1.y += Math.sin(angle) * (overlap / 2);
+							button2.x -= Math.cos(angle) * (overlap / 2);
+							button2.y -= Math.sin(angle) * (overlap / 2);
+						}
+					}
+				});
+			});
+		}
+		super.update(elapsed);
 	}
 
 	public function setExtrasDefaultPos() {
@@ -163,19 +194,12 @@ class FlxVirtualPad extends FlxMobileInputManager {
 		return button;
 	}
 
-	override public function destroy():Void {
-		super.destroy();
-
-		for (field in Reflect.fields(this))
-			if (Std.isOfType(Reflect.field(this, field), FlxButton))
-				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
-	}
-
 	function getSparrowAtlas(key:String):FlxAtlasFrames {
 		var file:String = '';
 		var bitmap:BitmapData = null;
 		#if MODS_ALLOWED
-		file = Paths.modsImages(key);
+		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
+			file = haxe.io.Path.join([Mods.currentModDirectory, key]);
 		if (Paths.currentTrackedAssets.exists(file)) {
 			Paths.localTrackedAssets.push(file);
 			bitmap = Paths.currentTrackedAssets.get(file).bitmap;

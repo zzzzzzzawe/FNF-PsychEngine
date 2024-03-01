@@ -96,6 +96,8 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 
 		var exit = new UIButton(0, itemText.y - 25, "Exit & Save", () ->
 		{
+			if(options[curOption].toLowerCase().contains('pad'))
+				control.virtualPad.setExtrasDefaultPos();
 			if (options[curOption] == 'Pad-Extra')
 			{
 				var nuhuh = new FlxText(0, 0, FlxG.width / 2, 'Pad-Extra Is Just A Binding Option\nPlease Select A Different Option To Exit.');
@@ -111,44 +113,11 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 						remove(nuhuh);
 					}
 				});
-				control.virtualPad.setExtrasDefaultPos();
 				return;
 			}
 			MobileControls.mode = curOption;
-			if (options[curOption] == 'Pad-Custom'){
-				var buttonsPos:Array<FlxPoint> = [];
-				var index:Int = 0;
-				control.virtualPad.forEachAlive((button:FlxButton) -> {
-					if(button.IDs != null)
-						buttonsPos.push(FlxPoint.get(button.x, button.y));
-				});
-				for(point in buttonsPos){
-					control.virtualPad.forEachAlive((button:FlxButton) -> {
-						if(button.x == point.x && button.y == point.y)
-							++index;
-					});
-				}
-				if(index > 0){
-					var fucku = new FlxText(0, 0, FlxG.width / 2, "Not So Fast You Silly Cheater!\nDon't Think About Doing This Ever Again :3");
-					fucku.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, FlxTextAlign.CENTER);
-					fucku.screenCenter();
-					fucku.cameras = [ui];
-					add(fucku);
-					FlxTween.tween(fucku, {alpha: 0}, 3.4, {
-						ease: FlxEase.circOut,
-						onComplete: (twn:FlxTween) ->
-						{
-							fucku.destroy();
-							remove(fucku);
-						}
-					});
-					control.destroy();
-					remove(control);
-					changeControls();
-					return;
-				}
+			if (options[curOption] == 'Pad-Custom')
 				MobileControls.setCustomMode(control.virtualPad);
-			}
 			controls.isInSubstate = false;
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			close();

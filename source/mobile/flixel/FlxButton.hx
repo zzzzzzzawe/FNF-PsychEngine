@@ -35,8 +35,18 @@ class FlxButton extends FlxTypedButton<FlxText>
 	 */
 	public var text(get, set):String;
 
+	/**
+		A simple tag that returns the button's graphic name in upper case.
+	**/
 	public var tag:String;
+	/**
+		The `FlxMobileInputID` that are assigned to this button.
+	**/
 	public var IDs:Array<FlxMobileInputID> = [];
+	/**
+		A silly FlxPoint for the button to avoid creating a new one when you need it.
+	**/
+	public var point:FlxPoint = new FlxPoint();
 
 	/**
 	 * Creates a new `FlxButton` object with a gray background
@@ -97,6 +107,11 @@ class FlxButton extends FlxTypedButton<FlxText>
 		else
 			label.text = Text;
 		return Text;
+	}
+
+	override function update(elapsed:Float) {
+		point.set(x, y);
+		super.update(elapsed);
 	}
 }
 
