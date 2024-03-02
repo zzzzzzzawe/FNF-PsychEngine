@@ -655,7 +655,7 @@ class PlayState extends MusicBeatState
 
 		#if (!android)
 		addVirtualPad('NONE', 'P');
-    		addVirtualPadCamera(false);
+    	addVirtualPadCamera(false);
 		#end
 
 		super.create();
@@ -837,7 +837,7 @@ class PlayState extends MusicBeatState
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
-		if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
+		#if VIDEOS_ALLOWED if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag); #end
 		if(variables.exists(tag)) return variables.get(tag);
 		#end
 		return null;
@@ -853,7 +853,7 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String) #if VIDEOS_ALLOWED :Video#end
+	public function startVideo(name:String): #if VIDEOS_ALLOWED Video #else Void #end
 	{
 		#if VIDEOS_ALLOWED
 		var filepath:String = Paths.video(name);
