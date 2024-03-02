@@ -1671,7 +1671,6 @@ class PlayState extends MusicBeatState
 			#end
 
 			paused = false;
-			mobileControls.visible = #if !android virtualPad.visible = #end true;
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
