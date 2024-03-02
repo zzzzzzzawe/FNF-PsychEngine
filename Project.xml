@@ -176,7 +176,7 @@
 			<!--Target SDK-->
 			<android target-sdk-version="29" if="EXTERNAL || MEDIA"/>
 
-                        <config:android permission="android.permission.MANAGE_EXTERNAL_STORAGE" if="EXTERNAL || MEDIA"/>
+            <config:android permission="android.permission.MANAGE_EXTERNAL_STORAGE" if="EXTERNAL || MEDIA"/>
 		</section>
 
 		<section if="ios">
@@ -191,6 +191,8 @@
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
+	<haxeflag name="--macro" value="macros.Keep.keepClasses()" />
+
 
 	<!-- _________________________________ Custom _______________________________ -->
 
