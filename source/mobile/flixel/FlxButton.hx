@@ -1,5 +1,6 @@
 package mobile.flixel;
 
+import flixel.graphics.frames.FlxFramesCollection;
 import flixel.graphics.atlas.FlxAtlas;
 import flixel.graphics.atlas.FlxNode;
 import flixel.graphics.frames.FlxTileFrames;
@@ -44,9 +45,9 @@ class FlxButton extends FlxTypedButton<FlxText>
 	**/
 	public var IDs:Array<FlxMobileInputID> = [];
 	/**
-		A silly FlxPoint for the button to avoid creating a new one when you need it.
+		A Small invisible bounds used for colision
 	**/
-	public var point:FlxPoint = new FlxPoint();
+	public var bounds:FlxSprite = new FlxSprite();
 
 	/**
 	 * Creates a new `FlxButton` object with a gray background
@@ -54,7 +55,7 @@ class FlxButton extends FlxTypedButton<FlxText>
 	 *
 	 * @param   X         The x position of the button.
 	 * @param   Y         The y position of the button.
-	 * @param   ID        The button's IDs(used for input handling so be careful).
+	 * @param   IDs        The button's IDs(used for input handling so be careful).
 	 * @param   Text      The text that you want to appear on the button.
 	 * @param   OnClick   The function to call whenever the button is clicked.
 	 */
@@ -65,9 +66,9 @@ class FlxButton extends FlxTypedButton<FlxText>
 		for (point in labelOffsets)
 			point.set(point.x - 1, point.y + 3);
 
-		this.IDs = IDs;
 
 		initLabel(Text);
+		this.IDs = IDs == null ? [] : IDs;
 	}
 
 	/**
@@ -109,9 +110,14 @@ class FlxButton extends FlxTypedButton<FlxText>
 		return Text;
 	}
 
-	override function update(elapsed:Float) {
-		point.set(x, y);
-		super.update(elapsed);
+	public inline function centerInBounds()
+	{
+		setPosition(bounds.x + ((bounds.width - frameWidth) / 2), bounds.y + ((bounds.height - frameHeight) / 2));
+	}
+
+	public inline function centerBounds()
+	{
+		bounds.setPosition(x + ((frameWidth - bounds.width) / 2), y + ((frameHeight - bounds.height) / 2));
 	}
 }
 

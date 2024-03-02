@@ -65,8 +65,6 @@ class FlxVirtualPad extends FlxMobileInputManager {
 	public var buttonExtra:FlxButton = new FlxButton(0, 0);
 	public var buttonExtra2:FlxButton = new FlxButton(0, 0);
 
-	public static var minDistance:Float = -40.0;
-
 	/**
 	 * Create a gamepad.
 	 *
@@ -113,33 +111,30 @@ class FlxVirtualPad extends FlxMobileInputManager {
 		updateTrackedButtons();
 	}
 
+	override function update(elapsed:Float)
+	{
+		forEachAlive((button:FlxButton) -> {
+			if(!button.isOnScreen(button.camera))
+			{
+				if(button.x < 0)
+					button.x = 0;
+				if(button.y < 0)
+					button.y = 0;
+				if(button.x > FlxG.width - button.frameWidth)
+					button.x = FlxG.width - button.frameWidth;
+				if(button.y > FlxG.height - button.frameHeight)
+					button.y = FlxG.height - button.frameHeight;
+			}
+		});
+		super.update(elapsed);
+	}
+
 	override public function destroy() {
 		super.destroy();
 
 		for (field in Reflect.fields(this))
 			if (Std.isOfType(Reflect.field(this, field), FlxButton))
 				Reflect.setField(this, field, FlxDestroyUtil.destroy(Reflect.field(this, field)));
-	}
-
-	override function update(elapsed:Float) {
-		if(members.length >= 1){
-			forEachAlive((button1:FlxButton) -> {
-				forEachAlive((button2:FlxButton) -> {
-					if(button1 != button2){
-						 var distanceBetween = button1.point.dist(button2.point);
-						 if (distanceBetween < minDistance) {
-							var overlap = minDistance - distanceBetween;
-							var angle = Math.atan2(button1.y - button2.y, button1.x - button2.x);
-							button1.x += Math.cos(angle) * (overlap / 2);
-							button1.y += Math.sin(angle) * (overlap / 2);
-							button2.x -= Math.cos(angle) * (overlap / 2);
-							button2.y -= Math.sin(angle) * (overlap / 2);
-						}
-					}
-				});
-			});
-		}
-		super.update(elapsed);
 	}
 
 	public function setExtrasDefaultPos() {
@@ -177,8 +172,10 @@ class FlxVirtualPad extends FlxMobileInputManager {
 	}
 
 	private function createButton(X:Float, Y:Float, Width:Int, Height:Int, Graphic:String, ?Color:Int = 0xFFFFFF, ?IDs:Array<FlxMobileInputID>):FlxButton {
-		var button = new FlxButton(X, Y);
+		var button = new FlxButton(X, Y, IDs);
 		button.frames = FlxTileFrames.fromFrame(getSparrowAtlas('mobile/images/virtualpad').getByName(Graphic), FlxPoint.get(Width, Height));
+		button.bounds.makeGraphic(Std.int(button.frameWidth - 50), Std.int(button.frameHeight - 50), FlxColor.TRANSPARENT);
+		button.centerBounds();
 		button.resetSizeFromFrame();
 		button.solid = false;
 		button.immovable = true;
@@ -187,7 +184,6 @@ class FlxVirtualPad extends FlxMobileInputManager {
 		button.color = Color;
 		button.antialiasing = ClientPrefs.data.antialiasing;
 		button.tag = Graphic.toUpperCase();
-		button.IDs = IDs;
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end
