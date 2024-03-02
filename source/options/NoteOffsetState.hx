@@ -170,9 +170,6 @@ class NoteOffsetState extends MusicBeatState
 		Conductor.bpm = 128.0;
 		FlxG.sound.playMusic(Paths.music('offsetSong'), 1, true);
 
-		addVirtualPad('LEFT_FULL', 'A_B_C');
-		addVirtualPadCamera(false);
-
 		super.create();
 	}
 
@@ -534,12 +531,14 @@ class NoteOffsetState extends MusicBeatState
 			controllerPointer.visible = controls.controllerMode;
 		}
 
+                removeVirtualPad();
+
 		var str:String;
 		var str2:String;
-		if(onComboMenu)
-			str = 'Combo Offset';
-		else
-			str = 'Note/Beat Delay';
+		if(onComboMenu) { addVirtualPad('NONE', 'A_B_C'); addVirtualPadCamera(false);
+			str = 'Combo Offset'; } 
+		else { addVirtualPad('LEFT_FULL', 'A_B_C'); addVirtualPadCamera(false);
+			str = 'Note/Beat Delay'; }
 
                 if (controls.mobileC) {
 		str2 = '(Press A to Switch)';
