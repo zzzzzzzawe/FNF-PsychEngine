@@ -2,7 +2,6 @@ package options;
 
 import states.MainMenuState;
 import backend.StageData;
-import flixel.addons.transition.FlxTransitionableState;
 import mobile.substates.MobileControlSelectSubState;
 #if (target.threaded)
 import sys.thread.Thread;
