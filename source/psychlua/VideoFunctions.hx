@@ -25,17 +25,20 @@ class VideoFunctions
 			var videoPath = Paths.video(videoName);
 			if (!FileSystem.exists(videoPath))
 			{
-				FunkinLua.luaTrace('startVideo: Video file not found: ' + videoName, false, false, FlxColor.RED);
-				if (tag != null)
-					return false;
+				FunkinLua.luaTrace('startVideo: Video file not found: $videoName', false, false, FlxColor.RED);
+				if (tag == null)
+					PlayState.instance.startAndEnd();
+				return false;
 			}
 			if (tag == null)
 			{
 				PlayState.instance.startVideo(videoName);
-				PlayState.instance.video.onVideoEnd.addOnce(() -> {
+				PlayState.instance.video.onVideoEnd.addOnce(() ->
+				{
 					PlayState.instance.callOnLuas('onVideoEnd', ['']);
 				});
-				PlayState.instance.video.onVideoStart.addOnce(() -> {
+				PlayState.instance.video.onVideoStart.addOnce(() ->
+				{
 					PlayState.instance.callOnLuas('onVideoStart', ['']);
 				});
 				return true;
@@ -45,22 +48,24 @@ class VideoFunctions
 				var video = LuaUtils.getVideoSpriteObject(tag);
 				if (video == null)
 				{
-					FunkinLua.luaTrace("startVideo: Video " + tag + " does not exist!", false, false, FlxColor.RED);
+					FunkinLua.luaTrace("startVideo: Video " + tag + " dosen't exist!", false, false, FlxColor.RED);
 					return false;
 				}
 				video.startVideo(videoPath, loop);
 				video.playbackRate = PlayState.instance.playbackRate;
-				video.onVideoEnd.addOnce(() -> {
+				video.onVideoEnd.addOnce(() ->
+				{
 					PlayState.instance.callOnLuas('onVideoEnd', [tag]);
 				});
-				video.onVideoStart.addOnce(() -> {
+				video.onVideoStart.addOnce(() ->
+				{
 					PlayState.instance.callOnLuas('onVideoStart', [tag]);
 				});
 				return true;
 			}
 		});
 
-		funk.set("addLuaVideoSprite", function(tag:String, front:Bool = false)
+		funk.set("addVideoSprite", function(tag:String, front:Bool = false)
 		{
 			var video:VideoSprite = null;
 			if (PlayState.instance.modchartVideoSprites.exists(tag))

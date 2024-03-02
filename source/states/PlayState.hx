@@ -836,12 +836,12 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function getLuaObject(tag:String, text:Bool=true):Dynamic {
+	public function getLuaObject(tag:String, text:Bool=true, videos:Bool=true):Dynamic {
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
+		if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		if(variables.exists(tag)) return variables.get(tag);
-		if(modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		#end
 		return null;
 	}
@@ -883,7 +883,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	function startAndEnd()
+	public function startAndEnd()
 	{
 		if(endingSong)
 			endSong();
