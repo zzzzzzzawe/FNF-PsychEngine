@@ -55,6 +55,11 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
+#if VIDEOS_ALLOWED
+import objects.Video;
+import objects.VideoSprite;
+#end
+
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -112,6 +117,9 @@ class PlayState extends MusicBeatState
 	#if CUSTOM_SHADERS_ALLOWED
 	public var modchartShader:Map<String, Effect> = new Map<String, Effect>();
 	public var shaderUpdates:Array<Float->Void> = [];
+	#end
+	#if VIDEOS_ALLOWED
+	public var modchartVideoSprites:Map<String, VideoSprite> = new Map<String, VideoSprite>();
 	#end
 	#end
 
@@ -266,7 +274,9 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED public var videoSprites:Array<VideoSpriteManager> = []; #end
+	#if VIDEOS_ALLOWED
+	public var video:Video;
+	#end
 
 	public var luaVirtualPad:FlxVirtualPad;
 
@@ -823,10 +833,11 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function getLuaObject(tag:String, text:Bool=true):FlxSprite {
+	public function getLuaObject(tag:String, text:Bool=true, videos:Bool=true):Dynamic {
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
+		if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag);
 		if(variables.exists(tag)) return variables.get(tag);
 		#end
 		return null;
@@ -842,11 +853,11 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String) #if VIDEOS_ALLOWED :VideoManager#end
+	public function startVideo(name:String) #if VIDEOS_ALLOWED :Video#end
 	{
 		#if VIDEOS_ALLOWED
 		var filepath:String = Paths.video(name);
-		var video:VideoManager = new VideoManager();
+		video = new Video();
 		inCutscene = true;
 
 		if(#if MODS_ALLOWED !FileSystem.exists(filepath) #else !Assets.exists(filepath) #end) {
@@ -869,7 +880,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	function startAndEnd()
+	public function startAndEnd()
 	{
 		if(endingSong)
 			endSong();
@@ -1631,6 +1642,12 @@ class PlayState extends MusicBeatState
 			}
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
+
+			#if VIDEOS_ALLOWED
+			for(video in modchartVideoSprites)
+				if(video != null && members.contains(video))
+					video.paused = true;
+			#end
 		}
 
 		super.openSubState(SubState);
@@ -1648,10 +1665,9 @@ class PlayState extends MusicBeatState
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
 			#if VIDEOS_ALLOWED
-			if(videoSprites.length > 0)
-			for(video in videoSprites)
-				if(video.exists)
-				video.paused = false;
+			for(video in modchartVideoSprites)
+				if(video != null && members.contains(video))
+					video.paused = false;
 			#end
 
 			paused = false;
@@ -1975,13 +1991,6 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		paused = true;
-
-		#if VIDEOS_ALLOWED
-		if(videoSprites.length > 0)
-			for(video in videoSprites)
-				if(video.exists)
-					video.paused = true;
-		#end
 		
 		if(FlxG.sound.music != null) {
 			FlxG.sound.music.pause();
@@ -2055,13 +2064,6 @@ class PlayState extends MusicBeatState
 				#if LUA_ALLOWED
 				modchartTimers.clear();
 				modchartTweens.clear();
-				#end
-
-				#if VIDEOS_ALLOWED
-				// i assume it's better removing the thing on gameover
-				if(videoSprites.length > 0)
-					for(video in videoSprites)
-						removeVideoSprite(video);
 				#end
 
 				openSubState(new GameOverSubstate());
@@ -3143,20 +3145,6 @@ class PlayState extends MusicBeatState
 		notes.remove(note, true);
 		note.destroy();
 	}
-
-	#if VIDEOS_ALLOWED
-	public function removeVideoSprite(video:VideoSpriteManager):Void {
-		if(members.contains(video))
-			remove(video, true);
-		else {
-			forEachOfType(FlxSpriteGroup, function(group:FlxSpriteGroup){
-				if(group.members.contains(video))
-					group.remove(video, true);
-			});
-		}
-		video.altDestroy();
-	}
-	#end
 
 	public function spawnNoteSplashOnNote(note:Note) {
 		if(note != null) {

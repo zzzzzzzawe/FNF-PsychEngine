@@ -998,11 +998,11 @@ class FunkinLua {
 		});
 
 		set("makeGraphic", function(obj:String, width:Int = 256, height:Int = 256, color:String = 'FFFFFF') {
-			var spr:FlxSprite = LuaUtils.getObjectDirectly(obj, false);
+			var spr:FlxSprite = LuaUtils.getObjectDirectly(obj, false, false);
 			if(spr != null) spr.makeGraphic(width, height, CoolUtil.colorFromString(color));
 		});
 		set("addAnimationByPrefix", function(obj:String, name:String, prefix:String, framerate:Int = 24, loop:Bool = true) {
-			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false);
+			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false, false);
 			if(obj != null && obj.animation != null)
 			{
 				obj.animation.addByPrefix(name, prefix, framerate, loop);
@@ -1017,7 +1017,7 @@ class FunkinLua {
 		});
 
 		set("addAnimation", function(obj:String, name:String, frames:Array<Int>, framerate:Int = 24, loop:Bool = true) {
-			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false);
+			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false, false);
 			if(obj != null && obj.animation != null)
 			{
 				obj.animation.add(name, frames, framerate, loop);
@@ -1035,7 +1035,7 @@ class FunkinLua {
 
 		set("playAnim", function(obj:String, name:String, forced:Bool = false, ?reverse:Bool = false, ?startFrame:Int = 0)
 		{
-			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false);
+			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false, false);
 			if(obj.playAnim != null)
 			{
 				obj.playAnim(name, forced, reverse, startFrame);
@@ -1050,7 +1050,7 @@ class FunkinLua {
 			return false;
 		});
 		set("addOffset", function(obj:String, anim:String, x:Float, y:Float) {
-			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false);
+			var obj:Dynamic = LuaUtils.getObjectDirectly(obj, false, false);
 			if(obj != null && obj.addOffset != null)
 			{
 				obj.addOffset(anim, x, y);
@@ -1060,8 +1060,8 @@ class FunkinLua {
 		});
 
 		set("setScrollFactor", function(obj:String, scrollX:Float, scrollY:Float) {
-			if(game.getLuaObject(obj,false)!=null) {
-				game.getLuaObject(obj,false).scrollFactor.set(scrollX, scrollY);
+			if(game.getLuaObject(obj,false,true)!=null) {
+				game.getLuaObject(obj,false,true).scrollFactor.set(scrollX, scrollY);
 				return;
 			}
 
@@ -1179,7 +1179,7 @@ class FunkinLua {
 		});
 
 		set("setObjectCamera", function(obj:String, camera:String = '') {
-			var real = game.getLuaObject(obj);
+			var real:FlxBasic = game.getLuaObject(obj);
 			if(real!=null){
 				real.cameras = [LuaUtils.cameraFromString(camera)];
 				return true;
@@ -1477,6 +1477,7 @@ class FunkinLua {
 		#if HSCRIPT_ALLOWED HScript.implement(this); #end
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(this); #end
 		#if flxanimate FlxAnimateFunctions.implement(this); #end
+		#if VIDEOS_ALLOWED VideoFunctions.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);
