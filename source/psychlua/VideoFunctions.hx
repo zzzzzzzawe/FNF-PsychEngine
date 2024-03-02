@@ -88,7 +88,7 @@ class VideoFunctions
 			return true;
 		});
 
-		funk.set("removeLuaVideoSprite", function(tag:String, destroy:Bool = true)
+		funk.set("removeVideoSprite", function(tag:String, destroy:Bool = true)
 		{
 			if (!PlayState.instance.modchartVideoSprites.exists(tag))
 			{
