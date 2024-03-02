@@ -39,7 +39,6 @@ class MobileData
 					var str = #if MODS_ALLOWED File.getContent(file) #else Assets.getText(file) #end;
 					var json:VirtualPadButtonsData = cast Json.parse(str);
 					var mapKey:String = Path.withoutDirectory(Path.withoutExtension(fileWithNoLib));
-					trace(mapKey);
 					map.set(mapKey, json);
 				}
 			}
