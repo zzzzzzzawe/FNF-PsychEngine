@@ -7,6 +7,7 @@ import llua.Lua;
 import lime.ui.Haptic;
 import psychlua.FunkinLua;
 import mobile.backend.TouchFunctions;
+#if android import lime.system.JNI; #end
 
 class MobileFunctions
 {
@@ -197,6 +198,9 @@ class MobileFunctions
 #if android
 class AndroidFunctions
 {
+	@:noCompletion private static var setOrientation_jni:Dynamic = JNI.createStaticMethod('org/libsdl/app/SDLActivity', 'setOrientation',
+		'(IIZLjava/lang/String;)V');
+
 	public static function implement(funk:FunkinLua)
 	{
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
@@ -206,6 +210,26 @@ class AndroidFunctions
 		funk.set("menuJustPressed", FlxG.android.justPressed.MENU);
 		funk.set("menuPressed", FlxG.android.pressed.MENU);
 		funk.set("menuJustReleased", FlxG.android.justReleased.MENU);
+
+		funk.set("setOrientation", function(hint:Null<String>):Void
+		{
+			switch (hint.toLowerCase())
+			{
+				case 'portrait':
+					hint = 'portrait';
+				case 'portraitupsidedown' | 'upsidedownportrait' | 'upsidedown':
+					hint = 'PortraitUpsideDown';
+				case 'landscapeleft' | 'leftlandscape':
+					hint = 'LandscapeLeft';
+				case 'landscaperight' | 'rightlandscape' | 'landscape':
+					hint = 'LandscapeRight';
+				default:
+					hint = null;
+			}
+			if (hint == null)
+				return FunkinLua.luaTrace('setOrientation: No orientation specified.');
+			setOrientation_jni(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, hint);
+		});
 	}
 }
 #end
