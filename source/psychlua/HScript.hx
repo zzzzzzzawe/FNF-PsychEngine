@@ -98,6 +98,7 @@ class HScript extends SScript
 		set('PlayState', PlayState);
 		set('Paths', Paths);
 		set('SUtil', SUtil);
+                set('MobileControls', mobile.objects.MobileControls);
 		set('Conductor', Conductor);
 		set('ClientPrefs', ClientPrefs);
 		#if ACHIEVEMENTS_ALLOWED
@@ -113,8 +114,8 @@ class HScript extends SScript
 		set('ShaderFilter', openfl.filters.ShaderFilter);
 		set('StringTools', StringTools);
 		#if VIDEOS_ALLOWED
-		set('VideoSpriteManager', objects.VideoSprite);
-		set('VideoManager', objects.Video);
+		set('VideoSprite', objects.VideoSprite);
+		set('Video', objects.Video);
 		#end
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
