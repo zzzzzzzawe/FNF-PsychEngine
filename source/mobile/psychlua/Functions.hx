@@ -198,8 +198,7 @@ class MobileFunctions
 #if android
 class AndroidFunctions
 {
-	@:noCompletion private static var setOrientation_jni:Dynamic = JNI.createStaticMethod('org/libsdl/app/SDLActivity', 'setOrientation',
-		'(IIZLjava/lang/String;)V');
+	@:noCompletion private static var setOrientation_jni:Dynamic = JNI.createStaticMethod('org/libsdl/app/SDLActivity', 'setOrientation', '(IIZLjava/lang/String;)V');
 
 	public static function implement(funk:FunkinLua)
 	{
@@ -216,7 +215,7 @@ class AndroidFunctions
 			switch (hint.toLowerCase())
 			{
 				case 'portrait':
-					hint = 'portrait';
+					hint = 'Portrait';
 				case 'portraitupsidedown' | 'upsidedownportrait' | 'upsidedown':
 					hint = 'PortraitUpsideDown';
 				case 'landscapeleft' | 'leftlandscape':
