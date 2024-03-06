@@ -537,7 +537,7 @@ class NoteOffsetState extends MusicBeatState
 		var str2:String;
 		if(onComboMenu) { addVirtualPad('NONE', 'A_B_C'); addVirtualPadCamera(false);
 			str = 'Combo Offset'; } 
-		else { addVirtualPad('LEFT_FULL', 'A_B_C'); addVirtualPadCamera(false);
+		else { addVirtualPad('LEFT_RIGHT', 'A_B_C'); addVirtualPadCamera(false);
 			str = 'Note/Beat Delay'; }
 
                 if (controls.mobileC) {
