@@ -79,7 +79,7 @@ class SUtil
 			showPopUp(fileName + " file has been saved.", "Success!");
 		}
 		catch (e:Exception)
-			showPopUp("File couldn't be saved.\n(${e.message})", "Error!");
+			LimeLogger.println("File couldn't be saved.\n(${e.message})");
 	}
 	#end
 
@@ -101,17 +101,15 @@ class SUtil
                     FileSystem.createDirectory(SUtil.getStorageDirectory());
                 }
                 catch(e:Dynamic) {
-			    openfl.Lib.application.window.alert("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else SUtil.getStorageDirectory() #end + "\nPress OK to close the game", "Error!");
+			    showPopUp("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else SUtil.getStorageDirectory() #end + "\nPress OK to close the game", "Error!");
                 LimeSystem.exit(1);
                 }}
 	}
 	#end
 
-	public static function showPopUp(message:String, title:String #if android, ?positiveText:String = "OK", ?positiveFunc:Void->Void #end):Void
+	public static function showPopUp(message:String, title:String):Void
 	{
-		#if android
-		AndroidTools.showAlertDialog(title, message, {name: positiveText, func: positiveFunc}, null);
-		#elseif (windows || web)
+		#if (windows || web || android)
 		openfl.Lib.application.window.alert(message, title);
 		#else
 		LimeLogger.println('$title - $message');
@@ -126,3 +124,4 @@ enum StorageType
 	EXTERNAL_OBB;
 	MEDIA;
 }
+

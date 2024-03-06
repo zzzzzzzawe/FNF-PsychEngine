@@ -7,12 +7,10 @@ import openfl.events.ErrorEvent;
 import lime.utils.Log as LimeLogger;
 import openfl.events.UncaughtErrorEvent;
 import lime.system.System as LimeSystem;
+import lime.utils.Log as LimeLogger;
 
 class CrashHandler
 {
-	#if android
-	static var errored:Bool = false;
-	#end
 	public static function init():Void
 	{
 		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onError);
@@ -25,9 +23,6 @@ class CrashHandler
 
 	private static function onError(event:UncaughtErrorEvent):Void
 	{
-		#if android
-		if (!errored) {
-		#end
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
@@ -68,10 +63,10 @@ class CrashHandler
 			File.saveContent('logs/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', msg);
 		}
 		catch (e:Exception)
-			trace('Couldn\'t save error message. (${e.message})', null);
+			LimeLogger.println('Couldn\'t save error message. (${e.message})');
 		#end
 
-		SUtil.showPopUp(msg, "Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		SUtil.showPopUp(msg, "Error!");
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -82,19 +77,13 @@ class CrashHandler
 			FlxG.sound.music.stop();
 
 		js.Browser.window.location.reload(true);
-		#elseif !android
+		#else
 		LimeSystem.exit(1);
-		#elseif android
-		errored = true;
-		}
 		#end
 	}
 
 	private static inline function onCriticalError(error:Dynamic):Void
 	{
-		#if android
-		if (!errored) {
-		#end
 		final log:Array<String> = [Std.isOfType(error, String) ? error : Std.string(error)];
 
 		for (item in CallStack.exceptionStack(true))
@@ -125,10 +114,10 @@ class CrashHandler
 			File.saveContent('crash/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '-critical' + '.txt', msg);
 		}
 		catch (e:Exception)
-			trace('Couldn\'t save error message. (${e.message})', null);
+			LimeLogger.println('Couldn\'t save error message. (${e.message})');
 		#end
 
-		SUtil.showPopUp(msg, "Critical Error!" #if android, "OK", () -> LimeSystem.exit(1) #end);
+		SUtil.showPopUp(msg, "Critical Error!");
 
 		#if DISCORD_ALLOWED
 		DiscordClient.shutdown();
@@ -139,11 +128,8 @@ class CrashHandler
 			FlxG.sound.music.stop();
 
 		js.Browser.window.location.reload(true);
-		#elseif !android
+		#else
 		LimeSystem.exit(1);
-		#elseif android
-		errored = true;
-		}
 		#end
 	}
 }
