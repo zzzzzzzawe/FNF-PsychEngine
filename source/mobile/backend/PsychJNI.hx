@@ -1,3 +1,8 @@
+/*
+The functions needs to be added: getCurrentOrientation, setWindowStyle
+The functions "maybe" needs to be added: isScreenKeyboardShown, getDisplayDPI, messageboxShowMessageBox, clipboardHasText, clipboardGetText, clipboardSetText
+NOTE: THESE AT "SDLActivity"!!
+*/
 package mobile.backend;
 
 #if android
