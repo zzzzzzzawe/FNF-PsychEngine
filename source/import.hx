@@ -25,7 +25,6 @@ import android.os.Environment as AndroidEnvironment;
 import android.Permissions as AndroidPermissions;
 import android.Settings as AndroidSettings;
 import android.Tools as AndroidTools;
-import extension.androiddialogs.AndroidDialogs as AndroidLegacyDialog;
 #end
 
 #if sys
