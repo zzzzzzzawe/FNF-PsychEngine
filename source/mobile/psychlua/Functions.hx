@@ -198,9 +198,11 @@ class MobileFunctions
 #if android
 class AndroidFunctions
 {
+        static var orientation:Dynamic;
+
 	public static function getCurrentOrientationAsString():String
 	{
-		final orientation:Dynamic = PsychJNI.getCurrentOrientation();
+		orientation = PsychJNI.getCurrentOrientation();
 		switch (orientation)
 		{
 			case 1:
@@ -219,6 +221,7 @@ class AndroidFunctions
 	public static function implement(funk:FunkinLua)
 	{
 		funk.set("getCurrentOrientation", getCurrentOrientationAsString());
+                funk.set("getDisplayDPI", PsychJNI.getDisplayDPI());
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
 		funk.set("backPressed", FlxG.android.pressed.BACK);
 		funk.set("backJustReleased", FlxG.android.justReleased.BACK);
