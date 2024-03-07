@@ -3,7 +3,7 @@ package mobile.backend;
 #if android
 import lime.system.JNI;
 
-class PsychJNI
+class PsychJNI #if (lime >= "8.0.0") implements JNISafety #end
 {
 	@:noCompletion private static var setOrientation_jni:Dynamic = JNI.createStaticMethod('org/libsdl/app/SDLActivity', 'setOrientation','(IIZLjava/lang/String;)V');
 
