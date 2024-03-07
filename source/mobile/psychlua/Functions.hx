@@ -198,8 +198,27 @@ class MobileFunctions
 #if android
 class AndroidFunctions
 {
+	public static function getCurrentOrientationAsString():String
+	{
+		final var orientation:Dynamic = PsychJNI.getCurrentOrientation();
+		switch (orientation)
+		{
+			case 1:
+				return "LandscapeRight";
+			case 2:
+				return "LandscapeLeft";
+			case 3:
+				return "Portrait";
+			case 4:
+				return "PortraitUpsideDown";
+			default:
+				return "Unknown";
+		}
+	}
+
 	public static function implement(funk:FunkinLua)
 	{
+		funk.set("getCurrentOrientation", getCurrentOrientationAsString()):
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
 		funk.set("backPressed", FlxG.android.pressed.BACK);
 		funk.set("backJustReleased", FlxG.android.justReleased.BACK);
