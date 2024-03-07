@@ -200,7 +200,7 @@ class AndroidFunctions
 {
 	public static function getCurrentOrientationAsString():String
 	{
-		final var orientation:Dynamic = PsychJNI.getCurrentOrientation();
+		final orientation:Dynamic = PsychJNI.getCurrentOrientation();
 		switch (orientation)
 		{
 			case 1:
