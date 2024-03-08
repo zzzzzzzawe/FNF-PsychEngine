@@ -1,8 +1,6 @@
 package lime.utils;
 
-#if !android
 import mobile.backend.SUtil;
-#end
 import haxe.Exception;
 import haxe.PosInfos;
 #if sys
@@ -53,11 +51,7 @@ class Log
 					trace('Couldn\'t save error message. (${e.message})', null);
 				#end
 
-				#if android
-				openfl.Lib.application.window.alert(message, 'Error!');
-				#else
 				SUtil.showPopUp(message, 'Error!');
-				#end
 
 				#if js
 				if (FlxG.sound.music != null)
