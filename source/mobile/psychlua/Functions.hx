@@ -191,37 +191,15 @@ class MobileFunctions
 			case 5:
 				return 'none';
 		}
-		return 'uknown';
+		return 'unknown';
 	}
 }
 
 #if android
 class AndroidFunctions
 {
-        static var orientation:Dynamic;
-
-	public static function getCurrentOrientationAsString():String
-	{
-		orientation = PsychJNI.getCurrentOrientation();
-		switch (orientation)
-		{
-			case 1:
-				return "LandscapeRight";
-			case 2:
-				return "LandscapeLeft";
-			case 3:
-				return "Portrait";
-			case 4:
-				return "PortraitUpsideDown";
-			default:
-				return "Unknown";
-		}
-	}
-
 	public static function implement(funk:FunkinLua)
 	{
-		funk.set("getCurrentOrientation", getCurrentOrientationAsString());
-                funk.set("getDisplayDPI", PsychJNI.getDisplayDPI());
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
 		funk.set("backPressed", FlxG.android.pressed.BACK);
 		funk.set("backJustReleased", FlxG.android.justReleased.BACK);
