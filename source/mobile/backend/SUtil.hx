@@ -2,6 +2,8 @@ package mobile.backend;
 
 #if android
 import lime.app.Application;
+import android.content.Context as AndroidContext;
+import android.os.Environment as AndroidEnvironment;
 #end
 import haxe.Exception;
 import haxe.io.Path;
