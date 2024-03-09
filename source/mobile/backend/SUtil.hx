@@ -4,6 +4,7 @@ package mobile.backend;
 import lime.app.Application;
 import android.content.Context as AndroidContext;
 import android.os.Environment as AndroidEnvironment;
+import android.Permissions as AndroidPermissions;
 #end
 import haxe.Exception;
 import haxe.io.Path;
