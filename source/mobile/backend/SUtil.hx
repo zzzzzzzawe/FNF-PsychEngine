@@ -98,7 +98,7 @@ class SUtil
 			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
 				'Notice!');
 			if (!AndroidEnvironment.isExternalStorageManager())
-				AndroidSettings.requestSetting("android.AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
+				AndroidSettings.requestSetting("AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
 		} else {
                 try {
                 if (!FileSystem.exists(SUtil.getStorageDirectory()))
