@@ -65,14 +65,18 @@ class SUtil
 
 				total += part;
 
+				try {
 				if (!FileSystem.exists(total))
 					FileSystem.createDirectory(total);
+				}
+				catch (e:Exception)
+					throw "Error while creating folder. (${e.message})" + "\nMaybe you needed restart the game" + "\nPress OK to close the game";
 			}
 		}
 	}
 
 	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'you forgot to add something in your code :3'):Void
+			fileData:String = 'You forgot to add something in your code :3'):Void
 	{
 		try
 		{
