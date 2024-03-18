@@ -98,7 +98,7 @@ class LuaUtils
 			}
 			else
 				target = Reflect.getProperty(instance, splitProps[0]);
-			trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
+			//trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
 			for (i in 1...splitProps.length)
 			{
 				var j:Dynamic = splitProps[i].substr(0, splitProps[i].length - 1);
