@@ -19,7 +19,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build windows -final
+        run: haxelib run lime build windows
 
       - name: Upload Artifact
         if: ${{ success() }}
@@ -49,7 +49,7 @@ jobs:
           haxelib --never install hxCodec --quiet
 
       - name: Compile
-        run: haxelib run lime build linux -final
+        run: haxelib run lime build linux
 
       - name: Upload Artifact
         if: ${{ success() }}
@@ -100,7 +100,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compile
-        run: haxelib run lime build android -D ${{ matrix.storage-type }} -final
+        run: haxelib run lime build android -D ${{ matrix.storage-type }}
 
       - name: Upload Artifact
         if: ${{ success() }}
@@ -127,7 +127,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D NOVIDEO -final
+        run: haxelib run lime build ios -D NOVIDEO
 
       - name: Make Ipa
         run: |
