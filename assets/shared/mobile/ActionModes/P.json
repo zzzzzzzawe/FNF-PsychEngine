@@ -3,10 +3,8 @@
     {
       "button": "buttonP",
       "graphic": "p",
-      "x": 1148,
+      "x": 1156,
       "y": 2,
-      "width": 132,
-      "height": 125,
       "color": "0xE5DE00"
     }
   ]

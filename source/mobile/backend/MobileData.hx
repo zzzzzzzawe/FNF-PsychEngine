@@ -56,8 +56,6 @@ typedef ButtonsData =
 	graphic:String, // the graphic of the button, usually can be located in the VirtualPad xml .
 	x:Float, // the button's X position on screen.
 	y:Float, // the button's Y position on screen.
-	width:Int, // the button's width, default value is 132.
-	height:Int, // the button's height, default value is 127.
 	color:String // the button color, default color is white.
 }
 

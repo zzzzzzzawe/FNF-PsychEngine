@@ -3,10 +3,8 @@
     {
       "button": "buttonB",
       "graphic": "b",
-      "x": 1148,
-      "y": 587,
-      "width": 132,
-      "height": 125,
+      "x": 1156,
+      "y": 596,
       "color": "0xFFCB00"
     }
   ]

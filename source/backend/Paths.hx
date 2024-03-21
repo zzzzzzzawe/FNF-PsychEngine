@@ -104,6 +104,8 @@ class Paths
 			if(FileSystem.exists(modded)) return modded;
 		}
 		#end
+		if(library == "mobile")
+			return getSharedPath('mobile/$file');
 
 		if (library != null)
 			return getLibraryPath(file, library);
