@@ -42,9 +42,9 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeAutoPause;
 
 		var option:Option = new Option('Pop Up Score',
-			"If unchecked, hitting notes won't make \"sick\", \"good\".. and combo popups (Useful for low end " + Main.platform + ").",
+			"If unchecked, hitting notes won't make \"sick\", \"good\".. and combo popups\n(Useful for low end " + Main.platform + ").",
 			'popUpRating',
-			'bool');
+			BOOL);
 		addOption(option);
 
 		var option:Option = new Option('Disable Reset Button',
@@ -56,7 +56,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Game Over Vibration',
 			"If checked, your device will vibrate at game over.",
 			'gameOverVibration',
-			'bool');
+			BOOL);
 		addOption(option);
 		option.onChange = onChangeVibration;
 
