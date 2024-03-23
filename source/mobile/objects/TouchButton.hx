@@ -5,7 +5,8 @@ import flixel.input.FlxPointer;
 import flixel.input.IFlxInput;
 import flixel.math.FlxPoint;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
-import mobile.backend.TouchFunctions;
+import flixel.input.mouse.FlxMouseButton;
+import shaders.flixel.system.FlxShader;
 
 /**
  * A simple button class that calls a function when clicked by the touch.
@@ -126,17 +127,26 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	/**
 	 * The alpha's the button should use depednging on the status.
 	**/
-	public var statusAlphas:Array<Float> = [1.0, 1.0, 0.7];
+	public var statusAlphas:Array<Float> = [1.0, 1.0, 0.6];
 
 	/**
-	 * How many alpha to add/substract from the current alpha for the label.
+	 * The brightness the button should use depednging on the status.
 	**/
-	public var labelAlphaDiff:Float = 0.05;
+	public var statusBrightness:Array<Float> = [1.0, 0.95, 0.7];
 
 	/**
-	 * If the button and label should change alpha according to the status.
+	 * How much to add/substract from the current indicator value for the label.
 	**/
-	public var dynamicAlpha:Bool = true;
+	public var labelStatusDiff:Float = 0.05;
+
+	/**
+	 * IF YOU'RE USING SPRITE GROUPS YOU MUST SET THIS TO THE GROUP'S ALPHA LIKE IN FLXVIRTUALPAD.
+	**/
+	public var parentAlpha(default, set):Float = 1;
+
+	public var statusIndicatorType(default, set):StatusIndicators = ALPHA;
+
+	public var brightShader:ButtonBrightnessShader = new ButtonBrightnessShader();
 
 	public var justReleased(get, never):Bool;
 	public var released(get, never):Bool;
@@ -177,6 +187,9 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		scrollFactor.set();
 
 		input = new FlxInput(0);
+
+		if(statusIndicatorType == BRIGHTNESS)
+			shader = brightShader;
 	}
 
 	/**
@@ -264,9 +277,16 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		var overlap = false;
 
 		for (camera in cameras){
+			#if mobile
             for(touch in FlxG.touches.list)
 				if (checkInput(touch, touch, touch.justPressedPosition, camera))
 					overlap = true;
+			#else
+			var button = FlxMouseButton.getByID(FlxMouseButtonID.LEFT);
+			if(checkInput(FlxG.mouse, button, button.justPressedPosition, camera))
+				overlap = true;
+	
+			#end
         }
 		return overlap;
 	}
@@ -323,10 +343,16 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 			_spriteLabel.scale.set(scale.x, scale.y);
 	}
 
-	function updateAlpha()
+	function indicateStatus()
 	{
-		if (statusAlphas.length > status && dynamicAlpha)
-			alpha = statusAlphas[status];
+		switch(statusIndicatorType){
+			case ALPHA:
+					alpha = statusAlphas[status];
+			case BRIGHTNESS:
+				brightShader.brightness.value = [statusBrightness[status]];
+			case NONE: // no balls
+		}
+		
 	}
 
 	/**
@@ -383,21 +409,24 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 
 		updateLabelPosition();
 
+		if(statusIndicatorType == BRIGHTNESS && label != null && brightShader != null)
+			label.shader = brightShader;
+
 		return Value;
 	}
 
 	function set_status(Value:Int):Int
 	{
 		status = Value;
-		updateAlpha();
+		indicateStatus();
 		return status;
 	}
 
 	override function set_alpha(Value:Float):Float
 	{
 		super.set_alpha(Value);
-		if(_spriteLabel != null && dynamicAlpha)
-			_spriteLabel.alpha = alpha == 0 ? 0 : alpha + labelAlphaDiff;
+		if(_spriteLabel != null && statusIndicatorType == ALPHA)
+			_spriteLabel.alpha = alpha == 0 ? 0 : alpha + labelStatusDiff;
 		return alpha;
 	}
 
@@ -418,9 +447,9 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 
 	override function set_color(Value:FlxColor):Int
 	{
+		
 		if(_spriteLabel != null)
 			_spriteLabel.color = Value;
-		Value.brightness += 0.12;
 		super.set_color(Value);
 		return Value;
 	}
@@ -444,6 +473,26 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		super.updateHitbox();
 		if(_spriteLabel != null)
 			_spriteLabel.updateHitbox();
+	}
+
+	function set_parentAlpha(Value:Float):Float {
+		statusAlphas = [Value, Value - 0.05, (parentAlpha - 0.45 == 0 && parentAlpha > 0) ? 0.25 : parentAlpha - 0.45];
+		indicateStatus();
+		return parentAlpha = Value;
+	}
+
+	function set_statusIndicatorType(Value:StatusIndicators){
+		if(Value == BRIGHTNESS){
+			shader = brightShader;
+			if(_spriteLabel != null)
+				_spriteLabel.shader = brightShader;
+		} else {
+			shader = null;
+			if(_spriteLabel != null)
+				_spriteLabel.shader = null;
+		}
+		statusIndicatorType = Value;
+		return Value;
 	}
 
 	inline function get_justReleased():Bool
@@ -514,4 +563,35 @@ private class TouchButtonEvent implements IFlxDestroyable
 			sound.play(true);
 		#end
 	}
+}
+
+class ButtonBrightnessShader extends FlxShader
+{
+	@:glFragmentSource('
+		#pragma header
+
+		uniform float brightness;
+
+		void main()
+		{
+			vec4 col = texture2D(bitmap, openfl_TextureCoordv);
+			col.rgb *= brightness;
+
+			gl_FragColor = col;
+		}
+	')
+	public function new()
+	{
+		super();
+	}
+}
+
+enum StatusIndicators
+{
+	// isn't very good looking
+	ALPHA;
+	// kills the colors of the sprite
+	BRIGHTNESS;
+	// peak-
+	NONE;
 }

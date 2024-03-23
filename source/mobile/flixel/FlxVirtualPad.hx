@@ -178,15 +178,23 @@ class FlxVirtualPad extends FlxMobileInputManager<TouchPadButton> {
 		}
 	}
 
-	private function createButton(X:Float, Y:Float, Graphic:String, ?Color:Int = 0xFFFFFF, ?IDs:Array<FlxMobileInputID>):TouchPadButton {
+	private function createButton(X:Float, Y:Float, Graphic:String, ?Color:FlxColor = 0xFFFFFF, ?IDs:Array<FlxMobileInputID>):TouchPadButton {
 		var button = new TouchPadButton(X, Y, IDs, Graphic.toUpperCase());
 		button.bounds.makeGraphic(Std.int(button.width - 50), Std.int(button.height - 50), FlxColor.TRANSPARENT);
 		button.centerBounds();
 		button.color = Color;
+		button.parentAlpha = this.alpha;
 		#if FLX_DEBUG
-		button.ignoreDrawDebug = true;
 		#end
 		return button;
+	}
+
+	override function set_alpha(Value):Float {
+		forEachAlive((button:TouchPadButton) -> {
+			button.parentAlpha = Value;
+		});
+		super.set_alpha(Value);
+		return Value;
 	}
 }
 
@@ -202,9 +210,11 @@ class TouchPadButton extends TouchButton
 			updateHitbox();
 			updateLabelPosition();
 			// statusAlphas = [ClientPrefs.data.controlsAlpha, ClientPrefs.data.controlsAlpha - 0.05, ClientPrefs.data.controlsAlpha-0.12];
-			statusAlphas = [1.0, 0.98, 0.9];
-			labelAlphaDiff = 0.08;
-			updateAlpha();
+			statusAlphas = [parentAlpha, parentAlpha - 0.05, (parentAlpha - 0.45 == 0 && parentAlpha > 0) ? 0.25 : parentAlpha - 0.45];
+			statusBrightness = [1, 0.9, 0.6];
+			statusIndicatorType = ALPHA;
+			labelStatusDiff = 0.08;
+			indicateStatus();
 			solid = false;
 			immovable = true;
 			moves = false;

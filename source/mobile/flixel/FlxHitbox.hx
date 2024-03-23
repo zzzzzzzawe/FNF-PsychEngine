@@ -106,7 +106,7 @@ class HitboxButton extends TouchButton
 	public function new(x:Float, y:Float, ?IDs:Array<FlxMobileInputID>, ?width:Int, ?height:Int){
 		super(x, y, IDs);
 		statusAlphas = [];
-		dynamicAlpha = false;
+		statusIndicatorType = NONE;
 		var fullLoad:Bool = true;
 		if(width == null || height == null)
 			fullLoad = false;
@@ -126,7 +126,7 @@ class HitboxButton extends TouchButton
 					if (hintTween != null)
 						hintTween.cancel();
 
-					hintTween = FlxTween.tween(this, {alpha: 1}, ClientPrefs.data.controlsAlpha / 100, {
+					hintTween = FlxTween.tween(this, {alpha: ClientPrefs.data.controlsAlpha}, ClientPrefs.data.controlsAlpha / 100, {
 						ease: FlxEase.circInOut,
 						onComplete: function(twn:FlxTween)
 						{

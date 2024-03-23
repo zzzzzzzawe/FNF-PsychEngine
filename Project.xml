@@ -173,6 +173,12 @@
 		<haxedef name="HXCPP_CHECK_POINTER" />
 		<haxedef name="HXCPP_STACK_LINE" />
 		<haxedef name="HXCPP_STACK_TRACE" />
+		<section if="desktop">
+			<!--Enable Handle Error-->
+			<haxedef name="openfl_enable_handle_error" if="${openfl &ge; 9.4.0}" />
+			<!--Undefinitions-->
+			<undefine name="openfl-disable-handle-error" if="debug" unless="${openfl &ge; 9.4.0}" />
+		</section>
 	
 		<section if="android">
 			<!-- Do whatever you want I'm tired uninstall and install everytime -->
