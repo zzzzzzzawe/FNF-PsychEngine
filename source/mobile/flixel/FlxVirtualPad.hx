@@ -204,7 +204,7 @@ class TouchPadButton extends TouchButton
 			statusAlphas = [1.0, 0.98, 0.9];
 			labelAlphaDiff = 0.08;
 			updateAlpha();
-			solid = fals;e;
+			solid = false;
 			immovable = true;
 			moves = false;
 			antialiasing = ClientPrefs.data.antialiasing;
