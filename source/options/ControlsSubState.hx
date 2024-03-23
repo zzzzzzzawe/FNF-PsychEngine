@@ -133,10 +133,9 @@ class ControlsSubState extends MusicBeatSubstate
 		grpBinds.clear();
 
 		var myID:Int = 0;
-		for (i in 0...options.length)
+		for (i => option in options)
 		{
-			var option:Array<Dynamic> = options[i];
-			if(option[0] || onKeyboardMode)
+			if(onKeyboardMode || option[0])
 			{
 				if(option.length > 1)
 				{
@@ -144,7 +143,10 @@ class ControlsSubState extends MusicBeatSubstate
 					var isDefaultKey:Bool = (option[1] == defaultKey);
 					var isDisplayKey:Bool = (isCentered && !isDefaultKey);
 
-					var text:Alphabet = new Alphabet(200, 300, option[1], !isDisplayKey);
+					var str:String = option[1];
+					var keyStr:String = option[2];
+					if(isDefaultKey) str = Language.getPhrase(str);
+					var text:Alphabet = new Alphabet(200, 300, !isDisplayKey ? Language.getPhrase('key_$keyStr', str) : Language.getPhrase('keygroup_$str', str), !isDisplayKey);
 					text.isMenuItem = true;
 					text.changeX = false;
 					text.distancePerItem.y = 60;
@@ -306,19 +308,11 @@ class ControlsSubState extends MusicBeatSubstate
 					FlxTween.tween(bindingBlack, {alpha: 0.6}, 0.35, {ease: FlxEase.linear});
 					add(bindingBlack);
 
-					bindingText = new Alphabet(FlxG.width / 2, 160, "Rebinding " + options[curOptions[curSelected]][3], false);
+					bindingText = new Alphabet(FlxG.width / 2, 160, Language.getPhrase('controls_rebinding', 'Rebinding {1}', [options[curOptions[curSelected]][3]]), false);
 					bindingText.alignment = CENTERED;
 					add(bindingText);
-
-					var funnyText:String;
-
-					if (controls.mobileC) {
-						funnyText = "Hold B to Cancel\nHold C to Delete";
-					} else {
-						funnyText = "Hold ESC to Cancel\nHold Backspace to Delete";
-					}
-
-					bindingText2 = new Alphabet(FlxG.width / 2, 340, funnyText, true);
+					
+					bindingText2 = new Alphabet(FlxG.width / 2, 340, Language.getPhrase('controls_rebinding2', (controls.mobileC) ? "Hold B to Cancel\nHold C to Delete" : 'Hold ESC to Cancel\nHold Backspace to Delete'), true);
 					bindingText2.alignment = CENTERED;
 					add(bindingText2);
 

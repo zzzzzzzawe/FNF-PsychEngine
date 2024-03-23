@@ -13,10 +13,8 @@ import backend.Song;
 import backend.StageData;
 import objects.Character;
 
-#if (target.threaded)
 import sys.thread.Thread;
 import sys.thread.Mutex;
-#end
 
 import objects.Note;
 import objects.NoteSplash;
@@ -27,9 +25,7 @@ class LoadingState extends MusicBeatState
 	public static var loadMax:Int = 0;
 
 	static var requestedBitmaps:Map<String, BitmapData> = [];
-        #if (target.threaded)
 	static var mutex:Mutex = new Mutex();
-        #end
 
 	function new(target:FlxState, stopMusic:Bool)
 	{
@@ -70,7 +66,7 @@ class LoadingState extends MusicBeatState
 
 	override function create()
 	{
-		#if !LOADING_SCREEN_ALLOWED
+		#if !SHOW_LOADING_SCREEN
 		while(true)
 		#end
 		{
@@ -81,7 +77,7 @@ class LoadingState extends MusicBeatState
 				onLoad();
 				return;
 			}
-			#if !LOADING_SCREEN_ALLOWED
+			#if !SHOW_LOADING_SCREEN
 			Sys.sleep(0.01);
 			#end
 		}
@@ -93,7 +89,7 @@ class LoadingState extends MusicBeatState
 		bg.updateHitbox();
 		add(bg);
 	
-		loadingText = new FlxText(520, 600, 400, 'Now Loading...', 32);
+		loadingText = new FlxText(520, 600, 400, Language.getPhrase('now_loading', 'Now Loading', ['...']), 32);
 		loadingText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, OUTLINE_FAST, FlxColor.BLACK);
 		loadingText.borderSize = 2;
 		add(loadingText);
@@ -166,15 +162,17 @@ class LoadingState extends MusicBeatState
 		#if PSYCH_WATERMARKS // PSYCH LOADING SCREEN
 		timePassed += elapsed;
 		shakeFl += elapsed * 3000;
-		var txt:String = 'Now Loading.';
+		var dots:String = '';
 		switch(Math.floor(timePassed % 1 * 3))
 		{
+			case 0:
+				dots = '.';
 			case 1:
-				txt += '.';
+				dots = '..';
 			case 2:
-				txt += '..';
+				dots = '...';
 		}
-		loadingText.text = txt;
+		loadingText.text = Language.getPhrase('now_loading', 'Now Loading{1}', [dots]);
 
 		if(!spawnedPessy)
 		{
@@ -253,7 +251,7 @@ class LoadingState extends MusicBeatState
 		return (loaded == loadMax && initialThreadCompleted);
 	}
 
-	static function getNextState(target:FlxState, stopMusic = false, intrusive:Bool = true):FlxState
+	public static function loadNextDirectory()
 	{
 		var directory:String = 'shared';
 		var weekDir:String = StageData.forceNextDirectory;
@@ -263,7 +261,11 @@ class LoadingState extends MusicBeatState
 
 		Paths.setCurrentLevel(directory);
 		trace('Setting asset folder to ' + directory);
+	}
 
+	static function getNextState(target:FlxState, stopMusic = false, intrusive:Bool = true):FlxState
+	{
+		loadNextDirectory();
 		if(intrusive)
 			return new LoadingState(target, stopMusic);
 
@@ -292,7 +294,7 @@ class LoadingState extends MusicBeatState
 		if (music != null) musicToPrepare = musicToPrepare.concat(music);
 	}
 
-	static var initialThreadCompleted:Bool = false;
+	static var initialThreadCompleted:Bool = true;
 	static var dontPreloadDefaultVoices:Bool = false;
 	public static function prepareToSong()
 	{
@@ -343,7 +345,8 @@ class LoadingState extends MusicBeatState
 				if (FileSystem.exists(moddyFile)) json = Json.parse(File.getContent(moddyFile));
 				else json = Json.parse(File.getContent(path));
 				#else
-				json = Json.parse(Assets.getText(path));
+				if(OpenFlAssets.exists(path))
+					json = Json.parse(Assets.getText(path));
 				#end
 
 				if (json != null)
@@ -414,9 +417,8 @@ class LoadingState extends MusicBeatState
 				arr.remove(null);
 	}
 
-	static function clearInvalidFrom(arr:Array<String>, prefix:String, ext:String, type:AssetType, ?library:String = null)
+	static function clearInvalidFrom(arr:Array<String>, prefix:String, ext:String, type:AssetType, ?parentFolder:String = null)
 	{
-                #if MODS_ALLOWED
 		for (i in 0...arr.length)
 		{
 			var folder:String = arr[i];
@@ -437,18 +439,17 @@ class LoadingState extends MusicBeatState
 
 			var member:String = arr[i];
 			var myKey = '$prefix/$member$ext';
-			if(library == 'songs') myKey = '$member$ext';
+			if(parentFolder == 'songs') myKey = '$member$ext';
 
 			//trace('attempting on $prefix: $myKey');
 			var doTrace:Bool = false;
-			if(member.endsWith('/') || (!Paths.fileExists(myKey, type, false, library) && (doTrace = true)))
+			if(member.endsWith('/') || (!Paths.fileExists(myKey, type, false, parentFolder) && (doTrace = true)))
 			{
 				arr.remove(member);
 				if(doTrace) trace('Removed invalid $prefix: $member');
 			}
 			else i++;
 		}
-                #end
 	}
 
 	public static function startThreads()
@@ -459,100 +460,65 @@ class LoadingState extends MusicBeatState
 		//then start threads
 		for (sound in soundsToPrepare) initThread(() -> Paths.sound(sound), 'sound $sound');
 		for (music in musicToPrepare) initThread(() -> Paths.music(music), 'music $music');
-		for (song in songsToPrepare) initThread(() -> Paths.returnSound(null, song, 'songs'), 'song $song');
+		for (song in songsToPrepare) initThread(() -> Paths.returnSound(song, 'songs', true, false), 'song $song');
 
 		// for images, they get to have their own thread
 		for (image in imagesToPrepare)
-			#if (target.threaded)
 			Thread.create(() -> {
 				mutex.acquire();
-			#end
 				try {
 					var bitmap:BitmapData;
-					var file:String = null;
-
-					#if MODS_ALLOWED
-					file = Paths.modsImages(image);
+					var file:String = Paths.getPath('images/$image.png', IMAGE);
 					if (Paths.currentTrackedAssets.exists(file)) {
 						mutex.release();
 						loaded++;
 						return;
 					}
-					else if (FileSystem.exists(file))
-						bitmap = BitmapData.fromFile(file);
-					else
-					#end
+					else if (!OpenFlAssets.exists(file, IMAGE))
 					{
-						file = Paths.getPath('images/$image.png', IMAGE);
-						if (Paths.currentTrackedAssets.exists(file)) {
-                                                        #if (target.threaded)
-							mutex.release();
-                                                        #end
-							loaded++;
-							return;
-						}
-						else if (OpenFlAssets.exists(file, IMAGE))
-							bitmap = OpenFlAssets.getBitmapData(file);
-						else {
-							trace('no such image $image exists');
-                                                        #if (target.threaded)
-							mutex.release();
-                                                        #end
-							loaded++;
-							return;
-						}
+						trace('no such image $image exists');
+						mutex.release();
+						loaded++;
+						return;
 					}
-					#if (target.threaded)
+					else bitmap = OpenFlAssets.getBitmapData(file);
 					mutex.release();
-					#end
 
 					if (bitmap != null) requestedBitmaps.set(file, bitmap);
 					else trace('oh no the image is null NOOOO ($image)');
 				}
 				catch(e:Dynamic) {
-                                        #if (target.threaded)
 					mutex.release();
-                                        #end
 					trace('ERROR! fail on preloading image $image');
 				}
 				loaded++;
-			#if (target.threaded)
 			});
-			#end
 	}
 
 	static function initThread(func:Void->Dynamic, traceData:String)
 	{
-		#if (target.threaded)
 		Thread.create(() -> {
 			mutex.acquire();
-		#end
 			try {
 				var ret:Dynamic = func();
-        			#if (target.threaded)
 				mutex.release();
-			        #end
 
 				if (ret != null) trace('finished preloading $traceData');
 				else trace('ERROR! fail on preloading $traceData');
 			}
 			catch(e:Dynamic) {
-        			#if (target.threaded)
 				mutex.release();
-			        #end
 				trace('ERROR! fail on preloading $traceData');
 			}
 			loaded++;
-		#if (target.threaded)
 		});
-		#end
 	}
 
 	inline private static function preloadCharacter(char:String, ?prefixVocals:String)
 	{
 		try
 		{
-			var path:String = Paths.getPath('characters/$char.json', TEXT, null, true);
+			var path:String = Paths.getPath('characters/$char.json', TEXT);
 			#if MODS_ALLOWED
 			var character:Dynamic = Json.parse(File.getContent(path));
 			#else

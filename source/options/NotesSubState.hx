@@ -164,9 +164,8 @@ class NotesSubState extends MusicBeatSubstate
 		if (controls.mobileC) {
 			tipText = "Press C to Reset the selected Note Part.";
 			tipY = 0;
-		} else {
-			tipText = "Press RELOAD to Reset the selected Note Part.";
-		}
+		} else
+			tipText = Language.getPhrase('note_colors_tip', 'Press RESET to Reset the selected Note Part.');
 
 		var tip:FlxText = new FlxText(tipX, tipY, 0, tipText, 16);
 		tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -197,8 +196,9 @@ class NotesSubState extends MusicBeatSubstate
 
 	function updateTip()
 	{
+		var key:String = !controls.controllerMode ? Language.getPhrase('note_colors_shift', 'Shift') : Language.getPhrase('note_colors_lb', 'Left Shoulder Button');
 		if(!controls.mobileC)
-			tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
+			tipTxt.text = Language.getPhrase('note_colors_hold_tip', 'Hold {1} + Press RESET key to fully reset the selected Note.', [key]);
 	}
 
 	var _storedColor:FlxColor;
@@ -498,7 +498,7 @@ class NotesSubState extends MusicBeatSubstate
 		}
 		else if(virtualPad.buttonC.justPressed || controls.RESET && hexTypeNum < 0)
 		{
-			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyJustPressed(LEFT_SHOULDER))
+			if(FlxG.keys.pressed.SHIFT || FlxG.gamepads.anyPressed(LEFT_SHOULDER))
 			{
 				for (i in 0...3)
 				{

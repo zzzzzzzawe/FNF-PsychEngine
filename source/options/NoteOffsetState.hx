@@ -115,7 +115,7 @@ class NoteOffsetState extends MusicBeatState
 		repositionCombo();
 
 		// Note delay stuff
-		beatText = new Alphabet(0, 0, 'Beat Hit!', true);
+		beatText = new Alphabet(0, 0, Language.getPhrase('delay_beat_hit', 'Beat Hit!'), true);
 		beatText.setScale(0.6, 0.6);
 		beatText.x += 260;
 		beatText.alpha = 0;
@@ -499,9 +499,9 @@ class NoteOffsetState extends MusicBeatState
 		{
 			switch(i)
 			{
-				case 0: dumbTexts.members[i].text = 'Rating Offset:';
+				case 0: dumbTexts.members[i].text = Language.getPhrase('combo_rating_offset', 'Rating Offset:');
 				case 1: dumbTexts.members[i].text = '[' + ClientPrefs.data.comboOffset[0] + ', ' + ClientPrefs.data.comboOffset[1] + ']';
-				case 2: dumbTexts.members[i].text = 'Numbers Offset:';
+				case 2: dumbTexts.members[i].text = Language.getPhrase('combo_numbers_offset', 'Numbers Offset:');
 				case 3: dumbTexts.members[i].text = '[' + ClientPrefs.data.comboOffset[2] + ', ' + ClientPrefs.data.comboOffset[3] + ']';
 			}
 		}
@@ -510,7 +510,7 @@ class NoteOffsetState extends MusicBeatState
 	function updateNoteDelay()
 	{
 		ClientPrefs.data.noteOffset = Math.round(barPercent);
-		timeTxt.text = 'Current offset: ' + Math.floor(barPercent) + ' ms';
+		timeTxt.text = Language.getPhrase('delay_current_offset', 'Current offset: {1} ms', [Math.floor(barPercent)]);
 	}
 
 	function updateMode()
@@ -531,23 +531,26 @@ class NoteOffsetState extends MusicBeatState
 			controllerPointer.visible = controls.controllerMode;
 		}
 
-                removeVirtualPad();
+        removeVirtualPad();
 
 		var str:String;
 		var str2:String;
-		if(onComboMenu) { addVirtualPad('NONE', 'A_B_C'); addVirtualPadCamera(false);
-			str = 'Combo Offset'; } 
-		else { addVirtualPad('LEFT_RIGHT', 'A_B_C'); addVirtualPadCamera(false);
-			str = 'Note/Beat Delay'; }
+		if(onComboMenu){
+			str = Language.getPhrase('combo_offset', 'Combo Offset');
+			addVirtualPad('NONE', 'A_B_C');
+			addVirtualPadCamera(false);
+		} else {
+			str = Language.getPhrase('note_delay', 'Note/Beat Delay');
+			addVirtualPad('LEFT_FULL', 'A_B_C');
+			addVirtualPadCamera(false);
+		}
 
-                if (controls.mobileC) {
-		str2 = '(Press A to Switch)';
-                } else {
-					if(!controls.controllerMode)
-						str2 = '(Press Accept to Switch)';
-					else
-						str2 = '(Press Start to Switch)';
-                }
+		if(controls.mobileC)
+			str2 = '(Press A to Switch)';
+		else if(!controls.controllerMode)
+			str2 = Language.getPhrase('switch_on_accept', '(Press Accept to Switch)');
+		else
+			str2 = Language.getPhrase('switch_on_start', '(Press Start to Switch)');
 
 		changeModeText.text = '< ${str.toUpperCase()} ${str2.toUpperCase()} >';
 	}
