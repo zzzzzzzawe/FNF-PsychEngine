@@ -5,6 +5,7 @@ import openfl.display.BitmapData;
 import mobile.objects.TouchButton;
 import openfl.display.Shape;
 import mobile.objects.TouchButton;
+import flixel.graphics.FlxGraphic;
 
 /**
  * A zone with 4 hint's (A hitbox).
@@ -100,6 +101,8 @@ class FlxHitbox extends FlxMobileInputManager<HitboxButton>
 
 class HitboxButton extends TouchButton
 {
+	public static var hitboxesGraphics:Int = -1;
+
 	public function new(x:Float, y:Float, ?IDs:Array<FlxMobileInputID>, ?width:Int, ?height:Int){
 		super(x, y, IDs);
 		statusAlphas = [];
@@ -123,7 +126,7 @@ class HitboxButton extends TouchButton
 					if (hintTween != null)
 						hintTween.cancel();
 
-					hintTween = FlxTween.tween(this, {alpha: ClientPrefs.data.controlsAlpha}, ClientPrefs.data.controlsAlpha / 100, {
+					hintTween = FlxTween.tween(this, {alpha: 1}, ClientPrefs.data.controlsAlpha / 100, {
 						ease: FlxEase.circInOut,
 						onComplete: function(twn:FlxTween)
 						{
@@ -161,8 +164,17 @@ class HitboxButton extends TouchButton
 		}
 	}
 
-	function createHintGraphic(Width:Int, Height:Int):BitmapData
+	function createHintGraphic(Width:Int, Height:Int):FlxGraphic
 	{
+		for(index in 0...hitboxesGraphics){
+			if(FlxG.bitmap.get('hitbox$index') != null){
+				var graphic = FlxG.bitmap.get('hitbox$index');
+				if(graphic.width == Width && graphic.height == Height){
+					return graphic;
+				}
+			}
+		}
+		hitboxesGraphics++;
 		var guh = ClientPrefs.data.controlsAlpha;
 		if (guh >= 0.9)
 			guh = ClientPrefs.data.controlsAlpha - 0.07;
@@ -178,6 +190,6 @@ class HitboxButton extends TouchButton
 		shape.graphics.endFill();
 		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
 		bitmap.draw(shape);
-		return bitmap;
+		return FlxG.bitmap.add(bitmap, false, 'hitbox$hitboxesGraphics');
 	}
 }

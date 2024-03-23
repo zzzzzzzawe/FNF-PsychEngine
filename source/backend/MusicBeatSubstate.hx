@@ -41,7 +41,6 @@ class MusicBeatSubstate extends FlxSubState
 	
 			mobileControls.cameras = [camControls];
 			mobileControls.visible = false;
-			mobileControls.alpha = ClientPrefs.data.controlsAlpha;
 			add(mobileControls);
 		}
 	
@@ -54,7 +53,6 @@ class MusicBeatSubstate extends FlxSubState
 	public function addVirtualPad(DPad:String, Action:String)
 	{
 		virtualPad = new FlxVirtualPad(DPad, Action);
-		virtualPad.alpha = ClientPrefs.data.controlsAlpha;
 		add(virtualPad);
 	}
 

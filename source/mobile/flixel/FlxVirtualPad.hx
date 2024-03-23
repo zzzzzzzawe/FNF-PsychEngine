@@ -109,6 +109,7 @@ class FlxVirtualPad extends FlxMobileInputManager<TouchPadButton> {
 			case NONE: // nothing
 		}
 
+		alpha = ClientPrefs.data.controlsAlpha;
 		scrollFactor.set();
 		updateTrackedButtons();
 	}
@@ -208,6 +209,7 @@ class TouchPadButton extends TouchButton
 			immovable = true;
 			moves = false;
 			antialiasing = ClientPrefs.data.antialiasing;
+			label.antialiasing = ClientPrefs.data.antialiasing;
 			tag = labelGraphic.toUpperCase();
 		}
 	}

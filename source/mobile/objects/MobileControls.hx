@@ -43,6 +43,7 @@ class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager<Dynamic>>
 		}
 		current = new CurrentManager(this);
 		// Options related stuff
+		current.target.alpha = 1;
 		alpha = ClientPrefs.data.controlsAlpha;
 		updateButtonsColors();
 	}
