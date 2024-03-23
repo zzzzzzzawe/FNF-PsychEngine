@@ -182,7 +182,6 @@ class FlxVirtualPad extends FlxMobileInputManager<TouchPadButton> {
 		button.bounds.makeGraphic(Std.int(button.width - 50), Std.int(button.height - 50), FlxColor.TRANSPARENT);
 		button.centerBounds();
 		button.color = Color;
-		trace(button.width + ' - ' + button.height);
 		#if FLX_DEBUG
 		button.ignoreDrawDebug = true;
 		#end
