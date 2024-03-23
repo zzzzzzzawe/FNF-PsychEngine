@@ -267,5 +267,5 @@ images/menudifficulties/hard: "images/pt-BR/menudifficulties/hard"
 
 // mobileC
 
-mods_leave: "Pressione BACKSPACE para sair "
+mods_leave: "Pressione BACKSPACE para sair"
 open_mobileC_menu: "Pressione CTRL para o menu dos controles"
