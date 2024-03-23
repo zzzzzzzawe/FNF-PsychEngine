@@ -200,9 +200,11 @@ class TouchPadButton extends TouchButton
 			scale.set(0.243, 0.243);
 			updateHitbox();
 			updateLabelPosition();
-			statusAlphas = [ClientPrefs.data.controlsAlpha, ClientPrefs.data.controlsAlpha - 0.05, ClientPrefs.data.controlsAlpha-0.12];
+			// statusAlphas = [ClientPrefs.data.controlsAlpha, ClientPrefs.data.controlsAlpha - 0.05, ClientPrefs.data.controlsAlpha-0.12];
+			statusAlphas = [1.0, 0.98, 0.9];
 			labelAlphaDiff = 0.08;
-			solid = false;
+			updateAlpha();
+			solid = fals;e;
 			immovable = true;
 			moves = false;
 			antialiasing = ClientPrefs.data.antialiasing;
