@@ -264,3 +264,8 @@ difficulty_hard: "Difícil"
 
 images/menudifficulties/easy: "images/pt-BR/menudifficulties/easy"
 images/menudifficulties/hard: "images/pt-BR/menudifficulties/hard"
+
+// mobileC
+
+mods_leave: "Press BACKSPACE To leave"
+open_mobileC_menu: "Press CTRL to Go Mobile Controls Menu"
