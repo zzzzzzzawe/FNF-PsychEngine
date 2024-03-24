@@ -19,16 +19,13 @@
 	<set name="SWF_VERSION" value="11.8" />
 	
 	<!-- ______________________ PSYCH ENGINE CUSTOMIZATION ______________________ -->
-	
-	<define name="BASE_GAME_FILES" /> <!-- DELETE THIS TO REMOVE MOST BASE GAME FILES AND REDUCE FILE SIZE -->
 
 	<define name="MODS_ALLOWED" if="desktop || mobile || emscripten" />
 	<define name="HSCRIPT_ALLOWED" if="desktop || mobile || web" />
 	<define name="LUA_ALLOWED" if="desktop || mobile" unless="hl"/>
 	<define name="ACHIEVEMENTS_ALLOWED" />
 	<define name="DISCORD_ALLOWED" if="desktop" unless="hl"/>
-	<define name="TRANSLATIONS_ALLOWED" />
-	
+	<define name="TRANSLATIONS_ALLOWED" />	
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE THE PSYCH LOGO FROM LOADING SCREEN -->
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits || hl || NOVIDEO || rpi"/> <!-- i'll keep this cuz it makes vscode think i don't use videos -->
@@ -36,6 +33,7 @@
 
 	<section if="officialBuild">
 		<define name="TITLE_SCREEN_EASTER_EGG"/>
+		<define name="BASE_GAME_FILES" />
 	</section>
 
 	<!-- ____________________________ Window Settings ___________________________ -->
