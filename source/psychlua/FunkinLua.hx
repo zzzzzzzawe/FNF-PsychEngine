@@ -1494,7 +1494,7 @@ class FunkinLua {
 		#if HSCRIPT_ALLOWED HScript.implement(this); #end
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(this); #end
 		#if flxanimate FlxAnimateFunctions.implement(this); #end
-		#if TRANSLATIONS_ALLOWED Language.addLuaCallbacks(lua); #end
+		#if TRANSLATIONS_ALLOWED Language.addLuaCallbacks(this); #end
 		// disabled for now, i don't know might remove it...
 		#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS) VideoFunctions.implement(this); #end
 		ReflectionFunctions.implement(this);
