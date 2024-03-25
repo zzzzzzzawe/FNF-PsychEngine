@@ -56,7 +56,10 @@ import tea.SScript;
 #end
 
 #if VIDEOS_ALLOWED
+#if ADVANCED_VIDEO_FUNCTIONS
 import objects.Video;
+import objects.AdvancedVideoSprite;
+#end
 import objects.VideoSprite;
 #end
 
@@ -118,8 +121,8 @@ class PlayState extends MusicBeatState
 	public var modchartShader:Map<String, Effect> = new Map<String, Effect>();
 	public var shaderUpdates:Array<Float->Void> = [];
 	#end
-	#if VIDEOS_ALLOWED
-	public var modchartVideoSprites:Map<String, VideoSprite> = new Map<String, VideoSprite>();
+	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
+	public var modchartVideoSprites:Map<String, AdvancedVideoSprite> = new Map<String, AdvancedVideoSprite>();
 	#end
 	#end
 
@@ -274,7 +277,7 @@ class PlayState extends MusicBeatState
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
 
-	#if VIDEOS_ALLOWED
+	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
 	public var video:Video;
 	#end
 
@@ -837,7 +840,7 @@ class PlayState extends MusicBeatState
 		#if LUA_ALLOWED
 		if(modchartSprites.exists(tag)) return modchartSprites.get(tag);
 		if(text && modchartTexts.exists(tag)) return modchartTexts.get(tag);
-		#if VIDEOS_ALLOWED if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag); #end
+		#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS) if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag); #end
 		if(variables.exists(tag)) return variables.get(tag);
 		#end
 		return null;
@@ -853,6 +856,7 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
+	#if (ADVANCED_VIDEO_FUNCTIONS)
 	public function startVideo(name:String): #if VIDEOS_ALLOWED Video #else Void #end
 	{
 		#if VIDEOS_ALLOWED
@@ -879,6 +883,65 @@ class PlayState extends MusicBeatState
 		return;
 		#end
 	}
+	#else
+	public var videoCutscene:VideoSprite = null;
+	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
+	{
+		#if VIDEOS_ALLOWED
+		inCutscene = true;
+
+		var foundFile:Bool = false;
+		var fileName:String = Paths.video(name);
+
+		#if sys
+		if (FileSystem.exists(fileName))
+		#else
+		if (OpenFlAssets.exists(fileName))
+		#end
+		foundFile = true;
+
+		if (foundFile)
+		{
+			var cutscene:VideoSprite = new VideoSprite(fileName, forMidSong, canSkip, loop);
+
+			// Finish callback
+			if (!forMidSong)
+			{
+				cutscene.finishCallback = function()
+				{
+					if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos)
+					{
+						moveCameraSection();
+						FlxG.camera.snapToTarget();
+					}
+					startAndEnd();
+				};
+
+				// Skip callback
+				cutscene.onSkip = function()
+				{
+					startAndEnd();
+				};
+			}
+			add(cutscene);
+
+			if (playOnLoad)
+				cutscene.videoSprite.play();
+			return cutscene;
+		}
+		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+		else addTextToDebug("Video not found: " + fileName, FlxColor.RED);
+		#else
+		else FlxG.log.error("Video not found: " + fileName);
+		#end
+		#else
+		FlxG.log.warn('Platform not supported!');
+		startAndEnd();
+		#end
+		return null;
+	}
+	#end
+
 
 	public function startAndEnd()
 	{
@@ -1641,7 +1704,7 @@ class PlayState extends MusicBeatState
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
 
-			#if VIDEOS_ALLOWED
+			#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
 			for(video in modchartVideoSprites)
 				if(video != null && members.contains(video))
 					video.paused = true;
@@ -1662,7 +1725,7 @@ class PlayState extends MusicBeatState
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
-			#if VIDEOS_ALLOWED
+			#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
 			for(video in modchartVideoSprites)
 				if(video != null && members.contains(video))
 					video.paused = false;
@@ -3038,6 +3101,11 @@ class PlayState extends MusicBeatState
 
 			if(char != null)
 			{
+				if(note.isSustainNote)
+				{
+					var holdAnim:String = animToPlay + '-hold';
+					if(char.animation.exists(holdAnim)) animToPlay = holdAnim;
+				}
 				char.playAnim(animToPlay, true);
 				char.holdTimer = 0;
 			}
@@ -3088,7 +3156,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if(!note.noAnimation) {
-			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))];
+			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 
 			var char:Character = boyfriend;
 			var animCheck:String = 'hey';
@@ -3100,7 +3168,12 @@ class PlayState extends MusicBeatState
 
 			if(char != null)
 			{
-				char.playAnim(animToPlay + note.animSuffix, true);
+				if(note.isSustainNote)
+				{
+					var holdAnim:String = animToPlay + '-hold';
+					if(char.animation.exists(holdAnim)) animToPlay = holdAnim;
+				}
+				char.playAnim(animToPlay, true);
 				char.holdTimer = 0;
 
 				if(note.noteType == 'Hey!') {
