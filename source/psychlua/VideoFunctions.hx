@@ -1,7 +1,7 @@
 package psychlua;
 
-#if VIDEOS_ALLOWED
-import objects.VideoSprite;
+#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
+import objects.AdvancedVideoSprite;
 import states.PlayState;
 import substates.GameOverSubstate;
 
@@ -14,7 +14,7 @@ class VideoFunctions
 		{
 			tag = tag.replace('.', '');
 			LuaUtils.resetVideoSpriteTag(tag);
-			var video = new VideoSprite(x, y);
+			var video = new AdvancedVideoSprite(x, y);
 			video.playbackRate = PlayState.instance.playbackRate;
 			PlayState.instance.modchartVideoSprites.set(tag, video);
 		});
@@ -67,7 +67,7 @@ class VideoFunctions
 
 		funk.set("addVideoSprite", function(tag:String, front:Bool = false)
 		{
-			var video:VideoSprite = null;
+			var video:AdvancedVideoSprite = null;
 			if (PlayState.instance.modchartVideoSprites.exists(tag))
 				video = PlayState.instance.modchartVideoSprites.get(tag);
 			else if (PlayState.instance.variables.exists(tag))
