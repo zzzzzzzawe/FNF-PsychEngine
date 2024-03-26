@@ -1264,9 +1264,8 @@ class InvertShader extends FlxShader
 		vec2 fragCoord = openfl_TextureCoordv*openfl_TextureSize;
 		vec2 iResolution = openfl_TextureSize;
 		vec2 uv = fragCoord/iResolution.xy;
-		vec3 col = flixel_texture2D(bitmap,uv).xyz;
-		vec3 col_inv = 1.0-col; // This is not right
-		gl_FragColor = vec4(col_inv,1.0);
+		vec3 color = flixel_texture2D(bitmap,uv).xyz;
+		gl_FragColor = vec4(1.0 - color,1.0);
     }')
 	public function new()
 	{
