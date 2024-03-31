@@ -193,10 +193,9 @@ class Paths
 			#if MODS_ALLOWED
 			if (FileSystem.exists(file))
 				bitmap = BitmapData.fromFile(file);
-			#else
+			#end
 			if (Assets.exists(file, IMAGE))
 				bitmap = Assets.getBitmapData(file);
-			#end
 
 			if (bitmap == null)
 			{
