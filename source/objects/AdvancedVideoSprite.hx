@@ -1,6 +1,6 @@
 package objects;
 
-#if VIDEOS_ALLOWED
+#if (ADVANCED_VIDEO_FUNCTIONS && VIDEOS_ALLOWED)
 #if (hxCodec >= "3.0.0")
 import hxcodec.flixel.FlxVideoSprite as MainVideoSprite;
 #elseif (hxCodec >= "2.6.1")
@@ -10,13 +10,11 @@ import VideoSprite as MainVideoSprite;
 #else
 import vlc.MP4Sprite as MainVideoSpriteprite;
 #end
-#end
 import states.PlayState;
 import haxe.extern.EitherType;
 import flixel.util.FlxSignal;
 import haxe.io.Path;
 
-#if VIDEOS_ALLOWED
 class AdvancedVideoSprite extends MainVideoSprite
 {
 	public var playbackRate(get, set):EitherType<Single, Float>;
@@ -123,5 +121,5 @@ class AdvancedVideoSprite extends MainVideoSprite
 		}
 		#end
 	}
-#end
 }
+#end
