@@ -39,7 +39,7 @@ class AdvancedVideoSprite extends MainVideoSprite
 		#end
 	}
 
-	public function startVideo(path:String, loop:Bool = false):VideoSprite
+	public function startVideo(path:String, loop:Bool = false):MainVideoSprite
 	{
 		#if (hxCodec >= "3.0.0")
 		play(path, loop);
