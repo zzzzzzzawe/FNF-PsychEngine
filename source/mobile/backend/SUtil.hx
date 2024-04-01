@@ -5,9 +5,7 @@ import lime.app.Application;
 import android.content.Context as AndroidContext;
 import android.os.Environment as AndroidEnvironment;
 import android.Permissions as AndroidPermissions;
-#if ("extension-androidtools" <= "1.9.0")
 import android.Settings as AndroidSettings;
-#end
 #end
 import haxe.Exception;
 import haxe.io.Path;
@@ -71,13 +69,13 @@ class SUtil
 					FileSystem.createDirectory(total);
 				}
 				catch (e:Exception)
-					throw "Error while creating folder. (${e.message})" + "\nMaybe you needed restart the game" + "\nPress OK to close the game";
+					throw 'Error while creating folder.\n(${e.message}\nTry restarting the game\n(Press OK to exit)';
 			}
 		}
 	}
 
 	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'You forgot to add something in your code :3'):Void
+			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
 	{
 		try
 		{
@@ -98,19 +96,12 @@ class SUtil
 		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE)
 			&& !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
 		{
-			#if ("extension-androidtools" <= "1.8.4")
 			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
 			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
-			#else
-			AndroidPermissions.requestPermissions(AndroidPermissions.READ_EXTERNAL_STORAGE);
-			AndroidPermissions.requestPermissions(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
-			#end
 			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
 				'Notice!');
-			#if ("extension-androidtools" <= "1.9.0")
 			if (!AndroidEnvironment.isExternalStorageManager())
 				AndroidSettings.requestSetting("AndroidSettings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
-			#end
 		} else {
                 try {
                 if (!FileSystem.exists(SUtil.getStorageDirectory()))
