@@ -184,8 +184,6 @@ class FlxVirtualPad extends FlxMobileInputManager<TouchPadButton> {
 		button.centerBounds();
 		button.color = Color;
 		button.parentAlpha = this.alpha;
-		#if FLX_DEBUG
-		#end
 		return button;
 	}
 
