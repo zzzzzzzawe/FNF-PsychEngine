@@ -5,7 +5,6 @@ import flixel.input.FlxPointer;
 import flixel.input.IFlxInput;
 import flixel.math.FlxPoint;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
-import flixel.input.mouse.FlxMouseButton;
 import shaders.flixel.system.FlxShader;
 
 /**
@@ -178,18 +177,20 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	{
 		super(X, Y);
 
+		if(statusIndicatorType == BRIGHTNESS)
+			shader = brightShader;
+
 		onUp = new TouchButtonEvent();
 		onDown = new TouchButtonEvent();
 		onOver = new TouchButtonEvent();
 		onOut = new TouchButtonEvent();
 
+		status = multiTouch ? TouchButton.NORMAL : TouchButton.HIGHLIGHT;
+
 		// Since this is a UI element, the default scrollFactor is (0, 0)
 		scrollFactor.set();
 
 		input = new FlxInput(0);
-
-		if(statusIndicatorType == BRIGHTNESS)
-			shader = brightShader;
 	}
 
 	/**
@@ -276,18 +277,13 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	{
 		var overlap = false;
 
+		
 		for (camera in cameras){
-			#if mobile
             for(touch in FlxG.touches.list)
 				if (checkInput(touch, touch, touch.justPressedPosition, camera))
 					overlap = true;
-			#else
-			var button = FlxMouseButton.getByID(FlxMouseButtonID.LEFT);
-			if(checkInput(FlxG.mouse, button, button.justPressedPosition, camera))
-				overlap = true;
-	
-			#end
         }
+
 		return overlap;
 	}
 
@@ -425,11 +421,18 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	override function set_alpha(Value:Float):Float
 	{
 		super.set_alpha(Value);
-		if(_spriteLabel != null && statusIndicatorType == ALPHA)
+		if(_spriteLabel != null)
 			_spriteLabel.alpha = alpha == 0 ? 0 : alpha + labelStatusDiff;
-		return alpha;
+		return Value;
 	}
 
+	override function set_visible(Value:Bool):Bool
+	{
+		super.set_visible(Value);
+		if(_spriteLabel != null)
+			_spriteLabel.visible = Value;
+		return Value;
+	}
 
 	override function set_x(Value:Float):Float
 	{
@@ -450,6 +453,7 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 		
 		if(_spriteLabel != null)
 			_spriteLabel.color = Value;
+		brightShader.color = Value;
 		super.set_color(Value);
 		return Value;
 	}
@@ -567,6 +571,7 @@ private class TouchButtonEvent implements IFlxDestroyable
 
 class ButtonBrightnessShader extends FlxShader
 {
+	public var color(default, set):Null<FlxColor> = FlxColor.WHITE;
 	@:glFragmentSource('
 		#pragma header
 
@@ -574,7 +579,7 @@ class ButtonBrightnessShader extends FlxShader
 
 		void main()
 		{
-			vec4 col = texture2D(bitmap, openfl_TextureCoordv);
+			vec4 col = flixel_texture2D(bitmap, openfl_TextureCoordv);
 			col.rgb *= brightness;
 
 			gl_FragColor = col;
@@ -584,14 +589,25 @@ class ButtonBrightnessShader extends FlxShader
 	{
 		super();
 	}
+
+	private function set_color(?laColor:FlxColor){
+		if(laColor == null){
+			colorMultiplier.value = [1, 1, 1, 1];
+			hasColorTransform.value = hasTransform.value = [false];
+			return color = laColor;
+		}
+		hasColorTransform.value = hasTransform.value = [true];
+		colorMultiplier.value = [laColor.redFloat, laColor.blueFloat, laColor.greenFloat, laColor.alphaFloat];
+		return color = laColor;
+	}
 }
 
 enum StatusIndicators
 {
 	// isn't very good looking
 	ALPHA;
-	// kills the colors of the sprite
+	// best one in my opinion
 	BRIGHTNESS;
-	// peak-
+	// used when u make ur own status indicator like in hitbox
 	NONE;
 }

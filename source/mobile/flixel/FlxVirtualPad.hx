@@ -211,8 +211,8 @@ class TouchPadButton extends TouchButton
 			updateLabelPosition();
 			// statusAlphas = [ClientPrefs.data.controlsAlpha, ClientPrefs.data.controlsAlpha - 0.05, ClientPrefs.data.controlsAlpha-0.12];
 			statusAlphas = [parentAlpha, parentAlpha - 0.05, (parentAlpha - 0.45 == 0 && parentAlpha > 0) ? 0.25 : parentAlpha - 0.45];
-			statusBrightness = [1, 0.9, 0.6];
-			statusIndicatorType = ALPHA;
+			statusBrightness = [1, 0.9, 0.75];
+			statusIndicatorType = BRIGHTNESS;
 			labelStatusDiff = 0.08;
 			indicateStatus();
 			solid = false;
