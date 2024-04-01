@@ -198,8 +198,16 @@ class MobileFunctions
 #if android
 class AndroidFunctions
 {
+	static var spicyPillow:AndroidBatteryManager = new AndroidBatteryManager();
 	public static function implement(funk:FunkinLua)
 	{
+		funk.set("isRooted", AndroidTools.isRooted());
+		funk.set("isDolbyAtmos", AndroidTools.isDolbyAtmos());
+		funk.set("isAndroidTV", AndroidTools.isAndroidTV());
+		funk.set("isTablet", AndroidTools.isTablet());
+		funk.set("isChromebook", AndroidTools.isChromebook());
+		funk.set("isDeXMode", AndroidTools.isDeXMode());
+
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
 		funk.set("backPressed", FlxG.android.pressed.BACK);
 		funk.set("backJustReleased", FlxG.android.justReleased.BACK);
@@ -227,6 +235,24 @@ class AndroidFunctions
 				return FunkinLua.luaTrace('setOrientation: No orientation specified.');
 			PsychJNI.setOrientation(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, hint);
 		});
+
+		funk.set("minimizeWindow", () -> AndroidTools.minimizeWindow());
+		funk.set("showToast", function(text:String, duration:Null<Int>, ?xOffset:Null<Int>, ?yOffset:Null<Int>) //, ?gravity:Null<Int>
+		{
+			if (text == null)
+				return FunkinLua.luaTrace('showToast: No text specified.');
+			else if (duration == null)
+				return FunkinLua.luaTrace('showToast: No duration specified.');
+
+			if (xOffset == null)
+				xOffset = 0;
+			if (yOffset == null)
+				yOffset = 0;
+
+			AndroidToast.makeText(text, duration, -1, xOffset, yOffset);
+		});
+
+		funk.set("isCharging", spicyPillow.isCharging());
 	}
 }
 #end
