@@ -6,6 +6,9 @@ import flixel.input.IFlxInput;
 import flixel.math.FlxPoint;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import shaders.flixel.system.FlxShader;
+#if mac
+import flixel.input.mouse.FlxMouseButton;
+#end
 
 /**
  * A simple button class that calls a function when clicked by the touch.
@@ -276,13 +279,18 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	function checkTouchOverlap():Bool
 	{
 		var overlap = false;
-
 		
-		for (camera in cameras){
-            for(touch in FlxG.touches.list)
+		for (camera in cameras)
+		{
+			#if mac
+			var button = FlxMouseButton.getByID(FlxMouseButtonID.LEFT);
+			if(checkInput(FlxG.mouse, button, button.justPressedPosition, camera))
+			#else
+			for(touch in FlxG.touches.list)
 				if (checkInput(touch, touch, touch.justPressedPosition, camera))
+			#end
 					overlap = true;
-        }
+		}
 
 		return overlap;
 	}
