@@ -243,6 +243,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 
 	function changeOption(change:Int)
 	{
+		FlxG.sound.play(Paths.sound('scrollMenu'));
 		curOption += change;
 
 		if (curOption < 0)
