@@ -113,7 +113,7 @@ class TitleState extends MusicBeatState
 				trace('error: $error');
 			}
 
-			http.request();
+			try {http.request();} catch(e:Dynamic) {trace('http error: $e');}
 		}
 		#end
 
