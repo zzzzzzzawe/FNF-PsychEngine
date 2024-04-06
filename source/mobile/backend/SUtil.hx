@@ -83,8 +83,8 @@ class SUtil
 
 	public static function showPopUp(message:String, title:String):Void
 	{
-		#if (windows || web || android)
-		openfl.Lib.application.window.alert(message, title);
+		#if (!ios || !iphonesim)
+		lime.app.Application.current.window.alert(message, title);
 		#else
 		trace('$title - $message');
 		#end
