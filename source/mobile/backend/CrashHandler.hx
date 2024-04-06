@@ -43,39 +43,39 @@ class CrashHandler
 			m = '${err.text}';
 		}
 		var stack = haxe.CallStack.exceptionStack();
+		var stackLabelArr:Array<String> = [];
 		var stackLabel:String = "";
 		for(e in stack) {
 			switch(e) {
-				case CFunction: stackLabel += "Non-Haxe (C) Function";
-				case Module(c): stackLabel += 'Module ${c}';
+				case CFunction: stackLabelArr.push("Non-Haxe (C) Function");
+				case Module(c): stackLabelArr.push('Module ${c}');
 				case FilePos(parent, file, line, col):
 					switch(parent) {
 						case Method(cla, func):
-							stackLabel += '${file.replace('.hx', '')}.$func() [line $line]';
+							stackLabelArr.push('${file.replace('.hx', '')}.$func() [line $line]');
 						case _:
-							stackLabel += '${file.replace('.hx', '')} [line $line]';
+							stackLabelArr.push('${file.replace('.hx', '')} [line $line]');
 					}
 				case LocalFunction(v):
-					stackLabel += 'Local Function ${v}';
+					stackLabelArr.push('Local Function ${v}');
 				case Method(cl, m):
-					stackLabel += '${cl} - ${m}';
+					stackLabelArr.push('${cl} - ${m}');
 			}
-			stackLabel += "\r\n";
 		}
-
+		stackLabel = stackLabelArr.join('\r\n');
 		#if sys
 		try
 		{
 			if (!FileSystem.exists('crash'))
 				FileSystem.createDirectory('crash');
 
-			File.saveContent('crash/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$m\n\n$stackLabel');
+			File.saveContent('crash/' + Date.now().toString().replace(' ', '-').replace(':', "'") + '.txt', '$m\n$stackLabel');
 		}
 		catch (e:haxe.Exception)
 			trace('Couldn\'t save error message. (${e.message})');
 		#end
 
-		mobile.backend.SUtil.showPopUp('$m\n\n$stackLabel', "Error!");
+		mobile.backend.SUtil.showPopUp('$m\n$stackLabel', "Error!");
 
 		#if js
 		if (flixel.FlxG.sound.music != null)
