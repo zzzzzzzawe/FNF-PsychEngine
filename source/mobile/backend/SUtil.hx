@@ -1,6 +1,11 @@
 package mobile.backend;
 
 #if android
+#if EXTERNAL
+#error 'Support for .PsychEngine is deprecated and removed. Use "DATA" or "OBB" instead.'
+#elseif MEDIA
+#error 'Support for Android/media is deprecated and removed. Use "DATA" or "OBB" instead.'
+#end
 import android.content.Context as AndroidContext;
 import android.os.Environment as AndroidEnvironment;
 import android.Permissions as AndroidPermissions;
