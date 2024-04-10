@@ -19,20 +19,23 @@ import sys.FileSystem;
 class SUtil
 {
 	#if sys
-	public static function getStorageDirectory(type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA EXTERNAL_MEDIA #else EXTERNAL_DATA #end):String
+	public static function getStorageDirectory(#if android ?force:Bool = true, type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA EXTERNAL_MEDIA #else EXTERNAL_DATA #end #end):String
 	{
 		var daPath:String = '';
 		#if android
- 		switch (type)
+		var forcedPath:String = '/storage/emulated/0/';
+		var packageNameLocal:String = 'com.shadowmario.psychengine';
+		var fileLocal:String = 'PsychEngine';
+		switch (type)
 		{
 			case EXTERNAL_DATA:
-				daPath = AndroidContext.getExternalFilesDir();
+				daPath = force ? forcedPath + 'Android/data/' + packageNameLocal + '/files' : AndroidContext.getExternalFilesDir();
 			case EXTERNAL_OBB:
-				daPath = AndroidContext.getObbDir();
+				daPath = force ? forcedPath + 'Android/obb/' + packageNameLocal : AndroidContext.getObbDir();
 			case EXTERNAL_MEDIA:
-				daPath = AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
+				daPath = force ? forcedPath + 'Android/media/' + packageNameLocal : AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
 			case EXTERNAL:
-				daPath = AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
+				daPath = force ? forcedPath + '.' + fileLocal : AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
 		}
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
@@ -61,9 +64,10 @@ class SUtil
 
 				total += part;
 
-				try {
-				if (!FileSystem.exists(total))
-					FileSystem.createDirectory(total);
+				try
+				{
+					if (!FileSystem.exists(total))
+						FileSystem.createDirectory(total);
 				}
 				catch (e:haxe.Exception)
 					trace('Error while creating folder. (${e.message}');
@@ -71,8 +75,7 @@ class SUtil
 		}
 	}
 
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
-			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
 	{
 		try
 		{
@@ -89,21 +92,27 @@ class SUtil
 	#if android
 	public static function doPermissionsShit():Void
 	{
-		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE) && !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
+		if (!AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.READ_EXTERNAL_STORAGE)
+			&& !AndroidPermissions.getGrantedPermissions().contains(AndroidPermissions.WRITE_EXTERNAL_STORAGE))
 		{
 			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
 			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
 			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens', 'Notice!');
 			if (!AndroidEnvironment.isExternalStorageManager())
 				AndroidSettings.requestSetting("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
-		} else {
-			try {
+		}
+		else
+		{
+			try
+			{
 				if (!FileSystem.exists(SUtil.getStorageDirectory()))
 					FileSystem.createDirectory(SUtil.getStorageDirectory());
-            } catch(e:Dynamic) {
-				showPopUp("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #elseif MEDIA "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #else SUtil.getStorageDirectory() #end + "\nPress OK to close the game", "Error!");
+			}
+			catch (e:Dynamic)
+			{
+				showPopUp("Please create folder to\n" + SUtil.getStorageDirectory(true) + "\nPress OK to close the game", "Error!");
 				LimeSystem.exit(1);
-            }
+			}
 		}
 	}
 	#end
