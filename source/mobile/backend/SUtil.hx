@@ -7,10 +7,8 @@ package mobile.backend;
 #error 'Support for Android/media is deprecated and removed. Use "DATA" or "OBB" instead.'
 #end
 import android.content.Context as AndroidContext;
-import android.os.Environment as AndroidEnvironment;
-import android.Permissions as AndroidPermissions;
-import android.Settings as AndroidSettings;
 #end
+import funkin.backend.utils.NativeAPI;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
@@ -27,13 +25,14 @@ class SUtil
 	{
 		var daPath:String = '';
 		#if android
-		switch (type)
+ 		switch (type)
 		{
 			case EXTERNAL_DATA:
 				daPath = AndroidContext.getExternalFilesDir(null);
 			case EXTERNAL_OBB:
 				daPath = AndroidContext.getObbDir();
 		}
+		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = lime.system.System.documentsDirectory;
 		#end
@@ -65,7 +64,7 @@ class SUtil
 					FileSystem.createDirectory(total);
 				}
 				catch (e:haxe.Exception)
-					throw 'Error while creating folder.\n(${e.message}\nTry restarting the game\n(Press OK to exit)';
+					trace('Error while creating folder. (${e.message}');
 			}
 		}
 	}
@@ -82,7 +81,7 @@ class SUtil
 			showPopUp(fileName + " file has been saved.", "Success!");
 		}
 		catch (e:haxe.Exception)
-			trace('File couldn \'t be saved. (${e.message})');
+			trace('File couldn\'t be saved. (${e.message})');
 	}
 	#end
 
@@ -101,4 +100,3 @@ enum StorageType
 	EXTERNAL_DATA;
 	EXTERNAL_OBB;
 }
-
