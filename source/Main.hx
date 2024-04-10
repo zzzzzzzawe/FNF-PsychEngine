@@ -52,6 +52,9 @@ class Main extends Sprite
 	{
 		super();
 		#if mobile
+		#if (android && EXTERNAL || MEDIA)
+		SUtil.doPermissionsShit();
+		#end
 		Sys.setCwd(SUtil.getStorageDirectory());
 		#end
 		mobile.backend.CrashHandler.init();
