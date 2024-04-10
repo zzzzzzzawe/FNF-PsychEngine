@@ -19,7 +19,7 @@ import sys.FileSystem;
 class SUtil
 {
 	#if sys
-	public static function getStorageDirectory(#if android ?force:Bool = true, type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA EXTERNAL_MEDIA #else EXTERNAL_DATA #end #end):String
+	public static function getStorageDirectory(?force:Bool = false #if (android), type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA EXTERNAL_MEDIA #else EXTERNAL_DATA #end #end):String
 	{
 		var daPath:String = '';
 		#if android
