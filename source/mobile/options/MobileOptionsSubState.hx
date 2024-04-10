@@ -1,5 +1,6 @@
 package mobile.options;
 
+import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
 
@@ -32,6 +33,15 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option.onChange = () ->
 		{
 			virtualPad.alpha = curOption.getValue();
+			if (Controls.instance.mobileC) {
+				FlxG.sound.volumeUpKeys = [];
+				FlxG.sound.volumeDownKeys = [];
+				FlxG.sound.muteKeys = [];
+			} else {
+				FlxG.sound.volumeUpKeys = [FlxKey.PLUS, FlxKey.NUMPADPLUS];
+				FlxG.sound.volumeDownKeys = [FlxKey.MINUS, FlxKey.NUMPADMINUS];
+				FlxG.sound.muteKeys = [FlxKey.ZERO, FlxKey.NUMPADZERO];
+			}
 		};
 		addOption(option);
 
