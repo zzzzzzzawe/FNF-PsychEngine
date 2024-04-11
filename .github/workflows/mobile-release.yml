@@ -116,6 +116,24 @@ jobs:
       - name: Move DATA File
         run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-DATA.apk
 
+      - name: Download EXTERNAL Build
+        uses: actions/download-artifact@main
+        with:
+           name: androidBuild-EXTERNAL
+           path: /home/runner
+
+      - name: Move EXTERNAL File
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-EXTERNAL.apk
+
+      - name: Download MEDIA Build
+        uses: actions/download-artifact@main
+        with:
+           name: androidBuild-MEDIA
+           path: /home/runner
+
+      - name: Move MEDIA File
+        run: mv /home/runner/PsychEngine-release.apk /home/runner/PsychEngine-MEDIA.apk
+
       - name: Download iOS Build
         uses: actions/download-artifact@main
         with:
