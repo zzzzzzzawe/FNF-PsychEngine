@@ -49,7 +49,7 @@ class FlxShader extends OriginalFlxShader
 		@:privateAccess
 		var gl = __context.gl;
 
-		#if android
+		#if mobile
 		var prefix = "#version 300 es\n";
 		#else
 		var prefix = "#version 330\n";
