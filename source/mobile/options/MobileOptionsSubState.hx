@@ -7,6 +7,7 @@ import options.Option;
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	var exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
+	var hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
 	var option:Option;
 
 	public function new()
@@ -56,10 +57,11 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 		if (MobileControls.mode == 4)
 		{
-			option = new Option('Hide Hitbox Hints',
-			'If checked, makes the hitbox invisible.',
-			'hideHitboxHints',
-			BOOL);
+			option = new Option('Hitbox Design',
+			'Choose how your hitbox should look like.',
+			'hitboxType',
+			STRING,
+			hintOptions);
 			addOption(option);
 
 			option = new Option('Hitbox Position',

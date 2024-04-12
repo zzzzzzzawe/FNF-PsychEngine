@@ -13,7 +13,7 @@ import states.TitleState;
 	public var dynamicColors:Bool = true; // yes cause its cool -Karim
 	public var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
 	public var screensaver:Bool = false;
-        public var hideHitboxHints:Bool = false;
+        public var hitboxType:String = "Gradient";
         // end of Mobile Controls Releated
 	public var popUpRating:Bool = true;
 	public var downScroll:Bool = false;
