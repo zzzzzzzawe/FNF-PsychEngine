@@ -1,11 +1,13 @@
 package mobile.options;
 
+import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
 
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	var exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
+	var hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
 	var option:Option;
 
 	public function new()
@@ -32,6 +34,15 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option.onChange = () ->
 		{
 			virtualPad.alpha = curOption.getValue();
+			if (Controls.instance.mobileC) {
+				FlxG.sound.volumeUpKeys = [];
+				FlxG.sound.volumeDownKeys = [];
+				FlxG.sound.muteKeys = [];
+			} else {
+				FlxG.sound.volumeUpKeys = [FlxKey.PLUS, FlxKey.NUMPADPLUS];
+				FlxG.sound.volumeDownKeys = [FlxKey.MINUS, FlxKey.NUMPADMINUS];
+				FlxG.sound.muteKeys = [FlxKey.ZERO, FlxKey.NUMPADZERO];
+			}
 		};
 		addOption(option);
 
@@ -46,10 +57,11 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 		if (MobileControls.mode == 4)
 		{
-			option = new Option('Hide Hitbox Hints',
-			'If checked, makes the hitbox invisible.',
-			'hideHitboxHints',
-			BOOL);
+			option = new Option('Hitbox Design',
+			'Choose how your hitbox should look like.',
+			'hitboxType',
+			STRING,
+			hintOptions);
 			addOption(option);
 
 			option = new Option('Hitbox Position',

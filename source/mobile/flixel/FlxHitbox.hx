@@ -119,7 +119,7 @@ class HitboxButton extends TouchButton
 			alpha = 0.00001;
 			antialiasing = ClientPrefs.data.antialiasing;
 			var hintTween:FlxTween = null;
-			if (!ClientPrefs.data.hideHitboxHints)
+			if (ClientPrefs.data.hitboxType != "Hidden")
 			{
 				onDown.callback = function()
 				{
@@ -180,14 +180,20 @@ class HitboxButton extends TouchButton
 			guh = ClientPrefs.data.controlsAlpha - 0.07;
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(0xFFFFFF);
-		shape.graphics.lineStyle(3, 0xFFFFFF, 1);
-		shape.graphics.drawRect(0, 0, Width, Height);
-		shape.graphics.lineStyle(0, 0, 0);
-		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
-		shape.graphics.endFill();
-		shape.graphics.beginGradientFill(RADIAL, [0xFFFFFF, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
-		shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
-		shape.graphics.endFill();
+		if (ClientPrefs.data.hitboxType == 'Gradient') {
+			shape.graphics.lineStyle(3, 0xFFFFFF, 1);
+			shape.graphics.drawRect(0, 0, Width, Height);
+			shape.graphics.lineStyle(0, 0, 0);
+			shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
+			shape.graphics.endFill();
+			shape.graphics.beginGradientFill(RADIAL, [0xFFFFFF, FlxColor.TRANSPARENT], [guh, 0], [0, 255], null, null, null, 0.5);
+			shape.graphics.drawRect(3, 3, Width - 6, Height - 6);
+			shape.graphics.endFill();
+		} else {
+			shape.graphics.lineStyle(10, 0xFFFFFF, 1);
+			shape.graphics.drawRect(0, 0, Width, Height);
+			shape.graphics.endFill();
+		}
 		var bitmap:BitmapData = new BitmapData(Width, Height, true, 0);
 		bitmap.draw(shape);
 		return FlxG.bitmap.add(bitmap, false, 'hitbox$hitboxesGraphics');
