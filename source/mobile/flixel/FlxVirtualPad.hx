@@ -54,18 +54,6 @@ class FlxVirtualPad extends FlxMobileInputManager<TouchPadButton> {
 	public var buttonZ:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.Z]);
 	public var buttonExtra:TouchPadButton = new TouchPadButton(0, 0);
 	public var buttonExtra2:TouchPadButton = new TouchPadButton(0, 0);
-	/*
-	public var buttonZero:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.ZERO]);
-	public var buttonOne:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.ONE]);
-	public var buttonTwo:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.TWO]);
-	public var buttonThree:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.THREE]);
-	public var buttonFour:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.FOUR]);
-	public var buttonFive:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.FIVE]);
-	public var buttonSix:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.SIX]);
-	public var buttonSeven:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.SEVEN]);
-	public var buttonEight:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.EIGHT]);
-	public var buttonNine:TouchPadButton = new TouchPadButton(0, 0, [FlxMobileInputID.NINE]);
-	*/
 
 	/**
 	 * Create a gamepad.
