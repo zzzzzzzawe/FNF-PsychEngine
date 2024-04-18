@@ -171,6 +171,7 @@ class CharacterEditorState extends MusicBeatState
 		if (controls.mobileC) {
 			str = "CAMERA
 			\nX/Y - Camera Zoom In/Out
+                        \nHold G and Arrow Keys - Move Camera
 			\nZ - Reset Camera Zoom
 			\n
 			\nCHARACTER
@@ -888,10 +889,10 @@ class CharacterEditorState extends MusicBeatState
 		if(FlxG.keys.pressed.CONTROL /*|| virtualPad.buttonC.pressed*/) ctrlMult = 0.25;
 
 		// CAMERA CONTROLS
-		if (FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
-		if (FlxG.keys.pressed.K) FlxG.camera.scroll.y += elapsed * 500 * shiftMult * ctrlMult;
-		if (FlxG.keys.pressed.L) FlxG.camera.scroll.x += elapsed * 500 * shiftMult * ctrlMult;
-		if (FlxG.keys.pressed.I) FlxG.camera.scroll.y -= elapsed * 500 * shiftMult * ctrlMult;
+		if ((virtualPad.buttonG.pressed && virtualPad.buttonLeft.pressed) || FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
+		if ((virtualPad.buttonG.pressed && virtualPad.buttonDown.pressed) || FlxG.keys.pressed.K) FlxG.camera.scroll.y += elapsed * 500 * shiftMult * ctrlMult;
+		if ((virtualPad.buttonG.pressed && virtualPad.buttonRight.pressed) || FlxG.keys.pressed.L) FlxG.camera.scroll.x += elapsed * 500 * shiftMult * ctrlMult;
+		if ((virtualPad.buttonG.pressed && virtualPad.buttonUp.pressed) || FlxG.keys.pressed.I) FlxG.camera.scroll.y -= elapsed * 500 * shiftMult * ctrlMult;
 
 		var lastZoom = FlxG.camera.zoom;
 		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || virtualPad.buttonZ.justPressed) FlxG.camera.zoom = 1;
@@ -910,8 +911,8 @@ class CharacterEditorState extends MusicBeatState
 		var changedAnim:Bool = false;
 		if(anims.length > 1)
 		{
-			if((FlxG.keys.justPressed.W  || virtualPad.buttonV.justPressed) && (changedAnim = true)) curAnim--;
-			else if((FlxG.keys.justPressed.S || virtualPad.buttonD.justPressed) && (changedAnim = true)) curAnim++;
+			if((FlxG.keys.justPressed.W  || virtualPad.buttonV.justPressed) && !virtualPad.buttonG.pressed && (changedAnim = true)) curAnim--;
+			else if((FlxG.keys.justPressed.S || virtualPad.buttonD.justPressed) && !virtualPad.buttonG.pressed && (changedAnim = true)) curAnim++;
 
 			if(changedAnim)
 			{
@@ -952,14 +953,14 @@ class CharacterEditorState extends MusicBeatState
 				FlxG.keys.pressed.DOWN
 			];
 		}
-		if(moveKeysP.contains(true))
+		if(moveKeysP.contains(true) && !virtualPad.buttonG.pressed)
 		{
 			character.offset.x += ((moveKeysP[0] ? 1 : 0) - (moveKeysP[1] ? 1 : 0)) * shiftMultBig;
 			character.offset.y += ((moveKeysP[2] ? 1 : 0) - (moveKeysP[3] ? 1 : 0)) * shiftMultBig;
 			changedOffset = true;
 		}
 
-		if(moveKeys.contains(true))
+		if(moveKeys.contains(true) && !virtualPad.buttonG.pressed)
 		{
 			holdingArrowsTime += elapsed;
 			if(holdingArrowsTime > 0.6)
