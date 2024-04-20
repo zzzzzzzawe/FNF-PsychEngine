@@ -1,16 +1,6 @@
 package mobile.backend;
 
-#if android
-import android.content.Context as AndroidContext;
-import android.os.Environment as AndroidEnvironment;
-import android.Permissions as AndroidPermissions;
-import android.Settings as AndroidSettings;
-#end
 import lime.system.System as LimeSystem;
-#if sys
-import sys.io.File;
-import sys.FileSystem;
-#end
 
 /**
  * A storage class for mobile.
@@ -19,24 +9,11 @@ import sys.FileSystem;
 class SUtil
 {
 	#if sys
-	public static function getStorageDirectory(?force:Bool = false #if (android), type:StorageType = #if EXTERNAL EXTERNAL #elseif OBB EXTERNAL_OBB #elseif MEDIA EXTERNAL_MEDIA #else EXTERNAL_DATA #end #end):String
+	public static function getStorageDirectory(?force:Bool = false):String
 	{
 		var daPath:String = '';
 		#if android
-		var forcedPath:String = '/storage/emulated/0/';
-		var packageNameLocal:String = 'com.shadowmario.psychengine';
-		var fileLocal:String = 'PsychEngine';
-		switch (type)
-		{
-			case EXTERNAL_DATA:
-				daPath = force ? forcedPath + 'Android/data/' + packageNameLocal + '/files' : AndroidContext.getExternalFilesDir();
-			case EXTERNAL_OBB:
-				daPath = force ? forcedPath + 'Android/obb/' + packageNameLocal : AndroidContext.getObbDir();
-			case EXTERNAL_MEDIA:
-				daPath = force ? forcedPath + 'Android/media/' + packageNameLocal : AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
-			case EXTERNAL:
-				daPath = force ? forcedPath + '.' + fileLocal : AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
-		}
+		daPath = force ? StorageType.fromStrForce(ClientPrefs.data.storageType) : StorageType.fromStr(ClientPrefs.data.storageType);
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = LimeSystem.documentsDirectory;
@@ -121,17 +98,51 @@ class SUtil
 	public static function showPopUp(message:String, title:String):Void
 	{
 		#if (!ios || !iphonesim)
-		lime.app.Application.current.window.alert(message, title);
+		try {
+			lime.app.Application.current.window.alert(message, title);
+		} catch(e:Dynamic)
+			trace('$title - $message');
 		#else
 		trace('$title - $message');
 		#end
 	}
 }
 
-enum StorageType
+enum abstract StorageType(String) from String to String
 {
-	EXTERNAL_DATA;
-	EXTERNAL_OBB;
-	EXTERNAL_MEDIA;
-	EXTERNAL;
+	final forcedPath = '/storage/emulated/0/';
+	final packageNameLocal = 'com.shadowmario.psychengine';
+	final fileLocal = 'PsychEngine';
+
+	public static function fromStr(str:String):StorageType {
+		final EXTERNAL_DATA = AndroidContext.getExternalFilesDir();
+		final EXTERNAL_OBB = AndroidContext.getObbDir();
+		final EXTERNAL_MEDIA = AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
+		final EXTERNAL = AndroidEnvironment.getExternalStorageDirectory() + '/.' + lime.app.Application.current.meta.get('file');
+
+		return switch (str)
+		{
+			case "EXTERNAL_DATA": EXTERNAL_DATA;
+			case "EXTERNAL_OBB": EXTERNAL_OBB;
+			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
+			case "EXTERNAL": EXTERNAL;
+			default: null;
+		}
+	}
+
+	public static function fromStrForce(str:String):StorageType {
+		static final EXTERNAL_DATA = forcedPath + 'Android/data/' + packageNameLocal + '/files';
+		static final EXTERNAL_OBB = forcedPath + 'Android/obb/' + packageNameLocal;
+		static final EXTERNAL_MEDIA = forcedPath + 'Android/media/' + packageNameLocal;
+		static final EXTERNAL = forcedPath + '.' + fileLocal;
+
+		return switch (str)
+		{
+			case "EXTERNAL_DATA": EXTERNAL_DATA;
+			case "EXTERNAL_OBB": EXTERNAL_OBB;
+			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
+			case "EXTERNAL": EXTERNAL;
+			default: null;
+		}
+	}
 }

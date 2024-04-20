@@ -1,6 +1,5 @@
 package lime.utils;
 
-import mobile.backend.SUtil;
 import haxe.Exception;
 import haxe.PosInfos;
 #if sys
@@ -51,7 +50,7 @@ class Log
 					trace('Couldn\'t save error message. (${e.message})', null);
 				#end
 
-				SUtil.showPopUp(message, 'Error!');
+				lime.app.Application.current.window.alert(message, 'Error!');
 
 				#if js
 				if (FlxG.sound.music != null)

@@ -6,8 +6,12 @@ import options.Option;
 
 class MobileOptionsSubState extends BaseOptionsMenu
 {
-	var exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
-	var hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
+	#if android
+	final storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
+	final lastStorageType:String = ClientPrefs.data.storageType;
+	#end
+	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
+	final hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
 	var option:Option;
 
 	public function new()
@@ -77,6 +81,25 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		BOOL);
 		addOption(option);
 
+		#if android
+		option = new Option('Storage Type',
+			'Whatever',
+			'storageType',
+			STRING,
+			storageTypes);
+			addOption(option);
+		#end
+
 		super();
+	}
+
+	public function onDestroy() {
+		super.destroy();
+		ClientPrefs.saveSettings();
+		ClientPrefs.loadPrefs();
+		if (ClientPrefs.data.storageType != lastStorageType) {
+			SUtil.showPopUp('', 'Notice!');
+			lime.system.System.exit(0);
+		}
 	}
 }

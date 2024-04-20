@@ -52,7 +52,7 @@ class Main extends Sprite
 	{
 		super();
 		#if mobile
-		#if (android && EXTERNAL || MEDIA)
+		#if android
 		SUtil.doPermissionsShit();
 		#end
 		Sys.setCwd(SUtil.getStorageDirectory());
