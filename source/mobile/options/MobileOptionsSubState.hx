@@ -83,7 +83,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 		#if android
 		option = new Option('Storage Type',
-			'Which folder psych engine should use?',
+			'Which folder Psych Engine should use?',
 			'storageType',
 			STRING,
 			storageTypes);
