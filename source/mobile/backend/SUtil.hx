@@ -131,10 +131,10 @@ enum abstract StorageType(String) from String to String
 	}
 
 	public static function fromStrForce(str:String):StorageType {
-		static final EXTERNAL_DATA = forcedPath + 'Android/data/' + packageNameLocal + '/files';
-		static final EXTERNAL_OBB = forcedPath + 'Android/obb/' + packageNameLocal;
-		static final EXTERNAL_MEDIA = forcedPath + 'Android/media/' + packageNameLocal;
-		static final EXTERNAL = forcedPath + '.' + fileLocal;
+		final EXTERNAL_DATA = forcedPath + 'Android/data/' + packageNameLocal + '/files';
+		final EXTERNAL_OBB = forcedPath + 'Android/obb/' + packageNameLocal;
+		final EXTERNAL_MEDIA = forcedPath + 'Android/media/' + packageNameLocal;
+		final EXTERNAL = forcedPath + '.' + fileLocal;
 
 		return switch (str)
 		{
