@@ -110,6 +110,7 @@ class SUtil
 	}
 }
 
+#if android
 enum abstract StorageType(String) from String to String
 {
 	final forcedPath = '/storage/emulated/0/';
@@ -148,3 +149,4 @@ enum abstract StorageType(String) from String to String
 		}
 	}
 }
+#end
