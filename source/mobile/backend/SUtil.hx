@@ -13,7 +13,9 @@ class SUtil
 	{
 		var daPath:String = '';
 		#if android
-		daPath = force ? StorageType.fromStrForce(ClientPrefs.data.storageType) : StorageType.fromStr(ClientPrefs.data.storageType);
+		if (!FileSystem.exists(LimeSystem.applicationStorageDirectory + 'storagetype.txt')) File.saveContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
+		var curStorageType:String = File.getContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt');
+		daPath = force ? StorageType.fromStrForce(curStorageType) : StorageType.fromStr(curStorageType);
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
 		#elseif ios
 		daPath = LimeSystem.documentsDirectory;
