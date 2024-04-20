@@ -95,8 +95,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 	public function onDestroy() {
 		super.destroy();
-		ClientPrefs.saveSettings();
-		ClientPrefs.loadPrefs();
+		/*ClientPrefs.saveSettings();
+		ClientPrefs.loadPrefs();*/
 		if (ClientPrefs.data.storageType != lastStorageType) {
 			SUtil.showPopUp('', 'Notice!');
 			lime.system.System.exit(0);
