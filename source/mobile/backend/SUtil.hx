@@ -161,7 +161,7 @@ enum abstract StorageType(String) from String to String
 			case "EXTERNAL_OBB": EXTERNAL_OBB;
 			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
 			case "EXTERNAL": EXTERNAL;
-			default: null;
+			default: EXTERNAL_DATA;
 		}
 	}
 
@@ -178,7 +178,7 @@ enum abstract StorageType(String) from String to String
 			case "EXTERNAL_OBB": EXTERNAL_OBB;
 			case "EXTERNAL_MEDIA": EXTERNAL_MEDIA;
 			case "EXTERNAL": EXTERNAL;
-			default: null;
+			default: EXTERNAL_DATA;
 		}
 	}
 }
