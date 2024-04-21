@@ -111,7 +111,6 @@ class SUtil
 			if (path.contains(external)) daPath = path;
 
 		daPath = haxe.io.Path.addTrailingSlash(daPath.endsWith("\n") ? daPath.substr(0, daPath.length - 1) : daPath);
-		trace(daPath);
 		return daPath;
 	}
 	#end
