@@ -7,7 +7,8 @@ import options.Option;
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
-	final storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
+	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
+	var externalPaths:Array<String> = SUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
 	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
@@ -16,6 +17,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 	public function new()
 	{
+		storageTypes = storageTypes.concat(externalPaths);
 		title = 'Mobile Options';
 		rpcTitle = 'Mobile Options Menu'; // for Discord Rich Presence, fuck it
 
