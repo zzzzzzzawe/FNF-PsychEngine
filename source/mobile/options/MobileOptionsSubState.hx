@@ -1,6 +1,5 @@
 package mobile.options;
 
-import lime.system.System;
 import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
