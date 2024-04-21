@@ -1,5 +1,6 @@
 package mobile.options;
 
+import lime.system.System;
 import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
@@ -8,7 +9,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
 	final storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
-	final lastStorageType:String = ClientPrefs.data.storageType;
+	public static final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
 	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
 	final hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
@@ -83,7 +84,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 		#if android
 		option = new Option('Storage Type',
-			'Which folder Psych Engine should use?',
+			'Which folder Psych Engine should use?\n(CHANGING THIS MAKES DELETE YOUR OLD FOLDER!!)',
 			'storageType',
 			STRING,
 			storageTypes);
@@ -96,7 +97,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	override public function destroy() {
 		super.destroy();
 		#if android
-		File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
+		SUtil.onStorageChange();
 		if (ClientPrefs.data.storageType != lastStorageType) {
 			SUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
