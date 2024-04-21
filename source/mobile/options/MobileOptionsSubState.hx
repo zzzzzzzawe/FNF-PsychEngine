@@ -96,8 +96,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	override public function destroy() {
 		super.destroy();
 		#if android
-		SUtil.onStorageChange();
 		if (ClientPrefs.data.storageType != lastStorageType) {
+			SUtil.onStorageChange();
 			SUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
 		}

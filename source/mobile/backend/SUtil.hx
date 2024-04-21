@@ -13,7 +13,8 @@ class SUtil
 	{
 		var daPath:String = '';
 		#if android
-		if (!FileSystem.exists(LimeSystem.applicationStorageDirectory + 'storagetype.txt')) File.saveContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
+		if (!FileSystem.exists(LimeSystem.applicationStorageDirectory + 'storagetype.txt'))
+			File.saveContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
 		var curStorageType:String = File.getContent(LimeSystem.applicationStorageDirectory + 'storagetype.txt');
 		daPath = force ? StorageType.fromStrForce(curStorageType) : StorageType.fromStr(curStorageType);
 		daPath = haxe.io.Path.addTrailingSlash(daPath);
@@ -54,7 +55,8 @@ class SUtil
 		}
 	}
 
-	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json', fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
+	public static function saveContent(fileName:String = 'file', fileExtension:String = '.json',
+			fileData:String = 'You forgor to add somethin\' in yo code :3'):Void
 	{
 		try
 		{
@@ -76,7 +78,8 @@ class SUtil
 		{
 			AndroidPermissions.requestPermission(AndroidPermissions.READ_EXTERNAL_STORAGE);
 			AndroidPermissions.requestPermission(AndroidPermissions.WRITE_EXTERNAL_STORAGE);
-			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens', 'Notice!');
+			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress Ok to see what happens',
+				'Notice!');
 			if (!AndroidEnvironment.isExternalStorageManager())
 				AndroidSettings.requestSetting("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION");
 		}
@@ -112,21 +115,25 @@ class SUtil
 			FileSystem.rename(lastStoragePath + smth, curStoragePath + smth);
 		}*/
 
-		try {
+		try
+		{
 			Sys.command('rm', ['-rf', lastStoragePath]);
-		} catch(e:haxe.Exception) {
+		}
+		catch (e:haxe.Exception)
+		{
 			trace('Failed to remove last directory. (${e.message})');
 		}
 	}
 	#end
 	#end
-
 	public static function showPopUp(message:String, title:String):Void
 	{
 		#if (!ios || !iphonesim)
-		try {
+		try
+		{
 			lime.app.Application.current.window.alert(message, title);
-		} catch(e:Dynamic)
+		}
+		catch (e:Dynamic)
 			trace('$title - $message');
 		#else
 		trace('$title - $message');
@@ -141,7 +148,8 @@ enum abstract StorageType(String) from String to String
 	final packageNameLocal = 'com.shadowmario.psychengine';
 	final fileLocal = 'PsychEngine';
 
-	public static function fromStr(str:String):StorageType {
+	public static function fromStr(str:String):StorageType
+	{
 		final EXTERNAL_DATA = AndroidContext.getExternalFilesDir();
 		final EXTERNAL_OBB = AndroidContext.getObbDir();
 		final EXTERNAL_MEDIA = AndroidEnvironment.getExternalStorageDirectory() + '/Android/media/' + lime.app.Application.current.meta.get('packageName');
@@ -157,7 +165,8 @@ enum abstract StorageType(String) from String to String
 		}
 	}
 
-	public static function fromStrForce(str:String):StorageType {
+	public static function fromStrForce(str:String):StorageType
+	{
 		final EXTERNAL_DATA = forcedPath + 'Android/data/' + packageNameLocal + '/files';
 		final EXTERNAL_OBB = forcedPath + 'Android/obb/' + packageNameLocal;
 		final EXTERNAL_MEDIA = forcedPath + 'Android/media/' + packageNameLocal;
