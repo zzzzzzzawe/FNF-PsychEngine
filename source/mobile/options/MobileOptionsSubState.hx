@@ -8,7 +8,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
 	final storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
-	public static final lastStorageType:String = ClientPrefs.data.storageType;
+	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
 	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
 	final hintOptions:Array<String> = ["Gradient", "No Gradient", "Hidden"];
@@ -93,11 +93,25 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		super();
 	}
 
+	function onStorageChange():Void
+	{
+		File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
+	
+		var lastStoragePath:String = StorageType.fromStrForce(lastStorageType) + '/';
+	
+		try
+		{
+			Sys.command('rm', ['-rf', lastStoragePath]);
+		}
+		catch (e:haxe.Exception)
+			trace('Failed to remove last directory. (${e.message})');
+	}
+
 	override public function destroy() {
 		super.destroy();
 		#if android
 		if (ClientPrefs.data.storageType != lastStorageType) {
-			SUtil.onStorageChange();
+			onStorageChange();
 			SUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
 		}
