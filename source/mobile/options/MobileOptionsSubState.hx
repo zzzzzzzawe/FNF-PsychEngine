@@ -17,7 +17,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 	public function new()
 	{
-		storageTypes = storageTypes.concat(externalPaths);
+		#if android storageTypes = storageTypes.concat(externalPaths); #end
 		title = 'Mobile Options';
 		rpcTitle = 'Mobile Options Menu'; // for Discord Rich Presence, fuck it
 
@@ -95,6 +95,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		super();
 	}
 
+	#if android
 	function onStorageChange():Void
 	{
 		File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.data.storageType);
@@ -108,6 +109,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		catch (e:haxe.Exception)
 			trace('Failed to remove last directory. (${e.message})');
 	}
+	#end
 
 	override public function destroy() {
 		super.destroy();
