@@ -35,14 +35,15 @@ import psychlua.HScript;
 #end
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
-
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
-
 import haxe.Json;
-
 import mobile.psychlua.Functions;
+import haxe.ds.ObjectMap;
+import haxe.ds.StringMap;
+import haxe.DynamicAccess;
 
+typedef State = #if hxluajit cpp.RawPointer<Lua_State> #else LuaState #end;
 class FunkinLua {
 	public var lua:State = null;
 	public var camTarget:FlxCamera;
@@ -55,12 +56,16 @@ class FunkinLua {
 	#end
 
 	public var callbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
+	private static var luaCallbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
 	public static var customFunctions:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	public function new(scriptName:String) {
 		#if LUA_ALLOWED
 		var times:Float = Date.now().getTime();
 		lua = LuaL.newstate();
+		#if hxluajit 
+		Lua.register(lua, "print", cpp.Function.fromStaticFunction(print));
+		#end
 		LuaL.openlibs(lua);
 
 		//trace('Lua version: ' + Lua.version());
@@ -270,11 +275,11 @@ class FunkinLua {
 					if(luaInstance.scriptName == foundScript)
 					{
 						Lua.getglobal(luaInstance.lua, global);
-						if(Lua.isnumber(luaInstance.lua,-1))
+						if(isnumber(luaInstance.lua,-1))
 							Lua.pushnumber(lua, Lua.tonumber(luaInstance.lua, -1));
-						else if(Lua.isstring(luaInstance.lua,-1))
+						else if(isstring(luaInstance.lua,-1))
 							Lua.pushstring(lua, Lua.tostring(luaInstance.lua, -1));
-						else if(Lua.isboolean(luaInstance.lua,-1))
+						else if(isboolean(luaInstance.lua,-1))
 							Lua.pushboolean(lua, Lua.toboolean(luaInstance.lua, -1));
 						else
 							Lua.pushnil(lua);
@@ -420,7 +425,7 @@ class FunkinLua {
 			luaTrace('removeLuaScript: Script $luaFile isn\'t running!', false, false, FlxColor.RED);
 			return false;
 		});
-		Lua_helper.add_callback(lua, "removeHScript", function(luaFile:String, ?ignoreAlreadyRunning:Bool = false) {
+		set("removeHScript", function(luaFile:String, ?ignoreAlreadyRunning:Bool = false) {
 			#if HSCRIPT_ALLOWED
 			var foundScript:String = findScript(luaFile, '.hx');
 			if(foundScript != null)
@@ -1511,7 +1516,8 @@ class FunkinLua {
 		for (name => func in customFunctions)
 		{
 			if(func != null)
-				Lua_helper.add_callback(lua, name, func);
+				set(name, func);
+				// Lua_helper.add_callback(lua, name, func);
 		}
 
 		try{
@@ -1557,26 +1563,26 @@ class FunkinLua {
 			Lua.getglobal(lua, func);
 			var type:Int = Lua.type(lua, -1);
 
-			if (type != Lua.LUA_TFUNCTION) {
-				if (type > Lua.LUA_TNIL)
+			if (type != #if hxluajit Lua.TFUNCTION #else Lua.LUA_TFUNCTION #end) {
+				if (type > #if hxluajit Lua.TNIL #else Lua.LUA_TNIL #end)
 					luaTrace("ERROR (" + func + "): attempt to call a " + LuaUtils.typeToString(type) + " value", false, false, FlxColor.RED);
 
 				Lua.pop(lua, 1);
 				return LuaUtils.Function_Continue;
 			}
 
-			for (arg in args) Convert.toLua(lua, arg);
+			for (arg in args) toLua(lua, arg);
 			var status:Int = Lua.pcall(lua, args.length, 1, 0);
 
 			// Checks if it's not successful, then show a error.
-			if (status != Lua.LUA_OK) {
+			if (status != #if hxluajit Lua.OK #else Lua.LUA_OK #end) {
 				var error:String = getErrorMessage(status);
 				luaTrace("ERROR (" + func + "): " + error, false, false, FlxColor.RED);
 				return LuaUtils.Function_Continue;
 			}
 
 			// If successful, pass and then return the result.
-			var result:Dynamic = cast Convert.fromLua(lua, -1);
+			var result:Dynamic = cast fromLua(lua, -1);
 			if (result == null) result = LuaUtils.Function_Continue;
 
 			Lua.pop(lua, 1);
@@ -1594,13 +1600,32 @@ class FunkinLua {
 		if(lua == null) return;
 
 		if (Type.typeof(data) == TFunction) {
+			#if hxluajit
+			luaCallbacks.set(variable, data);
+			Lua.pushstring(lua, variable);
+			Lua.pushcclosure(lua, cpp.Function.fromStaticFunction(callback), 1);
+			Lua.setglobal(lua, variable);
+			#else
 			Lua_helper.add_callback(lua, variable, data);
+			#end
 			return;
 		}
 
-		Convert.toLua(lua, data);
+		toLua(lua, data);
 		Lua.setglobal(lua, variable);
 	}
+
+	#if hxluajit
+	public function removeCallback(key:String){
+		if (lua == null)
+			return;
+
+		luaCallbacks.remove(key);
+
+		Lua.pushnil(lua);
+		Lua.setglobal(lua, key);
+	}
+	#end
 
 	public function stop() {
 		closed = true;
@@ -1652,7 +1677,7 @@ class FunkinLua {
 
 		var result:String = null;
 		Lua.getglobal(lua, variable);
-		result = Convert.fromLua(lua, -1);
+		result = fromLua(lua, -1);
 		Lua.pop(lua, 1);
 
 		if(result == null) {
@@ -1688,11 +1713,9 @@ class FunkinLua {
 
 		if (v != null) v = v.trim();
 		if (v == null || v == "") {
-			switch(status) {
-				case Lua.LUA_ERRRUN: return "Runtime Error";
-				case Lua.LUA_ERRMEM: return "Memory Allocation Error";
-				case Lua.LUA_ERRERR: return "Critical Error";
-			}
+			if(status == #if hxluajit Lua.ERRRUN #else Lua.LUA_ERRRUN #end) return "Runtime Error";
+			if(status == #if hxluajit Lua.ERRMEM #else Lua.LUA_ERRMEM #end) return "Memory Allocation Error";
+			if(status == #if hxluajit Lua.ERRERR #else Lua.LUA_ERRERR #end) return "Critical Error";
 			return "Unknown Error";
 		}
 
@@ -1703,7 +1726,14 @@ class FunkinLua {
 	public function addLocalCallback(name:String, myFunction:Dynamic)
 	{
 		callbacks.set(name, myFunction);
+		#if hxluajit
+		luaCallbacks.set(name, null);
+		Lua.pushstring(lua, name);
+		Lua.pushcclosure(lua, cpp.Function.fromStaticFunction(callback), 1);
+		Lua.setglobal(lua, name);
+		#else
 		Lua_helper.add_callback(lua, name, null); //just so that it gets called
+		#end
 	}
 
 	#if (MODS_ALLOWED && !flash && sys)
@@ -1765,6 +1795,202 @@ class FunkinLua {
 		luaTrace('This platform doesn\'t support Runtime Shaders!', false, false, FlxColor.RED);
 		#end
 		return false;
+	}
+
+	private static function toLua(l:State, val:Dynamic):Void
+	{
+		#if hxluajit
+		switch (Type.typeof(val))
+		{
+			case TNull:
+				Lua.pushnil(l);
+			case TInt:
+				Lua.pushinteger(l, val);
+			case TFloat:
+				Lua.pushnumber(l, val);
+			case TBool:
+				Lua.pushboolean(l, val ? 1 : 0);
+			case TClass(Array):
+				Lua.createtable(l, val.length, 0);
+
+				for (i in 0...val.length)
+				{
+					Lua.pushinteger(l, i + 1);
+					toLua(l, val[i]);
+					Lua.settable(l, -3);
+				}
+			case TClass(ObjectMap) | TClass(StringMap):
+				var map:Map<String, Dynamic> = val;
+
+				Lua.createtable(l, Lambda.count(map), 0);
+
+				for (key => value in map)
+				{
+					Lua.pushstring(l, Std.isOfType(key, String) ? key : Std.string(key));
+					toLua(l, value);
+					Lua.settable(l, -3);
+				}
+			case TClass(String):
+				Lua.pushstring(l, cast(val, String));
+			case TObject:
+				Lua.createtable(l, Reflect.fields(val).length, 0);
+
+				for (key in Reflect.fields(val))
+				{
+					Lua.pushstring(l, key);
+					toLua(l, Reflect.field(val, key));
+					Lua.settable(l, -3);
+				}
+			default:
+				Sys.println('Couldn\'t convert "${Type.typeof(val)}" to Lua.');
+		}
+		#else
+		Convert.toLua(l, val);
+		#end
+	}
+
+	private static function fromLua(l:State, idx:Int):Dynamic
+	{
+		#if hxluajit
+		switch (Lua.type(l, idx))
+		{
+			case type if (type == Lua.TNIL):
+				return null;
+			case type if (type == Lua.TBOOLEAN):
+				return Lua.toboolean(l, idx) == 1;
+			case type if (type == Lua.TNUMBER):
+				return Lua.tonumber(l, idx);
+			case type if (type == Lua.TSTRING):
+				return cast(Lua.tostring(l, idx), String);
+			case type if (type == Lua.TTABLE):
+				var count:Int = 0;
+				var array:Bool = true;
+
+				Lua.pushnil(l);
+
+				while (Lua.next(l, idx < 0 ? idx - 1 : idx) != 0)
+				{
+					if (array)
+					{
+						if (Lua.isnumber(l, -2) != 0)
+							array = false;
+						else
+						{
+							final index:Float = Lua.tonumber(l, -2);
+							if (index < 0 || Std.int(index) != index)
+								array = false;
+						}
+					}
+
+					count++;
+					Lua.pop(l, 1);
+				}
+
+				if (count == 0)
+					return
+					{
+					};
+				else if (array)
+				{
+					var ret:Array<Dynamic> = [];
+
+					Lua.pushnil(l);
+
+					while (Lua.next(l, idx < 0 ? idx - 1 : idx) != 0)
+					{
+						ret[Std.int(Lua.tonumber(l, -2)) - 1] = fromLua(l, -1);
+
+						Lua.pop(l, 1);
+					}
+
+					return ret;
+				}
+				else
+				{
+					var ret:DynamicAccess<Dynamic> = {};
+
+					Lua.pushnil(l);
+
+					while (Lua.next(l, idx < 0 ? idx - 1 : idx) != 0)
+					{
+						switch (Lua.type(l, -2))
+						{
+							case type if (type == Lua.TSTRING):
+								ret.set(cast(Lua.tostring(l, -2), String), fromLua(l, -1));
+
+								Lua.pop(l, 1);
+							case type if (type == Lua.TNUMBER):
+								ret.set(Std.string(Lua.tonumber(l, -2)), fromLua(l, -1));
+
+								Lua.pop(l, 1);
+						}
+					}
+
+					return ret;
+				}
+			default:
+				Sys.println('Couldn\'t convert "${cast (Lua.typename(l, idx), String)}" to Haxe.');
+		}
+
+		return null;
+		#else
+		return Convert.fromLua(l, idx);
+		#end
+	}
+
+	#if hxluajit
+	private static function print(l:State):Int
+	{
+		final nargs:Int = Lua.gettop(l);
+
+		/* loop through each argument */
+		for (i in 0...nargs)
+			Sys.println(cast(Lua.tostring(l, i + 1), String));
+
+		/* clear the stack */
+		Lua.pop(l, nargs);
+		return 0;
+	}
+
+	private static function callback(l:State):Int
+	{
+		final nargs:Int = Lua.gettop(l);
+
+		/* loop through each argument and set it to the array */
+		var args:Array<Dynamic> = [];
+		for (i in 0...nargs)
+			args[i] = fromLua(l, i + 1);
+
+		/* clear the stack */
+		Lua.pop(l, nargs);
+
+		final name:String = Lua.tostring(l, Lua.upvalueindex(1));
+
+		if (luaCallbacks.exists(name))
+		{
+			var ret:Dynamic = Reflect.callMethod(null, luaCallbacks.get(name), args);
+
+			if (ret != null)
+			{
+				toLua(l, ret);
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+	#end
+
+	function isnumber(l:State, idx:Int):Bool {
+		return #if hxluajit return Lua.isnumber(l, idx) != 0 #else return Lua.isnumber(l, idx) #end;
+	}
+
+	function isstring(l:State, idx:Int):Bool {
+		return #if hxluajit return Lua.isstring(l, idx) != 0 #else return Lua.isstring(l, idx) #end;
+	}
+
+	function isboolean(l:State, idx:Int):Bool {
+		return #if hxluajit return Lua.isboolean(l, idx) != 0 #else return Lua.isboolean(l, idx) #end;
 	}
 }
 #end

@@ -1,5 +1,7 @@
 #if LUA_ALLOWED
 package psychlua;
+import psychlua.FunkinLua;
+import psychlua.FunkinLua.State;
 
 class CallbackHandler
 {
@@ -8,7 +10,7 @@ class CallbackHandler
 		try
 		{
 			//trace('calling $fname');
-			var cbf:Dynamic = Lua_helper.callbacks.get(fname);
+			var cbf:Dynamic = #if hxluajit @:privateAccess FunkinLua.luaCallbacks.get(fname) #else Lua_helper.callbacks.get(fname) #end;
 
 			//Local functions have the lowest priority
 			//This is to prevent a "for" loop being called in every single operation,
@@ -37,7 +39,7 @@ class CallbackHandler
 			var args:Array<Dynamic> = [];
 
 			for (i in 0...nparams) {
-				args[i] = Convert.fromLua(l, i + 1);
+				args[i] = FunkinLua.fromLua(l, i + 1);
 			}
 
 			var ret:Dynamic = null;
@@ -46,13 +48,13 @@ class CallbackHandler
 			ret = Reflect.callMethod(null,cbf,args);
 
 			if(ret != null){
-				Convert.toLua(l, ret);
+				FunkinLua.toLua(l, ret);
 				return 1;
 			}
 		}
 		catch(e:Dynamic)
 		{
-			if(Lua_helper.sendErrorsToLua) {LuaL.error(l, 'CALLBACK ERROR! ${if(e.message != null) e.message else e}');return 0;}
+			#if !hxluajit if(Lua_helper.sendErrorsToLua) #end {LuaL.error(l, 'CALLBACK ERROR! ${if(e.message != null) e.message else e}');return 0;}
 			trace(e);
 			throw(e);
 		}

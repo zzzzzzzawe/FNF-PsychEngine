@@ -29,8 +29,8 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE THE PSYCH LOGO FROM LOADING SCREEN -->
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits || hl || NOVIDEO || rpi"/> <!-- i'll keep this cuz it makes vscode think i don't use videos -->
-	<define name="ADVANCED_VIDEO_FUNCTIONS" if="VIDEOS_ALLOWED android"/>
-        <define name="CUSTOM_SHADERS_ALLOWED" if="LUA_ALLOWED"/>
+	<!-- <define name="ADVANCED_VIDEO_FUNCTIONS" if="VIDEOS_ALLOWED"/> --> <!-- un-comment this for peak lua video sprite functions-->
+    <define name="CUSTOM_SHADERS_ALLOWED" if="LUA_ALLOWED" unless="flash"/>
 
 	<section if="officialBuild">
 		<define name="TITLE_SCREEN_EASTER_EGG"/>
@@ -111,10 +111,11 @@
 	<haxelib name="flixel-addons" />
 
 	<!--Psych stuff needed-->
-	<haxelib name="linc_luajit" if="LUA_ALLOWED"/>
-	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
+	<haxelib name="linc_luajit" if="LUA_ALLOWED" unless="USE_HXLUAJIT"/>
+	<haxelib name="hxluajit" if="LUA_ALLOWED USE_HXLUAJIT"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" unless="ADVANCED_VIDEO_FUNCTIONS"/>
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED ADVANCED_VIDEO_FUNCTIONS"/>
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED ADVANCED_VIDEO_FUNCTIONS" version="2.6.0"/>
+	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="flxanimate" unless="html5"/>
 	<haxelib name="tjson"/>

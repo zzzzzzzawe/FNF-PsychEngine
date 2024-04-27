@@ -515,6 +515,14 @@ class LuaUtils
 	
 	public static function typeToString(type:Int):String {
 		#if LUA_ALLOWED
+		#if hxluajit
+		if(type == Lua.TBOOLEAN) return "boolean";
+		if(type == Lua.TNUMBER) return "number";
+		if(type == Lua.TSTRING) return "string";
+		if(type == Lua.TTABLE) return "table";
+		if(type == Lua.TFUNCTION) return "function";
+		if (type <= Lua.TNIL) return "nil";
+		#else
 		switch(type) {
 			case Lua.LUA_TBOOLEAN: return "boolean";
 			case Lua.LUA_TNUMBER: return "number";
@@ -523,6 +531,7 @@ class LuaUtils
 			case Lua.LUA_TFUNCTION: return "function";
 		}
 		if (type <= Lua.LUA_TNIL) return "nil";
+		#end
 		#end
 		return "unknown";
 	}

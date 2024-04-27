@@ -2,8 +2,6 @@ package mobile.psychlua;
 
 import psychlua.CustomSubstate;
 #if LUA_ALLOWED
-import llua.*;
-import llua.Lua;
 import lime.ui.Haptic;
 import psychlua.FunkinLua;
 import mobile.backend.TouchFunctions;
