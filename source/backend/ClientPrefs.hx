@@ -13,7 +13,7 @@ import states.TitleState;
 	public var dynamicColors:Bool = true; // yes cause its cool -Karim
 	public var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
 	#if mobile public var screensaver:Bool = false; #end
-	#if android public var storageType:String = "EXTERNAL"; #end
+	#if android public var storageType:String = "EXTERNAL_DATA"; #end
         public var hitboxType:String = "Gradient";
         // end of Mobile and Mobile Controls Releated
 	public var popUpRating:Bool = true;
