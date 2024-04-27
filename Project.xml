@@ -111,8 +111,8 @@
 	<haxelib name="flixel-addons" />
 
 	<!--Psych stuff needed-->
-	<haxelib name="linc_luajit" if="LUA_ALLOWED" unless="USE_HXLUAJIT"/>
-	<haxelib name="hxluajit" if="LUA_ALLOWED USE_HXLUAJIT"/>
+	<haxelib name="linc_luajit" if="LUA_ALLOWED" unless="EXPERIMENTAL_HXLUAJIT"/>
+	<haxelib name="hxluajit" if="LUA_ALLOWED EXPERIMENTAL_HXLUAJIT"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" unless="ADVANCED_VIDEO_FUNCTIONS"/>
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED ADVANCED_VIDEO_FUNCTIONS" version="2.6.0"/>
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
@@ -200,6 +200,8 @@
 			<define name='objc' />
 			<ios linker-flags='-ObjC' />
 		</section>-->
+		
+		<haxeflag name="--macro" value="mobile.macros.GlobalMacro.haxelibWarning()" />
 
 	<!--Avoid memory leaks with for loops in HScript-->
 	<haxedef name="loop_unroll_max_cost" value="25" />
@@ -209,7 +211,6 @@
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
 	<haxeflag name="--macro" value="macros.Keep.keepClasses()" />
-
 
 	<!-- _________________________________ Custom _______________________________ -->
 
