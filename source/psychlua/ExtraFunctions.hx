@@ -212,11 +212,12 @@ class ExtraFunctions
 			}
 			return false;
 		});
-		funk.set("deleteFile", function(path:String, ?ignoreModFolders:Bool = false)
+		funk.set("deleteFile", function(path:String, ?ignoreModFolders:Bool = false, ?absolute:Bool = false)
 		{
 			try {
-				var lePath:String = Paths.getPath(path, TEXT, !ignoreModFolders);
-				if(Assets.exists(lePath))
+				var lePath:String = path;
+				if(!absolute) lePath = Paths.getPath(path, TEXT, !ignoreModFolders);
+				if(FileSystem.exists(lePath))
 				{
 					FileSystem.deleteFile(lePath);
 					return true;

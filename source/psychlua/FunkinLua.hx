@@ -8,7 +8,6 @@ import openfl.Lib;
 import openfl.utils.Assets;
 import flixel.FlxBasic;
 import flixel.FlxObject;
-import flixel.addons.transition.FlxTransitionableState;
 
 #if (!flash && sys)
 import flixel.addons.display.FlxRuntimeShader;
