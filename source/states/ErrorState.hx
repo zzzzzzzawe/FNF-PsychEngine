@@ -32,6 +32,7 @@ class ErrorState extends MusicBeatState
 		errorText.screenCenter();
 		add(errorText);
 		super.create();
+		addVirtualPad('NONE', 'A_B');
 	}
 
 	override function update(elapsed:Float)
