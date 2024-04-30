@@ -121,7 +121,7 @@ class Character extends FlxSprite
 				}
 				catch(e:Dynamic)
 				{
-					trace('Error loading character file of "$character": $e');
+					SUtil.showPopUp('"$character": $e', 'Error while loading a character!');
 				}
 		}
 
