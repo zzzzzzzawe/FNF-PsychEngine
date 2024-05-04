@@ -91,7 +91,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		#if (openfl >= "9.2.0")
+		#if (openfl <= "9.2.0")
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
