@@ -166,6 +166,8 @@
 	<!--Enable this for Nape release builds for a serious peformance improvement-->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
+	<haxedef name="message.reporting" value="pretty" />
+
 	<haxedef name='no-deprecation-warnings' />
 
 	<haxedef name='no-inline' if="html5"/>
