@@ -39,7 +39,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compile
-        run: haxelib run lime build android -D EXPERIMENTAL_HXLUAJIT -D officialBuild -final
+        run: haxelib run lime build android-D officialBuild -final
         env:
           cert_pass: nullfunni
           cert_alias_pass: nullfunni
@@ -69,7 +69,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D NOVIDEO -D officialBuild -final
+        run: haxelib run lime build ios -D officialBuild -final
 
       - name: Make Ipa
         run: |

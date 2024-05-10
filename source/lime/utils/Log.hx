@@ -50,14 +50,10 @@ class Log
 					trace('Couldn\'t save error message. (${e.message})', null);
 				#end
 
-				lime.app.Application.current.window.alert(message, 'Error!');
-
-				#if js
-				if (FlxG.sound.music != null)
-					FlxG.sound.music.stop();
-
-				js.Browser.window.location.reload(true);
+				#if html5
+				trace('Error! - ' + message); // there's nothing I can do about it
 				#else
+				lime.app.Application.current.window.alert(message, 'Error!');
 				lime.system.System.exit(1);
 				#end
 			}

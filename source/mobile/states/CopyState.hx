@@ -1,5 +1,6 @@
 package mobile.states;
 
+#if mobile
 import states.TitleState;
 import flixel.addons.transition.FlxTransitionableState;
 import lime.utils.Assets as LimeAssets;
@@ -199,3 +200,4 @@ class CopyState extends MusicBeatState
 		return (maxLoopTimes < 0);
 	}
 }
+#end

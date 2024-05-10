@@ -120,6 +120,7 @@ class SUtil
 		#if (!ios || !iphonesim)
 		try
 		{
+			trace('$title - $message');
 			lime.app.Application.current.window.alert(message, title);
 		}
 		catch (e:Dynamic)

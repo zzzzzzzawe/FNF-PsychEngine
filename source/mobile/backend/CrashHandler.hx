@@ -77,7 +77,7 @@ class CrashHandler
 
 		mobile.backend.SUtil.showPopUp('$m\n$stackLabel', "Error!");
 
-		#if js
+		#if html5
 		if (flixel.FlxG.sound.music != null)
 			flixel.FlxG.sound.music.stop();
 

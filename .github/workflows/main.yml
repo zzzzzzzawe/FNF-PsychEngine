@@ -121,7 +121,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
 
       - name: Compile
-        run: haxelib run lime build android -D EXPERIMENTAL_HXLUAJIT
+        run: haxelib run lime build android
 
       - name: Upload Artifact
         if: ${{ success() }}
@@ -147,7 +147,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D NOVIDEO
+        run: haxelib run lime build ios
 
       - name: Make Ipa
         run: |
