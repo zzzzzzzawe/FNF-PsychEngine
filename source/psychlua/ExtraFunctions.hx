@@ -100,7 +100,7 @@ class ExtraFunctions
 		});
 
 		funk.set("keyJustPressed", function(name:String = '') {
-			name = name.toLowerCase();
+			name = name.toLowerCase().trim();
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT_P;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_P;
@@ -111,7 +111,7 @@ class ExtraFunctions
 			return false;
 		});
 		funk.set("keyPressed", function(name:String = '') {
-			name = name.toLowerCase();
+			name = name.toLowerCase().trim();
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN;
@@ -122,7 +122,7 @@ class ExtraFunctions
 			return false;
 		});
 		funk.set("keyReleased", function(name:String = '') {
-			name = name.toLowerCase();
+			name = name.toLowerCase().trim();
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT_R;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_R;
@@ -135,28 +135,31 @@ class ExtraFunctions
 
 		// Save data management
 		funk.set("initSaveData", function(name:String, ?folder:String = 'psychenginemods') {
-			if(!PlayState.instance.modchartSaves.exists(name))
+			var variables = MusicBeatState.getVariables();
+			if(!variables.exists('save_$name'))
 			{
 				var save:FlxSave = new FlxSave();
 				// folder goes unused for flixel 5 users. @BeastlyGhost
 				save.bind(name, CoolUtil.getSavePath() + '/' + folder);
-				PlayState.instance.modchartSaves.set(name, save);
+				variables.set('save_$name', save);
 				return;
 			}
 			FunkinLua.luaTrace('initSaveData: Save file already initialized: ' + name);
 		});
 		funk.set("flushSaveData", function(name:String) {
-			if(PlayState.instance.modchartSaves.exists(name))
+			var variables = MusicBeatState.getVariables();
+			if(variables.exists('save_$name'))
 			{
-				PlayState.instance.modchartSaves.get(name).flush();
+				variables.get('save_$name').flush();
 				return;
 			}
 			FunkinLua.luaTrace('flushSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
 		funk.set("getDataFromSave", function(name:String, field:String, ?defaultValue:Dynamic = null) {
-			if(PlayState.instance.modchartSaves.exists(name))
+			var variables = MusicBeatState.getVariables();
+			if(variables.exists('save_$name'))
 			{
-				var saveData = PlayState.instance.modchartSaves.get(name).data;
+				var saveData = variables.get('save_$name').data;
 				if(Reflect.hasField(saveData, field))
 					return Reflect.field(saveData, field);
 				else
@@ -166,18 +169,20 @@ class ExtraFunctions
 			return defaultValue;
 		});
 		funk.set("setDataFromSave", function(name:String, field:String, value:Dynamic) {
-			if(PlayState.instance.modchartSaves.exists(name))
+			var variables = MusicBeatState.getVariables();
+			if(variables.exists('save_$name'))
 			{
-				Reflect.setField(PlayState.instance.modchartSaves.get(name).data, field, value);
+				Reflect.setField(variables.get('save_$name').data, field, value);
 				return;
 			}
 			FunkinLua.luaTrace('setDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
 		funk.set("eraseSaveData", function(name:String)
 		{
-			if (PlayState.instance.modchartSaves.exists(name))
+			var variables = MusicBeatState.getVariables();
+			if (variables.exists('save_$name'))
 			{
-				PlayState.instance.modchartSaves.get(name).erase();
+				variables.get('save_$name').erase();
 				return;
 			}
 			FunkinLua.luaTrace('eraseSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
