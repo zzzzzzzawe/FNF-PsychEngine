@@ -543,6 +543,7 @@ class WeekEditorState extends MusicBeatState
 		if (data.length > 0)
 		{
 			#if mobile
+			unsavedProgress = false;
 			SUtil.saveContent(weekFileName, ".json", data);
 			#else
 			_file = new FileReference();

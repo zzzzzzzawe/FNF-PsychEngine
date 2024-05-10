@@ -403,6 +403,7 @@ class MenuCharacterEditorState extends MusicBeatState
 			var characterName:String = splittedImage[splittedImage.length-1].toLowerCase().replace(' ', '');
 
 			#if mobile
+			unsavedProgress = false;
 			SUtil.saveContent(characterName, ".json", data);
 			#else
 			_file = new FileReference();
