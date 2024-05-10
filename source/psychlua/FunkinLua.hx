@@ -1858,7 +1858,7 @@ class FunkinLua {
 			case TNull:
 				Lua.pushnil(l);
 			case TInt:
-				Lua.pushinteger(l, val);
+				Lua.pushinteger(l, Std.int(val));
 			case TFloat:
 				Lua.pushnumber(l, val);
 			case TBool:
