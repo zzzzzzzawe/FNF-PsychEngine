@@ -29,7 +29,7 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="PSYCH_WATERMARKS"/> <!-- DELETE THIS TO REMOVE THE PSYCH LOGO FROM LOADING SCREEN -->
 	<define name="VIDEOS_ALLOWED" if="desktop || mobile" unless="32bits || hl || rpi"/> <!-- i'll keep this cuz it makes vscode think i don't use videos -->
-	<define name="ADVANCED_VIDEO_FUNCTIONS" if="VIDEOS_ALLOWED android"/> <!-- un-comment this for peak lua video sprite functions-->
+	<define name="ADVANCED_VIDEO_FUNCTIONS" if="VIDEOS_ALLOWED mobile"/> <!-- un-comment this for peak lua video sprite functions-->
 	<define name="CUSTOM_SHADERS_ALLOWED" if="LUA_ALLOWED" unless="flash"/>
 	<!--<define name="EXPERIMENTAL_HXLUAJIT" if="ios"/>-->
 
