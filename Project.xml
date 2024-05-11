@@ -115,7 +115,7 @@
 	<haxelib name="linc_luajit" if="LUA_ALLOWED" unless="EXPERIMENTAL_HXLUAJIT"/>
 	<haxelib name="hxluajit" if="LUA_ALLOWED EXPERIMENTAL_HXLUAJIT"/>
 	<haxelib name="hxvlc" if="VIDEOS_ALLOWED" unless="ADVANCED_VIDEO_FUNCTIONS"/>
-	<haxelib name="hxCodec" if="VIDEOS_ALLOWED ADVANCED_VIDEO_FUNCTIONS" version="2.6.0"/>
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED ADVANCED_VIDEO_FUNCTIONS"/>
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED"/>
 	<haxelib name="hxdiscord_rpc" if="DISCORD_ALLOWED"/>
 	<haxelib name="flxanimate" unless="html5"/>
