@@ -11,7 +11,7 @@ import flixel.graphics.FlxGraphic;
  * A zone with 4 hint's (A hitbox).
  * It's really easy to customize the layout.
  *
- * @author: Mihai Alexandru, Karim Akra & Lily (mcagabe19)
+ * @author: Mihai Alexandru and Karim Akra
  */
 class FlxHitbox extends FlxMobileInputManager<HitboxButton>
 {

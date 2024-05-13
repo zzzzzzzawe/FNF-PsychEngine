@@ -1256,7 +1256,6 @@ class GlitchShader extends FlxShader
 class InvertShader extends FlxShader
 {
 	@:glFragmentSource('
-	// Author: Lily (mcagabe19)
     #pragma header
 
     void main()
