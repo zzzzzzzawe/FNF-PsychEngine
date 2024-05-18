@@ -18,8 +18,10 @@ class SUtil
 	// root directory, used for handling the saved storage type and path
 	public static final rootDir:String = LimeSystem.applicationStorageDirectory;
 
+	#if android
 	// returns the selected directory from SAF directory picker for CUSTOM
 	public static var selectedDir(get, never):Null<String>;
+	#end
 
 	public static function getStorageDirectory(?force:Bool = false):String
 	{
