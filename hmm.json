@@ -92,8 +92,8 @@
       "name": "extension-androidtools",
       "type": "git",
       "dir": null,
-      "ref": "main",
-      "url": "https://github.com/MAJigsaw77/extension-androidtools.git"
+      "ref": "SAF",
+      "url": "https://github.com/MobilePorting/extension-androidtools.git"
     }
   ]
 }
