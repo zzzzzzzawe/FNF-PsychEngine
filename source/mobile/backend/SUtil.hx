@@ -30,7 +30,7 @@ class SUtil
 		if (!FileSystem.exists(rootDir + 'storagetype.txt'))
 			File.saveContent(rootDir + 'storagetype.txt', ClientPrefs.data.storageType);
 		var curStorageType:String = File.getContent(rootDir + 'storagetype.txt');
-		if(curStorageType == "EXTERNAL_DATA" && selectedDir == null)
+		if(curStorageType == "CUSTOM" && selectedDir == null)
 		{
 			initSAFCallback();
 			Tools.openDirectoryPicker(5);
