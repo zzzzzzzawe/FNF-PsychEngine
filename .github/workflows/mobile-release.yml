@@ -69,7 +69,7 @@ jobs:
           haxelib run hmm install --quiet
 
       - name: Compile
-        run: haxelib run lime build ios -D HXVLC_OPENAL -D officialBuild -final
+        run: haxelib run lime build ios -D officialBuild -final
 
       - name: Make Ipa
         run: |
