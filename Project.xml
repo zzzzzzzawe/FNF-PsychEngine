@@ -201,11 +201,10 @@
 			<config:android permission="android.permission.ACCESS_NETWORK_STATE" />
 		</section>
 
-		<section if="ios">
+		<!--<section if="ios">
 			<!--<define name='objc' />
-			<ios linker-flags='-ObjC' />-->
-			<haxedef name="HXVLC_OPENAL" />
-		</section>
+			<ios linker-flags='-ObjC' />
+		</section>-->
 		
 		<haxeflag name="--macro" value="mobile.macros.GlobalMacro.haxelibWarning()" />
 
