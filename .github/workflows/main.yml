@@ -21,7 +21,6 @@ jobs:
         run: haxelib run lime build windows
 
       - name: Upload Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
           name: windowsBuild
@@ -48,7 +47,6 @@ jobs:
         run: haxelib run lime build linux
 
       - name: Upload Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
           name: linuxBuild
@@ -77,7 +75,6 @@ jobs:
         run: haxelib run lime build mac
 
       - name: Upload Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
           name: macOSBuild-${{matrix.version}}
@@ -89,17 +86,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Setup Android NDK
-        uses: nttld/setup-ndk@main
-        id: setup-ndk
-        with:
-          ndk-version: r21e
-
       - name: Setup Java JDK
         uses: actions/setup-java@main
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
@@ -116,15 +107,12 @@ jobs:
           haxelib run lime config ANDROID_SDK $ANDROID_HOME
           haxelib run lime config ANDROID_NDK_ROOT $ANDROID_NDK_HOME
           haxelib run lime config JAVA_HOME $JAVA_HOME
-          haxelib run lime config ANDROID_SETUP true
-        env:
-          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          haxelib run lime config ANDROID_SETUP true 
 
       - name: Compile
         run: haxelib run lime build android
 
       - name: Upload Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
           name: androidBuild
@@ -157,7 +145,6 @@ jobs:
           zip -r PsychEngine.ipa Payload
 
       - name: Upload Artifact
-        if: ${{ success() }}
         uses: actions/upload-artifact@main
         with:
           name: iOSBuild
