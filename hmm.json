@@ -54,7 +54,7 @@
       "type": "git",
       "dir": null,
       "ref": "main",
-      "url": "https://github.com/mcagabe19-stuff/SScript-7.7.0"
+      "url": "https://github.com/PsychPorting/SScript-Base"
     },
     {
       "name": "hxcpp-debug-server",
@@ -95,7 +95,7 @@
       "type": "git",
       "dir": null,
       "ref": "SAF",
-      "url": "https://github.com/MobilePorting/extension-androidtools.git"
+      "url": "https://github.com/PsychPorting/extension-androidtools-Base.git"
     }
   ]
 }
