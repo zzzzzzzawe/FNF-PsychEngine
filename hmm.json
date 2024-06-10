@@ -40,11 +40,6 @@
       "url": "https://github.com/mcagabe19-stuff/hxcpp" 
     },
     {
-      "name": "hxCodec",
-      "type": "haxelib",
-      "version": "2.6.0"
-    },
-    {
       "name": "hxvlc",
       "type": "haxelib",
       "version": null
@@ -72,16 +67,11 @@
       "version": null
     },
     {
-      "name": "hxluajit",
-      "type": "haxelib",
-      "version": null
-    },
-    {
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "master",
-      "url": "https://github.com/superpowers04/linc_luajit.git"
+      "ref": "main",
+      "url": "https://github.com/mcagabe19/linc_luajit-legacy.git"
     },
     {
       "name": "flxanimate",
