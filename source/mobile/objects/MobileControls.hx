@@ -35,11 +35,9 @@ class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager<Dynamic>>
 				initControler(1, extra);
 			case 2: // CUSTOM
 				initControler(2, extra);
-			case 3: // BOTH
-				initControler(3, extra);
-			case 4: // HITBOX
+			case 3: // HITBOX
 				initControler(4, extra);
-			case 5: // KEYBOARD
+			case 4: // KEYBOARD
 		}
 		current = new CurrentManager(this);
 		// Options related stuff
@@ -63,9 +61,6 @@ class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager<Dynamic>>
 				add(virtualPad);
 			case 2:
 				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad('RIGHT_FULL', 'NONE', extraAction));
-				add(virtualPad);
-			case 3:
-				virtualPad = new FlxVirtualPad('BOTH', 'NONE', extraAction);
 				add(virtualPad);
 			case 4:
 				hitbox = new FlxHitbox(extraAction);
@@ -197,7 +192,7 @@ class CurrentManager
 
 	public function new(control:MobileControls)
 	{
-		if (MobileControls.mode == 4)
+		if (MobileControls.mode == 3)
 		{
 			target = control.hitbox;
 			buttonLeft = control.hitbox.buttonLeft;

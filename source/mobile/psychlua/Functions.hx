@@ -183,10 +183,8 @@ class MobileFunctions
 			case 2:
 				return 'custom';
 			case 3:
-				return 'duo';
-			case 4:
 				return 'hitbox';
-			case 5:
+			case 4:
 				return 'none';
 		}
 		return 'unknown';
