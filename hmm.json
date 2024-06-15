@@ -37,7 +37,7 @@
       "type": "git",
       "dir": null,
       "ref": "master",
-      "url": "https://github.com/mcagabe19-stuff/hxcpp" 
+      "url": "https://github.com/mcagabe19-stuff/hxcpp"
     },
     {
       "name": "hxvlc",
@@ -71,7 +71,7 @@
       "type": "git",
       "dir": null,
       "ref": "main",
-      "url": "https://github.com/mcagabe19-stuff/linc_lua.git"
+      "url": "https://github.com/mcagabe19-stuff/linc_luajit-legacy.git"
     },
     {
       "name": "flxanimate",
