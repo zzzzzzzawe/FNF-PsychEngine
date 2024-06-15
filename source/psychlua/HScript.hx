@@ -242,18 +242,8 @@ class HScript extends SScript
 		set('createGlobalCallback', function(name:String, func:Dynamic)
 		{
 			for (script in PlayState.instance.luaArray)
-				if(script != null && script.lua != null && !script.closed){
-					#if hxluajit
-					@:privateAccess {
-						FunkinLua.luaCallbacks.set(name, func);
-						Lua.pushstring(script.lua, name);
-						Lua.pushcclosure(script.lua, cpp.Function.fromStaticFunction(FunkinLua.callback), 1);
-						Lua.setglobal(script.lua, name);
-					}
-					#else
+				if(script != null && script.lua != null && !script.closed)
 					Lua_helper.add_callback(script.lua, name, func);
-					#end
-				}
 
 			FunkinLua.customFunctions.set(name, func);
 		});

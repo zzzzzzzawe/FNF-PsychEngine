@@ -10,7 +10,7 @@ class CallbackHandler
 		try
 		{
 			//trace('calling $fname');
-			var cbf:Dynamic = #if hxluajit @:privateAccess FunkinLua.luaCallbacks.get(fname) #else Lua_helper.callbacks.get(fname) #end;
+			var cbf:Dynamic = Lua_helper.callbacks.get(fname);
 
 			//Local functions have the lowest priority
 			//This is to prevent a "for" loop being called in every single operation,
@@ -56,7 +56,7 @@ class CallbackHandler
 		}
 		catch(e:Dynamic)
 		{
-			#if !hxluajit if(Lua_helper.sendErrorsToLua) #end {LuaL.error(l, 'CALLBACK ERROR! ${if(e.message != null) e.message else e}');return 0;}
+			if(Lua_helper.sendErrorsToLua) {LuaL.error(l, 'CALLBACK ERROR! ${if(e.message != null) e.message else e}');return 0;}
 			trace(e);
 			throw(e);
 		}

@@ -3146,7 +3146,6 @@ class PlayState extends MusicBeatState
 		@:privateAccess
 		FlxG.game._filters = [];
 		camGame.filters = camHUD.filters = camOther.filters = [];
-		#if hxluajit @:privateAccess FunkinLua.luaCallbacks.clear(); #end
 		super.destroy();
 	}
 
