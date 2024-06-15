@@ -1252,7 +1252,7 @@ class FunkinLua {
 			}
 			return false;
 		});
-		#if !ADVANCED_VIDEO_FUNCTIONS
+		
 		set("startVideo", function(videoFile:String, ?canSkip:Bool = true) {
 			#if VIDEOS_ALLOWED
 			if(FileSystem.exists(Paths.video(videoFile)))
@@ -1284,7 +1284,6 @@ class FunkinLua {
 			return true;
 			#end
 		});
-		#end
 
 		set("playMusic", function(sound:String, volume:Float = 1, loop:Bool = false) {
 			FlxG.sound.playMusic(Paths.music(sound), volume, loop);
@@ -1517,8 +1516,6 @@ class FunkinLua {
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(this); #end
 		#if flxanimate FlxAnimateFunctions.implement(this); #end
 		#if TRANSLATIONS_ALLOWED Language.addLuaCallbacks(this); #end
-		// disabled for now, i don't know might remove it...
-		#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS) VideoFunctions.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);

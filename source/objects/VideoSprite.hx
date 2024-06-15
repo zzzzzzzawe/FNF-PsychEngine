@@ -1,6 +1,5 @@
 package objects;
 
-#if !ADVANCED_VIDEO_FUNCTIONS
 import flixel.addons.display.FlxPieDial;
 
 #if hxvlc
@@ -178,4 +177,3 @@ class VideoSprite extends FlxSpriteGroup {
 	}
 	#end
 }
-#end

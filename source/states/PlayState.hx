@@ -50,10 +50,6 @@ import tea.SScript;
 #end
 
 #if VIDEOS_ALLOWED
-#if ADVANCED_VIDEO_FUNCTIONS
-import objects.Video;
-import objects.AdvancedVideoSprite;
-#end
 import objects.VideoSprite;
 #end
 
@@ -101,12 +97,6 @@ class PlayState extends MusicBeatState
 	#if HSCRIPT_ALLOWED
 	public var hscriptArray:Array<HScript> = [];
 	public var instancesExclude:Array<String> = [];
-	#end
-
-	#if LUA_ALLOWED
-	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-	public var modchartVideoSprites:Map<String, AdvancedVideoSprite> = new Map<String, AdvancedVideoSprite>();
-	#end
 	#end
 
 	public var BF_X:Float = 770;
@@ -259,10 +249,6 @@ class PlayState extends MusicBeatState
 	// Callbacks for stages
 	public var startCallback:Void->Void = null;
 	public var endCallback:Void->Void = null;
-
-	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-	public var video:Video;
-	#end
 
 	public var luaVirtualPad:FlxVirtualPad;
 
@@ -830,7 +816,6 @@ class PlayState extends MusicBeatState
 
 	public function getLuaObject(tag:String, text:Bool=true, videos:Bool=true):Dynamic {
 		#if LUA_ALLOWED
-		#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS) if(videos && modchartVideoSprites.exists(tag)) return modchartVideoSprites.get(tag); #end
 		if(variables.exists(tag)) return variables.get(tag);
 		#end
 		return null;
@@ -846,34 +831,6 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	#if (ADVANCED_VIDEO_FUNCTIONS)
-	public function startVideo(name:String): #if VIDEOS_ALLOWED Video #else Void #end
-	{
-		#if VIDEOS_ALLOWED
-		var filepath:String = Paths.video(name);
-		video = new Video();
-		inCutscene = true;
-
-		if(#if MODS_ALLOWED !FileSystem.exists(filepath) #else !Assets.exists(filepath) #end) {
-			FlxG.log.warn('Couldnt find video file: ' + name);
-			startAndEnd();
-			return null;
-		}
-
-		video.startVideo(filepath);
-		video.onVideoEnd.add(function(){
-			startAndEnd();
-			return;
-		});
-
-		return video;
-		#else
-		FlxG.log.warn('Platform not supported for video play back!');
-		startAndEnd();
-		return;
-		#end
-	}
-	#else
 	public var videoCutscene:VideoSprite = null;
 	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
 	{
@@ -930,8 +887,6 @@ class PlayState extends MusicBeatState
 		#end
 		return null;
 	}
-	#end
-
 
 	public function startAndEnd()
 	{
@@ -1601,12 +1556,6 @@ class PlayState extends MusicBeatState
 			}
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = false);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = false);
-
-			#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-			for(video in modchartVideoSprites)
-				if(video != null && members.contains(video))
-					video.paused = true;
-			#end
 		}
 
 		super.openSubState(SubState);
@@ -1622,12 +1571,6 @@ class PlayState extends MusicBeatState
 	
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
-
-			#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-			for(video in modchartVideoSprites)
-				if(video != null && members.contains(video))
-					video.paused = false;
-			#end
 
 			paused = false;
 			callOnScripts('onResume');

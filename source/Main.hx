@@ -76,7 +76,7 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
-		#if (VIDEOS_ALLOWED && !ADVANCED_VIDEO_FUNCTIONS)
+		#if (VIDEOS_ALLOWED)
 		hxvlc.util.Handle.init();
 		#end
 	}

@@ -7,10 +7,6 @@ import openfl.display.BlendMode;
 import Type.ValueType;
 
 import substates.GameOverSubstate;
-#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-import objects.Video;
-import objects.AdvancedVideoSprite;
-#end
 
 typedef LuaTweenOptions = {
 	type:FlxTweenType,
@@ -518,21 +514,4 @@ class LuaUtils
 		}
 		return PlayState.instance.camGame;
 	}
-	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
-	inline public static function getVideoSpriteObject(name:String):AdvancedVideoSprite
-		return #if LUA_ALLOWED PlayState.instance.modchartVideoSprites.exists(name) ? PlayState.instance.modchartVideoSprites.get(name) : #end Reflect.getProperty(PlayState.instance, name);
-
-	public static function resetVideoSpriteTag(tag:String) {
-		#if LUA_ALLOWED
-		if(!PlayState.instance.modchartVideoSprites.exists(tag)) {
-			return;
-		}
-
-		var target:AdvancedVideoSprite = PlayState.instance.modchartVideoSprites.get(tag);
-		PlayState.instance.remove(target, true);
-		target.destroy();
-		PlayState.instance.modchartVideoSprites.remove(tag);
-		#end
-	}
-	#end
 }
