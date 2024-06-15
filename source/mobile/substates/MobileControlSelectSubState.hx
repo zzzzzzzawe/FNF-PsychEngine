@@ -12,7 +12,7 @@ import flixel.ui.FlxButton as UIButton;
 
 class MobileControlSelectSubState extends MusicBeatSubstate
 {
-	var options:Array<String> = ['Pad-Right', 'Pad-Left', 'Pad-Custom', 'Pad-Duo', 'Hitbox', 'Keyboard'];
+	var options:Array<String> = ['Pad-Right', 'Pad-Left', 'Pad-Custom', 'Hitbox', 'Keyboard'];
 	var control:MobileControls;
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
@@ -261,15 +261,15 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 				reset.visible = true;
 				keyboardText.kill();
 				changeControls();
-			case 4:
+			case 3:
 				reset.visible = false;
 				keyboardText.kill();
 				changeControls();
-			case 5:
+			case 4:
 				reset.visible = false;
 				keyboardText.revive();
 				changeControls();
-			case 6:
+			case 5:
 				reset.visible = true;
 				keyboardText.kill();
 				changeControls(0, true);
