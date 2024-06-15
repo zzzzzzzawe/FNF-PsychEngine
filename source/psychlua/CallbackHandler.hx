@@ -1,7 +1,5 @@
 #if LUA_ALLOWED
 package psychlua;
-import psychlua.FunkinLua;
-import psychlua.FunkinLua.State;
 
 class CallbackHandler
 {
@@ -38,9 +36,8 @@ class CallbackHandler
 			var nparams:Int = Lua.gettop(l);
 			var args:Array<Dynamic> = [];
 
-			@:privateAccess
 			for (i in 0...nparams) {
-				args[i] = FunkinLua.fromLua(l, i + 1);
+				args[i] = Convert.fromLua(l, i + 1);
 			}
 
 			var ret:Dynamic = null;
@@ -48,9 +45,8 @@ class CallbackHandler
 
 			ret = Reflect.callMethod(null,cbf,args);
 
-			@:privateAccess
 			if(ret != null){
-				FunkinLua.toLua(l, ret);
+				Convert.toLua(l, ret);
 				return 1;
 			}
 		}
