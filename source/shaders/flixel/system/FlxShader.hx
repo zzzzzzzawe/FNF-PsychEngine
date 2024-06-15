@@ -2,8 +2,12 @@ package shaders.flixel.system;
 
 import flixel.system.FlxAssets.FlxShader as OriginalFlxShader;
 
+#if ios
+// I think iOS has issues with GLSL Es 300
+typedef FlxShader = OriginalFlxShader;
+#else
 /**
- * An improved FlxShader
+ * A improved FlxShader that allows using GLSL Es 300 on android and GLSL 330 on desktop
  * @author Mihai Alexandru (M.A. Jigsaw)
  */
 class FlxShader extends OriginalFlxShader
@@ -169,3 +173,4 @@ class FlxShader extends OriginalFlxShader
 		}
 	}
 }
+#end

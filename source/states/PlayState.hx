@@ -33,11 +33,6 @@ import substates.GameOverSubstate;
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
 #end
-#if CUSTOM_SHADERS_ALLOWED
-import shaders.openfl.filters.ShaderFilter as CustomShaderFilter;
-import openfl.filters.BitmapFilter;
-import shaders.CustomShaders;
-#end
 
 import objects.Note.EventNote;
 import objects.*;
@@ -109,10 +104,6 @@ class PlayState extends MusicBeatState
 	#end
 
 	#if LUA_ALLOWED
-	#if CUSTOM_SHADERS_ALLOWED
-	public var modchartShader:Map<String, Effect> = new Map<String, Effect>();
-	public var shaderUpdates:Array<Float->Void> = [];
-	#end
 	#if (VIDEOS_ALLOWED && ADVANCED_VIDEO_FUNCTIONS)
 	public var modchartVideoSprites:Map<String, AdvancedVideoSprite> = new Map<String, AdvancedVideoSprite>();
 	#end
@@ -1552,98 +1543,6 @@ class PlayState extends MusicBeatState
 		callOnScripts('onEventPushed', [subEvent.event, subEvent.value1 != null ? subEvent.value1 : '', subEvent.value2 != null ? subEvent.value2 : '', subEvent.strumTime]);
 	}
 
-	#if CUSTOM_SHADERS_ALLOWED
-	public function addShaderToObject(obj:String, effect:CustomShaderFilter) {
-		if(obj == '') {
-			@:privateAccess
-			var curCamFilters:Array<BitmapFilter> = FlxG.game._filters;
-			if(curCamFilters == null || curCamFilters.length == 0){
-				FlxG.game.setFilters([effect]);
-				return;
-			}
-			curCamFilters.push(effect);
-			FlxG.game.setFilters(curCamFilters);
-			FlxG.game.filtersEnabled = ClientPrefs.data.shaders;
-		} else {
-			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
-			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
-				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
-					var gameObject = Reflect.field(this, obj);
-					gameObject.shader = effect.shader;
-					return;
-				}
-				var luaObject:FlxSprite = getLuaObject(obj);
-				if(luaObject == null){
-					addTextToDebug('add shader function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
-					return;
-				}
-				luaObject.shader = effect.shader;
-				return;
-			}
-			var curCamFilters:Array<BitmapFilter> = camera.filters;
-			if(curCamFilters == null || curCamFilters.length == 0){
-				camera.filters = [effect];
-				return;
-			}
-			curCamFilters.push(effect);
-			camera.filters = curCamFilters;
-			camera.filtersEnabled = ClientPrefs.data.shaders;
-		}
-	}
-
-	public function removeShaderFromCamera(cam:String, effect:Dynamic) {
-		var camera:Dynamic;
-		if(cam == '')
-			camera = FlxG.game;
-		else
-			camera = LuaUtils.cameraFromString(cam);
-		if(camera == null) {
-			addTextToDebug('shader remove function: ERROR THE CAMERA $cam DOES NOT EXIST', FlxColor.RED);
-			return;
-		}
-
-		if(camera._filters.contains(effect))
-			camera._filters.remove(effect);
-	}
-
-	public function clearObjectShaders(obj:String) {
-		if(obj == '') {
-			var shadersToRemove = [];
-			@:privateAccess{
-				if(FlxG.game._filters.length > 0) {
-					for(shader in FlxG.game._filters)
-						shadersToRemove.push(shader);
-					for(shader in shadersToRemove)
-						FlxG.game._filters.remove(shader);
-				}
-			}
-		} else {
-			var camera:FlxCamera = LuaUtils.cameraFromString(obj);
-			if(camera == null || (!obj.toLowerCase().contains('game') && camera == camGame)) {
-				if(Reflect.fields(this).contains(obj) && Std.isOfType(Reflect.field(this, obj), FlxSprite)){
-					var gameObject = Reflect.field(this, obj);
-					gameObject.shader = null;
-					return;
-				}
-				var luaObject:FlxSprite = getLuaObject(obj);
-				if(luaObject == null){
-					addTextToDebug('shaders clear function: NO OBJECT WITH A TAG OF \"$obj\" EXIST', FlxColor.RED);
-					return;
-				}
-				luaObject.shader = null;
-				return;
-			}
-			var shadersToRemove = [];
-			if(camera.filters.length > 0){
-				for(shader in camera.filters)
-					shadersToRemove.push(shader);
-				for(shader in shadersToRemove)
-					camera.filters.remove(shader);
-			}
-		}
-	}
-    #end
-
 	public var skipArrowStartTween:Bool = false; //for lua
 	private function generateStaticArrows(player:Int):Void
 	{
@@ -1992,10 +1891,6 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraX', camFollow.x);
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
-		#if CUSTOM_SHADERS_ALLOWED
-        for (shaderUpdate in shaderUpdates)
-			shaderUpdate(elapsed);
-        #end
 		callOnScripts('onUpdatePost', [elapsed]);
     }
 
