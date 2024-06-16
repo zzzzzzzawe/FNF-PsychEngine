@@ -211,6 +211,7 @@ class AndroidFunctions
 		funk.set("menuJustPressed", FlxG.android.justPressed.MENU);
 		funk.set("menuPressed", FlxG.android.pressed.MENU);
 		funk.set("menuJustReleased", FlxG.android.justReleased.MENU);
+		funk.set("getCurrentOrientation", () -> PsychJNI.getCurrentOrientationAsString());
 
 		funk.set("setOrientation", function(hint:Null<String>):Void
 		{
