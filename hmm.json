@@ -28,11 +28,6 @@
       "version": "1.5.1"
     },
     {
-      "name": "flixel-ui",
-      "type": "haxelib",
-      "version": "2.5.0"
-    },
-    {
       "name": "hxcpp",
       "type": "git",
       "dir": null,
