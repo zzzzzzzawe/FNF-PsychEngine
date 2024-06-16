@@ -1,5 +1,6 @@
 package;
 
+import mobile.backend.MobileScaleMode;
 import debug.FPSCounter;
 import flixel.FlxGame;
 import haxe.io.Path;
@@ -127,8 +128,16 @@ class Main extends Sprite
 		#end
 
 		FlxG.fixedTimestep = false;
-		FlxG.game.focusLostFramerate = 60;
+		FlxG.game.focusLostFramerate = #if mobile 30 #else 60 #end;
+		#if web
+		FlxG.keys.preventDefaultKeys.push(TAB);
+		#else
 		FlxG.keys.preventDefaultKeys = [TAB];
+		#end
+
+		#if mobile
+		FlxG.scaleMode = new MobileScaleMode();
+		#end
 		
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 		#if DISCORD_ALLOWED DiscordClient.prepare(); #end
