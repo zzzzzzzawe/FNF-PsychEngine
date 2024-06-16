@@ -1,7 +1,6 @@
 package mobile.substates;
 
 import flixel.FlxObject;
-import flixel.addons.ui.FlxUIButton;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.util.FlxGradient;

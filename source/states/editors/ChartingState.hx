@@ -1757,6 +1757,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				}
 			}
 		}
+		}
 
 		if(PsychUIInputText.focusOn == null)
 		{
@@ -2955,7 +2956,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		//	undos.push(newsong);
 		var noteStrum = getStrumTime(dummyArrow.y * (getSectionBeats() / 4), false) + sectionStartTime();
 		var noteData = 0;
-		
+
 		if (controls.mobileC)
 			for (touch in FlxG.touches.list) noteData = Math.floor((touch.x - GRID_SIZE) / GRID_SIZE);
 		else 
