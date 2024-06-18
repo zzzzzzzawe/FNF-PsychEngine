@@ -32,7 +32,10 @@ import substates.GameOverSubstate;
 
 #if !flash
 import flixel.addons.display.FlxRuntimeShader;
+import openfl.filters.ShaderFilter;
 #end
+
+import objects.VideoSprite;
 
 import objects.Note.EventNote;
 import objects.*;
@@ -47,10 +50,6 @@ import psychlua.HScript;
 
 #if SScript
 import tea.SScript;
-#end
-
-#if VIDEOS_ALLOWED
-import objects.VideoSprite;
 #end
 
 /**
@@ -135,7 +134,6 @@ class PlayState extends MusicBeatState
 	public var inst:FlxSound;
 	public var vocals:FlxSound;
 	public var opponentVocals:FlxSound;
-	public var splitVocals:Bool = false;
 
 	public var dad:Character = null;
 	public var gf:Character = null;
@@ -700,11 +698,8 @@ class PlayState extends MusicBeatState
 			spr.y += newText.height + 2;
 		});
 		luaDebugGroup.add(newText);
-		#if sys
+
 		Sys.println(text);
-		#else
-		trace(text);
-		#end
 	}
 	#end
 
@@ -814,12 +809,8 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function getLuaObject(tag:String, text:Bool=true, videos:Bool=true):Dynamic {
-		#if LUA_ALLOWED
-		if(variables.exists(tag)) return variables.get(tag);
-		#end
-		return null;
-	}
+	public function getLuaObject(tag:String, text:Bool=true):FlxSprite
+		return variables.get(tag);
 
 	function startCharacterPos(char:Character, ?gfCheck:Bool = false) {
 		if(gfCheck && char.curCharacter.startsWith('gf')) { //IF DAD IS GIRLFRIEND, HE GOES TO HER POSITION
@@ -888,7 +879,7 @@ class PlayState extends MusicBeatState
 		return null;
 	}
 
-	public function startAndEnd()
+	function startAndEnd()
 	{
 		if(endingSong)
 			endSong();
@@ -1289,10 +1280,7 @@ class PlayState extends MusicBeatState
 				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
 				
 				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
-				if(oppVocals != null){
-					opponentVocals.loadEmbedded(oppVocals);
-					splitVocals = true;
-				}
+				if(oppVocals != null && oppVocals.length > 0) opponentVocals.loadEmbedded(oppVocals);
 			}
 		}
 
@@ -1562,13 +1550,16 @@ class PlayState extends MusicBeatState
 	}
 
 	override function closeSubState()
-	{		
+	{
+		super.closeSubState();
+		
 		stagesFunc(function(stage:BaseStage) stage.closeSubState());
 		if (paused)
 		{
-			if(FlxG.sound.music != null && !startingSong)
+			if (FlxG.sound.music != null && !startingSong)
+			{
 				resyncVocals();
-	
+			}
 			FlxTimer.globalManager.forEach(function(tmr:FlxTimer) if(!tmr.finished) tmr.active = true);
 			FlxTween.globalManager.forEach(function(twn:FlxTween) if(!twn.finished) twn.active = true);
 
@@ -1576,7 +1567,6 @@ class PlayState extends MusicBeatState
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
-		super.closeSubState();
 	}
 
 	override public function onFocus():Void
@@ -1835,7 +1825,7 @@ class PlayState extends MusicBeatState
 		setOnScripts('cameraY', camFollow.y);
 		setOnScripts('botPlay', cpuControlled);
 		callOnScripts('onUpdatePost', [elapsed]);
-    }
+	}
 
 	// Health icon updaters
 	public dynamic function updateIconsScale(elapsed:Float)
@@ -1881,7 +1871,7 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		paused = true;
-		
+
 		if(FlxG.sound.music != null) {
 			FlxG.sound.music.pause();
 			vocals.pause();
@@ -2614,7 +2604,7 @@ class PlayState extends MusicBeatState
 			},
 			startDelay: Conductor.crochet * 0.002 / playbackRate
 		});
-		}
+	}
 	}
 	public var strumsBlocked:Array<Bool> = [];
 	private function onKeyPress(event:KeyboardEvent):Void
@@ -2937,7 +2927,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(!splitVocals) vocals.volume = 1;
+		if(opponentVocals.length <= 0) vocals.volume = 1;
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 		
@@ -3086,9 +3076,6 @@ class PlayState extends MusicBeatState
 		Note.globalRgbShaders = [];
 		backend.NoteTypesConfig.clearNoteTypesData();
 		instance = null;
-		@:privateAccess
-		FlxG.game._filters = [];
-		camGame.filters = camHUD.filters = camOther.filters = [];
 		super.destroy();
 	}
 
