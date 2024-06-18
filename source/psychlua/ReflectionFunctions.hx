@@ -14,7 +14,7 @@ class ReflectionFunctions
 {
 	static final instanceStr:Dynamic = "##PSYCHLUA_STRINGTOOBJ";
 	public static function implement(funk:FunkinLua)
-		{
+	{
 		funk.set("getProperty", function(variable:String, ?allowMaps:Bool = false) {
 			var split:Array<String> = variable.split('.');
 			if(split.length > 1)
@@ -24,7 +24,7 @@ class ReflectionFunctions
 		funk.set("setProperty", function(variable:String, value:Dynamic, ?allowMaps:Bool = false) {
 			var split:Array<String> = variable.split('.');
 			if(split.length > 1) {
-				LuaUtils.setVarInArray(LuaUtils.getPropertyLoop(split, true, true, allowMaps), split[split.length-1], value, allowMaps);
+				LuaUtils.setVarInArray(LuaUtils.getPropertyLoop(split, true, allowMaps), split[split.length-1], value, allowMaps);
 				return true;
 			}
 			LuaUtils.setVarInArray(LuaUtils.getTargetInstance(), variable, value, allowMaps);
@@ -72,7 +72,7 @@ class ReflectionFunctions
 			var split:Array<String> = obj.split('.');
 			var realObject:Dynamic = null;
 			if(split.length > 1)
-				realObject = LuaUtils.getPropertyLoop(split, true, false, allowMaps);
+				realObject = LuaUtils.getPropertyLoop(split, false, allowMaps);
 			else
 				realObject = Reflect.getProperty(LuaUtils.getTargetInstance(), obj);
 
@@ -98,7 +98,7 @@ class ReflectionFunctions
 			var split:Array<String> = obj.split('.');
 			var realObject:Dynamic = null;
 			if(split.length > 1)
-				realObject = LuaUtils.getPropertyLoop(split, true, false, allowMaps);
+				realObject = LuaUtils.getPropertyLoop(split, false, allowMaps);
 			else
 				realObject = Reflect.getProperty(LuaUtils.getTargetInstance(), obj);
 
@@ -121,6 +121,8 @@ class ReflectionFunctions
 			var groupOrArray:Dynamic = Reflect.getProperty(LuaUtils.getTargetInstance(), obj);
 			if(Std.isOfType(groupOrArray, FlxTypedGroup)) {
 				var sex = groupOrArray.members[index];
+				if(!dontDestroy)
+					sex.kill();
 				groupOrArray.remove(sex, true);
 				if(!dontDestroy)
 					sex.destroy();

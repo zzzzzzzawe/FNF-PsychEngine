@@ -8,7 +8,7 @@ package psychlua;
 class DeprecatedFunctions
 {
 	public static function implement(funk:FunkinLua)
-		{
+	{
 		// DEPRECATED, DONT MESS WITH THESE SHITS, ITS JUST THERE FOR BACKWARD COMPATIBILITY
 		funk.set("addAnimationByIndicesLoop", function(obj:String, name:String, prefix:String, indices:String, framerate:Int = 24) {
 			FunkinLua.luaTrace("addAnimationByIndicesLoop is deprecated! Use addAnimationByIndices instead", false, true);
@@ -17,8 +17,8 @@ class DeprecatedFunctions
 
 		funk.set("objectPlayAnimation", function(obj:String, name:String, forced:Bool = false, ?startFrame:Int = 0) {
 			FunkinLua.luaTrace("objectPlayAnimation is deprecated! Use playAnim instead", false, true);
-			if(PlayState.instance.getLuaObject(obj,false,false) != null) {
-				PlayState.instance.getLuaObject(obj,false,false).animation.play(name, forced, false, startFrame);
+			if(PlayState.instance.getLuaObject(obj,false) != null) {
+				PlayState.instance.getLuaObject(obj,false).animation.play(name, forced, false, startFrame);
 				return true;
 			}
 

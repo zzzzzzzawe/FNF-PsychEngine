@@ -12,8 +12,8 @@ class FlxAnimateFunctions
 			var lastSprite = MusicBeatState.getVariables().get(tag);
 			if(lastSprite != null)
 			{
-				PlayState.instance.remove(lastSprite);
 				lastSprite.kill();
+				PlayState.instance.remove(lastSprite);
 				lastSprite.destroy();
 			}
 

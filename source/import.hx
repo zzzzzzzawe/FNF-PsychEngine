@@ -5,6 +5,11 @@ import backend.Discord;
 #end
 
 //Psych
+#if LUA_ALLOWED
+import llua.*;
+import llua.Lua;
+#end
+
 #if ACHIEVEMENTS_ALLOWED
 import backend.Achievements;
 #end

@@ -52,7 +52,6 @@ class LuaUtils
 					target = retVal;
 			}
 			else target = Reflect.getProperty(instance, splitProps[0]);
-			trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
 
 			for (i in 1...splitProps.length)
 			{
@@ -94,7 +93,7 @@ class LuaUtils
 			}
 			else
 				target = Reflect.getProperty(instance, splitProps[0]);
-			//trace('OBJ: $target\n INSTANCE: $instance\n SPLITPROPS: ${splitProps[0]}');
+
 			for (i in 1...splitProps.length)
 			{
 				var j:Dynamic = splitProps[i].substr(0, splitProps[i].length - 1);
@@ -138,7 +137,7 @@ class LuaUtils
 					for (i in 0...parsedJson.length)
 					{
 						var sub:Dynamic = parsedJson[i];
-						if(sub != null && sub.save != null && (!settings.exists(sub.save) || settings.get(sub.save) != sub.value))
+						if(sub != null && sub.save != null && !settings.exists(sub.save))
 						{
 							if(sub.type != 'keybind' && sub.type != 'key')
 							{
@@ -229,9 +228,9 @@ class LuaUtils
 		return Reflect.getProperty(leArray, variable);
 	}
 
-	public static function getPropertyLoop(split:Array<String>, ?checkForVideosToo:Bool = true, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
+	public static function getPropertyLoop(split:Array<String>, ?getProperty:Bool=true, ?allowMaps:Bool = false):Dynamic
 	{
-		var obj:Dynamic = getObjectDirectly(split[0], checkForVideosToo);
+		var obj:Dynamic = getObjectDirectly(split[0]);
 		var end = split.length;
 		if(getProperty) end = split.length-1;
 
@@ -239,7 +238,7 @@ class LuaUtils
 		return obj;
 	}
 
-	public static function getObjectDirectly(objectName:String, ?checkForVideosToo:Bool = true, ?allowMaps:Bool = false):Dynamic
+	public static function getObjectDirectly(objectName:String, ?allowMaps:Bool = false):Dynamic
 	{
 		switch(objectName)
 		{
@@ -247,8 +246,8 @@ class LuaUtils
 				return PlayState.instance;
 			
 			default:
-				var obj:Dynamic = PlayState.instance.getLuaObject(objectName, checkForVideosToo);
-				if(obj == null) obj = getVarInArray(getTargetInstance(), objectName, allowMaps);
+				var obj:Dynamic = MusicBeatState.getVariables().get(objectName);
+				if(obj == null) obj = getVarInArray(MusicBeatState.getState(), objectName, allowMaps);
 				return obj;
 		}
 	}
@@ -503,6 +502,7 @@ class LuaUtils
 			case Lua.LUA_TTABLE: return "table";
 			case Lua.LUA_TFUNCTION: return "function";
 		}
+		if (type <= Lua.LUA_TNIL) return "nil";
 		#end
 		return "unknown";
 	}

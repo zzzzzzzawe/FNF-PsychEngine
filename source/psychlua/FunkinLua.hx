@@ -4,8 +4,10 @@ package psychlua;
 import backend.WeekData;
 import backend.Highscore;
 import backend.Song;
+
 import openfl.Lib;
 import openfl.utils.Assets;
+import openfl.display.BitmapData;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 
@@ -34,13 +36,12 @@ import psychlua.HScript;
 #end
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
+
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
+
 import haxe.Json;
 import mobile.psychlua.Functions;
-import haxe.ds.ObjectMap;
-import haxe.ds.StringMap;
-import haxe.DynamicAccess;
 
 class FunkinLua {
 	public var lua:State = null;
@@ -57,8 +58,6 @@ class FunkinLua {
 	public static var customFunctions:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	public function new(scriptName:String) {
-		#if LUA_ALLOWED
-		var times:Float = Date.now().getTime();
 		lua = LuaL.newstate();
 		LuaL.openlibs(lua);
 
@@ -313,13 +312,13 @@ class FunkinLua {
 
 							// Manual conversion
 							// first we convert the key
-							if(Lua.Lua.isnumber(luaInstance.lua,-2)){
+							if(Lua.isnumber(luaInstance.lua,-2)){
 								Lua.pushnumber(lua, Lua.tonumber(luaInstance.lua, -2));
 								pop++;
-							}else if(Lua.Lua.isstring(luaInstance.lua,-2)){
+							}else if(Lua.isstring(luaInstance.lua,-2)){
 								Lua.pushstring(lua, Lua.tostring(luaInstance.lua, -2));
 								pop++;
-							}else if(Lua.Lua.isboolean(luaInstance.lua,-2)){
+							}else if(Lua.isboolean(luaInstance.lua,-2)){
 								Lua.pushboolean(lua, Lua.toboolean(luaInstance.lua, -2));
 								pop++;
 							}
@@ -327,19 +326,19 @@ class FunkinLua {
 
 
 							// then the value
-							if(Lua.Lua.isnumber(luaInstance.lua,-1)){
+							if(Lua.isnumber(luaInstance.lua,-1)){
 								Lua.pushnumber(lua, Lua.tonumber(luaInstance.lua, -1));
 								pop++;
-							}else if(Lua.Lua.isstring(luaInstance.lua,-1)){
+							}else if(Lua.isstring(luaInstance.lua,-1)){
 								Lua.pushstring(lua, Lua.tostring(luaInstance.lua, -1));
 								pop++;
-							}else if(Lua.Lua.isboolean(luaInstance.lua,-1)){
+							}else if(Lua.isboolean(luaInstance.lua,-1)){
 								Lua.pushboolean(lua, Lua.toboolean(luaInstance.lua, -1));
 								pop++;
 							}
 							// TODO: table
 
-							if(pop==2)Lua.rawset(tableIdx); // then set it
+							if(pop==2)Lua.rawset(lua, tableIdx); // then set it
 							Lua.pop(luaInstance.lua, 1); // for the loop
 						}
 						Lua.pop(luaInstance.lua,1); // end the loop entirely
@@ -614,7 +613,6 @@ class FunkinLua {
 		set("noteTweenDirection", function(tag:String, note:Int, value:Dynamic, duration:Float, ease:String) {
 			noteTweenFunction(tag, note, {direction: value}, duration, ease);
 		});
-
 		set("mouseClicked", function(button:String) {
 			var click:Bool = FlxG.mouse.justPressed;
 			switch(button.trim().toLowerCase())
@@ -700,9 +698,9 @@ class FunkinLua {
 		set("getHealth", function() return game.health);
 
 		//Identical functions
-		set("FlxColor", FlxColor.fromString);
-		set("getColorFromName", FlxColor.fromString);
-		set("getColorFromString", FlxColor.fromString);
+		set("FlxColor", function(color:String) return FlxColor.fromString(color));
+		set("getColorFromName", function(color:String) return FlxColor.fromString(color));
+		set("getColorFromString", function(color:String) return FlxColor.fromString(color));
 		set("getColorFromHex", function(color:String) return FlxColor.fromString('#$color'));
 
 		// precaching
@@ -717,8 +715,12 @@ class FunkinLua {
 		set("precacheImage", function(name:String, ?allowGPU:Bool = true) {
 			Paths.image(name, allowGPU);
 		});
-		set("precacheSound", Paths.sound);
-		set("precacheMusic", Paths.music);
+		set("precacheSound", function(name:String) {
+			Paths.sound(name);
+		});
+		set("precacheMusic", function(name:String) {
+			Paths.music(name);
+		});
 
 		// others
 		set("triggerEvent", function(name:String, arg1:Dynamic, arg2:Dynamic) {
@@ -729,7 +731,10 @@ class FunkinLua {
 			return true;
 		});
 
-		set("startCountdown", game.startCountdown);
+		set("startCountdown", function() {
+			game.startCountdown();
+			return true;
+		});
 		set("endSong", function() {
 			game.KillNotes();
 			game.endSong();
@@ -967,7 +972,7 @@ class FunkinLua {
 			return false;
 		});
 
-		set("addAnimationByIndices", function(obj:String, name:String, prefix:String, indices:String, framerate:Int = 24, loop:Bool = false) {
+		set("addAnimationByIndices", function(obj:String, name:String, prefix:String, indices:Any, framerate:Int = 24, loop:Bool = false) {
 			return LuaUtils.addAnimByIndices(obj, name, prefix, indices, framerate, loop);
 		});
 
@@ -998,8 +1003,8 @@ class FunkinLua {
 		});
 
 		set("setScrollFactor", function(obj:String, scrollX:Float, scrollY:Float) {
-			if(game.getLuaObject(obj,false,true)!=null) {
-				game.getLuaObject(obj,false,true).scrollFactor.set(scrollX, scrollY);
+			if(game.getLuaObject(obj,false)!=null) {
+				game.getLuaObject(obj,false).scrollFactor.set(scrollX, scrollY);
 				return;
 			}
 
@@ -1118,8 +1123,27 @@ class FunkinLua {
 			return (obj != null && Std.isOfType(obj, FlxSound));
 		});
 
+		set("setHealthBarColors", function(left:String, right:String) {
+			var left_color:Null<FlxColor> = null;
+			var right_color:Null<FlxColor> = null;
+			if (left != null && left != '')
+				left_color = CoolUtil.colorFromString(left);
+			if (right != null && right != '')
+				right_color = CoolUtil.colorFromString(right);
+			game.healthBar.setColors(left_color, right_color);
+		});
+		set("setTimeBarColors", function(left:String, right:String) {
+			var left_color:Null<FlxColor> = null;
+			var right_color:Null<FlxColor> = null;
+			if (left != null && left != '')
+				left_color = CoolUtil.colorFromString(left);
+			if (right != null && right != '')
+				right_color = CoolUtil.colorFromString(right);
+			game.timeBar.setColors(left_color, right_color);
+		});
+
 		set("setObjectCamera", function(obj:String, camera:String = '') {
-			var real:FlxBasic = game.getLuaObject(obj);
+			var real = game.getLuaObject(obj);
 			if(real!=null){
 				real.cameras = [LuaUtils.cameraFromString(camera)];
 				return true;
@@ -1255,7 +1279,6 @@ class FunkinLua {
 			}
 			return false;
 		});
-		
 		set("startVideo", function(videoFile:String, ?canSkip:Bool = true) {
 			#if VIDEOS_ALLOWED
 			if(FileSystem.exists(Paths.video(videoFile)))
@@ -1446,7 +1469,6 @@ class FunkinLua {
 				if(snd != null) snd.time = value;
 			}
 		});
-
 		#if FLX_PITCH
 		set("getSoundPitch", function(tag:String) {
 			tag = LuaUtils.formatVariable('sound_$tag');
@@ -1515,10 +1537,10 @@ class FunkinLua {
 		});
 
 		#if DISCORD_ALLOWED DiscordClient.addLuaCallbacks(this); #end
-		#if HSCRIPT_ALLOWED HScript.implement(this); #end
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(this); #end
-		#if flxanimate FlxAnimateFunctions.implement(this); #end
 		#if TRANSLATIONS_ALLOWED Language.addLuaCallbacks(this); #end
+		#if HSCRIPT_ALLOWED HScript.implement(this); #end
+		#if flxanimate FlxAnimateFunctions.implement(this); #end
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);
@@ -1559,9 +1581,9 @@ class FunkinLua {
 			trace(e);
 			return;
 		}
+		trace('lua file loaded succesfully:' + scriptName);
+
 		call('onCreate', []);
-		trace('lua file loaded succesfully: $scriptName (${Std.int(Date.now().getTime() - times)}ms)');
-		#end
 	}
 
 	//main
@@ -1611,7 +1633,6 @@ class FunkinLua {
 	}
 
 	public function set(variable:String, data:Dynamic) {
-		#if LUA_ALLOWED
 		if(lua == null) return;
 
 		if (Type.typeof(data) == TFunction) {
@@ -1631,7 +1652,6 @@ class FunkinLua {
 		}
 		Lua.close(lua);
 		lua = null;
-		#end
 		#if HSCRIPT_ALLOWED
 		if(hscript != null)
 		{
@@ -1742,9 +1762,11 @@ class FunkinLua {
 
 		if (v != null) v = v.trim();
 		if (v == null || v == "") {
-			if(status == Lua.LUA_ERRRUN) return "Runtime Error";
-			if(status == Lua.LUA_ERRMEM) return "Memory Allocation Error";
-			if(status == Lua.LUA_ERRERR) return "Critical Error";
+			switch(status) {
+				case Lua.LUA_ERRRUN: return "Runtime Error";
+				case Lua.LUA_ERRMEM: return "Memory Allocation Error";
+				case Lua.LUA_ERRERR: return "Critical Error";
+			}
 			return "Unknown Error";
 		}
 
@@ -1761,6 +1783,7 @@ class FunkinLua {
 	#if (MODS_ALLOWED && !flash && sys)
 	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
 	#end
+
 	public function initLuaShader(name:String)
 	{
 		if(!ClientPrefs.data.shaders) return false;

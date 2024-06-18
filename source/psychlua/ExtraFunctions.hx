@@ -1,6 +1,5 @@
 package psychlua;
 
-import haxe.extern.EitherType;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
 
@@ -11,7 +10,7 @@ import openfl.utils.Assets;
 class ExtraFunctions
 {
 	public static function implement(funk:FunkinLua)
-		{
+	{
 		// Keyboard & Gamepads
 		funk.set("keyboardJustPressed", function(name:String)
 			{
@@ -232,7 +231,9 @@ class ExtraFunctions
 			}
 			return false;
 		});
-		funk.set("getTextFromFile", Paths.getTextFromFile);
+		funk.set("getTextFromFile", function(path:String, ?ignoreModFolders:Bool = false) {
+			return Paths.getTextFromFile(path, ignoreModFolders);
+		});
 		funk.set("directoryFileList", function(folder:String) {
 			var list:Array<String> = [];
 			#if sys
@@ -248,12 +249,18 @@ class ExtraFunctions
 		});
 
 		// String tools
-		funk.set("stringStartsWith", StringTools.startsWith);
-		funk.set("stringEndsWith", StringTools.endsWith);
+		funk.set("stringStartsWith", function(str:String, start:String) {
+			return str.startsWith(start);
+		});
+		funk.set("stringEndsWith", function(str:String, end:String) {
+			return str.endsWith(end);
+		});
 		funk.set("stringSplit", function(str:String, split:String) {
 			return str.split(split);
 		});
-		funk.set("stringTrim", StringTools.trim);
+		funk.set("stringTrim", function(str:String) {
+			return str.trim();
+		});
 
 		// Randomization
 		funk.set("getRandomInt", function(min:Int, max:Int = FlxMath.MAX_VALUE_INT, exclude:String = '') {
@@ -276,6 +283,8 @@ class ExtraFunctions
 			}
 			return FlxG.random.float(min, max, toExclude);
 		});
-		funk.set("getRandomBool", FlxG.random.bool);
+		funk.set("getRandomBool", function(chance:Float = 50) {
+			return FlxG.random.bool(chance);
+		});
 	}
 }
