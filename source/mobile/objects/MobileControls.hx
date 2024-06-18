@@ -62,7 +62,7 @@ class MobileControls extends FlxTypedSpriteGroup<FlxMobileInputManager<Dynamic>>
 			case 2:
 				virtualPad = MobileControls.getCustomMode(new FlxVirtualPad('RIGHT_FULL', 'NONE', extraAction));
 				add(virtualPad);
-			case 4:
+			case 3:
 				hitbox = new FlxHitbox(extraAction);
 				add(hitbox);
 		}
