@@ -14,7 +14,7 @@ class PsychJNI #if (lime >= "8.0.0") implements JNISafety #end
 	public static final SDL_ORIENTATION_LANDSCAPE:Int = 1;
 	public static final SDL_ORIENTATION_LANDSCAPE_FLIPPED:Int = 2;
 	public static final SDL_ORIENTATION_PORTRAIT:Int = 3;
-	public static final SDL_ORIENTATION_PORTRAIT_FLIPPED:Int = 4;,
+	public static final SDL_ORIENTATION_PORTRAIT_FLIPPED:Int = 4;
 
 	public static inline function setOrientation(width:Int, height:Int, resizeable:Bool, hint:String):Dynamic
 		return setOrientation_jni(width, height, resizeable, hint);
