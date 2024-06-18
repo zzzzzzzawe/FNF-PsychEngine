@@ -3,7 +3,7 @@
 	NOTE: THESE AT "SDLActivity"!!
  */
 
-package mobile.backend;
+package android.backend;
 
 #if android
 import lime.system.JNI;
