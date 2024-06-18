@@ -5,7 +5,7 @@ import psychlua.CustomSubstate;
 import lime.ui.Haptic;
 import psychlua.FunkinLua;
 import mobile.backend.TouchFunctions;
-#if android import mobile.backend.PsychJNI; #end
+#if android import android.backend.PsychJNI; #end
 
 class MobileFunctions
 {
