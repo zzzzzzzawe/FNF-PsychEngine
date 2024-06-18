@@ -215,6 +215,11 @@ class Paths
 				bitmap.image.premultiplied = true;
 				bitmap.getTexture(FlxG.stage.context3D);
 			}
+			bitmap.getSurface();
+			bitmap.disposeImage();
+			bitmap.image.data = null;
+			bitmap.image = null;
+			bitmap.readable = true;
 		}
 
 		var graph:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
