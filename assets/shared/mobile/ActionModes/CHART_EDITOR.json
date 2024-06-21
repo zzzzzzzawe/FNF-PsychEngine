@@ -107,6 +107,15 @@
       "width": 132,
       "height": 125,
       "color": "0xFF009D"
+    },
+    {
+      "button": "buttonH",
+      "graphic": "h",
+      "x": 1148,
+      "y": 214,
+      "width": 132,
+      "height": 125,
+      "color": "0xF3A505"
     }
   ]
 }

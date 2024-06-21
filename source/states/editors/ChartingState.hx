@@ -329,7 +329,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			#end
 			"",
 			"Hold Y to move 4x faster",
-			"Hold F and touch on an arrow to select it",
+			"Hold H and touch on an arrow to select it",
 			"V/D - Zoom in/out",
 			"",
 			"C - Test your chart inside Chart Editor",
@@ -1663,40 +1663,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.justPressed)
-			{
-				if (touch.overlaps(curRenderedNotes))
-				{
-					curRenderedNotes.forEachAlive(function(note:Note)
-					{
-						if (touch.overlaps(note))
-						{
-                                                        if (virtualPad.buttonF.pressed)
-                                                                selectNote(note);
-                                                        else
-							        deleteNote(note);
-                                                }
-					});
-				}
-				else
-				{
-					if (touch.x > gridBG.x
-						&& touch.x < gridBG.x + gridBG.width
-						&& touch.y > gridBG.y
-						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-					{
-						FlxG.log.add('added note');
-						addNote();
-					}
-				}
-			}
-                        /*else if (touch.justPressed) {
-                               if (touch.overlaps(curRenderedNotes)) {
-                                        curRenderedNotes.forEachAlive(function(note:Note) {
-                                                if (touch.overlaps(note)) {
-                                                         if (virtualPad.buttonF.pressed) {
-                                                                  selectNote(note);}}});}}*/
-
 			if (touch.x > gridBG.x
 				&& touch.x < gridBG.x + gridBG.width
 				&& touch.y > gridBG.y
@@ -1711,9 +1677,55 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			}else{
 			dummyArrow.visible = false;
 			}
+
+			if (touch.justPressed)
+			{
+				if (touch.overlaps(curRenderedNotes))
+				{
+					curRenderedNotes.forEachAlive(function(note:Note)
+					{
+						if (touch.overlaps(note))
+						{
+							if (virtualPad.buttonH.pressed)
+								selectNote(note);
+							else
+								deleteNote(note);
+						}
+					});
+				}
+				else
+				{
+					if (touch.x > gridBG.x
+						&& touch.x < gridBG.x + gridBG.width
+						&& touch.y > gridBG.y
+						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+					{
+						FlxG.log.add('added note');
+						addNote();
+					}
+				}
+			}
 		}
 
 		} else {
+
+		if (FlxG.mouse.x > gridBG.x
+			&& FlxG.mouse.x < gridBG.x + gridBG.width
+			&& FlxG.mouse.y > gridBG.y
+			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+		{
+			dummyArrow.visible = true;
+			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
+			if (FlxG.keys.pressed.SHIFT)
+				dummyArrow.y = FlxG.mouse.y;
+			else
+			{
+				var gridmult = GRID_SIZE / (quantization / 16);
+				dummyArrow.y = Math.floor(FlxG.mouse.y / gridmult) * gridmult;
+			}
+		} else {
+			dummyArrow.visible = false;
+		}
 
 		if (FlxG.mouse.justPressed)
 		{
@@ -1723,7 +1735,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				{
 					if (FlxG.mouse.overlaps(note))
 					{
-						if (virtualPad.buttonF.pressed || FlxG.keys.pressed.CONTROL)
+						if (virtualPad.buttonH.pressed || FlxG.keys.pressed.CONTROL)
 						{
 							selectNote(note);
 						}
