@@ -102,8 +102,8 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
-          automatic_release_tag: "dev-d9e5520"
-          title: "DevBuild d9e5520"
+          automatic_release_tag: "dev-73f22c3"
+          title: "DevBuild 73f22c3"
           files: |
             /home/runner/*.apk
             /home/runner/*.zip
