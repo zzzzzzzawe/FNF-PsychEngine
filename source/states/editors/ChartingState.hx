@@ -330,7 +330,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			"",
 			"Hold Y to move 4x faster",
 			"Hold F and touch on an arrow to select it",
-			"Z/D - Zoom in/out",
+			"V/D - Zoom in/out",
 			"",
 			"C - Test your chart inside Chart Editor",
 			"A - Play your chart",
@@ -1828,11 +1828,11 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				return;
 			}
 
-			if(virtualPad.buttonV.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
+			if(virtualPad.buttonZ.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
 				undo();
 			}
 
-			if(FlxG.keys.justPressed.Z || virtualPad.buttonZ.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
+			if(FlxG.keys.justPressed.Z || virtualPad.buttonV.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
 				--curZoom;
 				updateZoom();
 			}
