@@ -2111,7 +2111,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		bpmTxt.text =
 		Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + " / " + Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2)) +
 		"\nSection: " + curSec +
-		"\n\nBeat: " + Std.string(curDecBeat).substring(0,4) +
+		"\n\nBeat: " + Std.string(curDecBeat).substring(0,5) +
 		"\n\nStep: " + curStep +
 		if ((quantization - 2) % 10 == 0 && quantization != 12) "\n\nBeat Snap: " + quantization + "nd";
 		else "\n\nBeat Snap: " + quantization + "th";
