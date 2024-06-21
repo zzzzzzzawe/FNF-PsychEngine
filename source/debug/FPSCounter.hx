@@ -81,7 +81,7 @@ class FPSCounter extends TextField
 	{
 		text = 
 		'FPS: $currentFPS' + 
-		'\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}' +
+		'\nMemory: ${flixel.util.FlxStringUtil.formatBytes(#if cpp cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE) #else memoryMegas #end)}' +
 		os;
 
 		textColor = 0xFFFFFFFF;

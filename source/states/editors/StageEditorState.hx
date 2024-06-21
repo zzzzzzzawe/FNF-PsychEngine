@@ -128,33 +128,25 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		var btn = 'F2';
 		#end
 
-		var str:Array<String> = [];
-		if(controls.mobileC)
-		{
-			["X/Y - Camera Zoom In/Out",
-				"G + Arrow Buttons - Move Camera",
-				"Z - Reset Camera Zoom",
-				"Arrow Buttons/Drag - Move Object",
-				"",
-				"S - Toggle HUD",
-				// "F12 - Toggle Selection Rectangle",
-				// "Hold Control - Move Objects pixel-by-pixel and Camera 4x slower",
-				"Hold C - Move Objects and Camera 4x faster"
-			];
-		}
-		else
-		{
-			["E/Q - Camera Zoom In/Out",
-				"J/K/L/I - Move Camera",
-				"R - Reset Camera Zoom",
-				"Arrow Keys/Mouse & Right Click - Move Object",
-				"",
-				'$btn - Toggle HUD',
-				"F12 - Toggle Selection Rectangle",
-				"Hold Shift - Move Objects and Camera 4x faster",
-				"Hold Control - Move Objects pixel-by-pixel and Camera 4x slower"
-			];
-		}
+		var str:Array<String> = controls.mobileC ? ["X/Y - Camera Zoom In/Out",
+			"G + Arrow Buttons - Move Camera",
+			"Z - Reset Camera Zoom",
+			"Arrow Buttons/Drag - Move Object",
+			"",
+			"S - Toggle HUD",
+			// "F12 - Toggle Selection Rectangle",
+			// "Hold Control - Move Objects pixel-by-pixel and Camera 4x slower",
+			"Hold C - Move Objects and Camera 4x faster"
+		] : ["E/Q - Camera Zoom In/Out",
+			"J/K/L/I - Move Camera",
+			"R - Reset Camera Zoom",
+			"Arrow Keys/Mouse & Right Click - Move Object",
+			"",
+			'$btn - Toggle HUD',
+			"F12 - Toggle Selection Rectangle",
+			"Hold Shift - Move Objects and Camera 4x faster",
+			"Hold Control - Move Objects pixel-by-pixel and Camera 4x slower"
+		];
 
 		helpBg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		helpBg.scale.set(FlxG.width, FlxG.height);

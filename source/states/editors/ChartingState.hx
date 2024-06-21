@@ -1,5 +1,6 @@
 package states.editors;
 
+import openfl.geom.Rectangle;
 import haxe.Json;
 import haxe.format.JsonParser;
 import haxe.io.Bytes;
@@ -14,7 +15,6 @@ import openfl.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
-import openfl.geom.Rectangle;
 import openfl.net.FileReference;
 
 import backend.Song;
@@ -28,7 +28,11 @@ import objects.HealthIcon;
 import objects.AttachedSprite;
 import objects.Character;
 import substates.Prompt;
+
+
+#if sys
 import openfl.media.Sound;
+#end
 
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
@@ -303,7 +307,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		UI_box.selectedName = 'Song';
 		UI_box.scrollFactor.set();
 		
-		var tipText:FlxText = new FlxText(FlxG.width - 200, FlxG.height - 32, 200, 'Press F1 for Help', 16);
+		var tipText:FlxText = new FlxText(FlxG.width - 200, FlxG.height - 32, 200, 'Press ${(controls.mobileC) ? 'F' : 'F1'} for Help', 16);
 		tipText.scrollFactor.set();
 		tipText.active = false;
 		add(tipText);
@@ -316,50 +320,42 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		helpBg.alpha = 0.6;
 		helpBg.active = helpBg.visible = false;
 
-		var str:Array<String> = [];
-		if(controls.mobileC)
-		{
-			[
-				"Up/Down - Change Conductor's strum time",
-				"Left/Right - Go to the previous/next section",
-				#if FLX_PITCH
-				"",
-				"G - Reset Song Playback Rate",
-				#end
-				"",
-				"Hold Y to move 4x faster",
-				"Hold F and touch on an arrow to select it",
-				"Z/D - Zoom in/out",
-				"",
-				"C - Test your chart inside Chart Editor",
-				"A - Play your chart",
-				"Up/Down (On The Right) - Decrease/Increase Note Sustain Length",
-				"X - Stop/Resume song"
-			];
-		}
-		else
-		{
-			[
-				"W/S or Mouse Wheel - Change Conductor's strum time",
-				"A/D - Go to the previous/next section",
-				"Left/Right - Change Snap",
-				"Up/Down - Change Conductor's Strum Time with Snapping",
-				#if FLX_PITCH
-				"",
-				"Left Bracket / Right Bracket - Change Song Playback Rate (SHIFT to go Faster)",
-				"ALT + Left Bracket / Right Bracket - Reset Song Playback Rate",
-				#end
-				"",
-				"Hold Shift to move 4x faster",
-				"Hold Control and click on an arrow to select it",
-				"Z/X - Zoom in/out",
-				"",
-				"Esc - Test your chart inside Chart Editor",
-				"Enter - Play your chart",
-				"Q/E - Decrease/Increase Note Sustain Length",
-				"Space - Stop/Resume song"
-			];
-		}
+		var str:Array<String> = controls.mobileC ? [
+			"Up/Down - Change Conductor's strum time",
+			"Left/Right - Go to the previous/next section",
+			#if FLX_PITCH
+			"",
+			"G - Reset Song Playback Rate",
+			#end
+			"",
+			"Hold Y to move 4x faster",
+			"Hold F and touch on an arrow to select it",
+			"Z/D - Zoom in/out",
+			"",
+			"C - Test your chart inside Chart Editor",
+			"A - Play your chart",
+			"Up/Down (On The Right) - Decrease/Increase Note Sustain Length",
+			"X - Stop/Resume song"
+		] : [
+			"W/S or Mouse Wheel - Change Conductor's strum time",
+			"A/D - Go to the previous/next section",
+			"Left/Right - Change Snap",
+			"Up/Down - Change Conductor's Strum Time with Snapping",
+			#if FLX_PITCH
+			"",
+			"Left Bracket / Right Bracket - Change Song Playback Rate (SHIFT to go Faster)",
+			"ALT + Left Bracket / Right Bracket - Reset Song Playback Rate",
+			#end
+			"",
+			"Hold Shift to move 4x faster",
+			"Hold Control and click on an arrow to select it",
+			"Z/X - Zoom in/out",
+			"",
+			"Esc - Test your chart inside Chart Editor",
+			"Enter - Play your chart",
+			"Q/E - Decrease/Increase Note Sustain Length",
+			"Space - Stop/Resume song"
+		];
 
 		helpTexts = new FlxSpriteGroup();
 		helpTexts.scrollFactor.set();
@@ -1351,7 +1347,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		check_disableNoteRGB.onClick = function()
 		{
 			_song.disableNoteRGB = check_disableNoteRGB.checked;
-                        updateGrid();
+			updateGrid();
 			//trace('CHECKED!');
 		};
 
@@ -1705,15 +1701,15 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				&& touch.x < gridBG.x + gridBG.width
 				&& touch.y > gridBG.y
 				&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-			{
-				dummyArrow.visible = true;
+		{
+			dummyArrow.visible = true;
 				dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
 				if (FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed)
 					dummyArrow.y = touch.y;
-				else
+			else
 					dummyArrow.y = Math.floor(touch.y / GRID_SIZE) * GRID_SIZE;
 			}else{
-				dummyArrow.visible = false;
+			dummyArrow.visible = false;
 			}
 		}
 
@@ -1755,8 +1751,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 					FlxG.log.add('added note');
 					addNote();
 				}
+				}
 			}
-		}
 		}
 
 		if(PsychUIInputText.focusOn == null)
@@ -1785,8 +1781,14 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				removeVirtualPad();
 				openSubState(new states.editors.EditorPlayState(playbackSpeed));
 			}
-			else if(FlxG.keys.justPressed.F1 || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
+			else if((FlxG.keys.justPressed.F1 || virtualPad.buttonF.justPressed) || (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 			{
+				if(controls.mobileC){
+					virtualPad.forEachAlive(function(button:TouchPadButton){
+						if(button.tag != 'F')
+							button.visible = !button.visible;
+					});
+				}
 				helpBg.visible = !helpBg.visible;
 				helpTexts.visible = helpBg.visible;
 			}
@@ -1920,7 +1922,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			}
 
 			if(!vortex){
-				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
+				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN  )
 				{
 					FlxG.sound.music.pause();
 					updateCurStep();
@@ -1981,7 +1983,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				}
 
 				var feces:Float;
-				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
+				if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN  )
 				{
 					FlxG.sound.music.pause();
 
