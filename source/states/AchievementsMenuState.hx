@@ -353,7 +353,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
-            controls.isInSubstate = false;
+			controls.isInSubstate = false;
 			close();
 			return;
 		}
