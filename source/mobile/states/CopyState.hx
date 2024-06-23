@@ -32,7 +32,7 @@ class CopyState extends MusicBeatState
 		locatedFiles = [];
 		maxLoopTimes = 0;
 		checkExistingFiles();
-		if (maxLoopTimes < 0)
+		if (maxLoopTimes <= 0)
 		{
 			MusicBeatState.switchState(new TitleState());
 			return;
