@@ -173,13 +173,12 @@
 
 	<section if="cpp">
 		<haxedef name="HXCPP_GC_MOVING" />
-		<haxedef name="HXCPP_GC_BIG_BLOCK" />
-	</section>
+		<haxedef name="HXCPP_GC_BIG_BLOCKS" />
 
-	<!--Always enable Null Object Reference check-->
-	<haxedef name="HXCPP_CHECK_POINTER" />
-	<haxedef name="HXCPP_STACK_LINE" />
-	<haxedef name="HXCPP_STACK_TRACE" />
+		<haxedef name="HXCPP_CHECK_POINTER" />
+		<haxedef name="HXCPP_STACK_LINE" />
+		<haxedef name="HXCPP_STACK_TRACE" />
+	</section>
 
 	<section if="desktop">
 		<!--Enable Handle Error-->
