@@ -12,7 +12,7 @@ class CopyState extends MusicBeatState
 {
 	public static var locatedFiles:Array<String> = [];
 	public static var maxLoopTimes:Int = 0;
-	public static final IGNORE_FOLDER_FILE_NAME:String = ".ignore";
+	public static final IGNORE_FOLDER_FILE_NAME:String = "ignore.txt";
 
 	public var loadingImage:FlxSprite;
 	public var bottomBG:FlxSprite;
@@ -122,11 +122,8 @@ class CopyState extends MusicBeatState
 			}
 			catch (e:haxe.Exception)
 			{
-				if(!OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
-				{
-					failedFiles.push('${getFile(file)} (${e.message})');
-					failedFilesStack.push('${getFile(file)} (${e.stack})');
-				}
+				failedFiles.push('${getFile(file)} (${e.message})');
+				failedFilesStack.push('${getFile(file)} (${e.stack})');
 			}
 		}
 	}
@@ -146,11 +143,8 @@ class CopyState extends MusicBeatState
 		}
 		catch (e:haxe.Exception)
 		{
-			if(!OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
-			{
-				failedFiles.push('${getFile(file)} (${e.message})');
-				failedFilesStack.push('${getFile(file)} (${e.stack})');
-			}
+			failedFiles.push('${getFile(file)} (${e.message})');
+			failedFilesStack.push('${getFile(file)} (${e.stack})');
 		}
 	}
 
