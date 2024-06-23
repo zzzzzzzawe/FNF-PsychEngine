@@ -122,7 +122,7 @@ class CopyState extends MusicBeatState
 			}
 			catch (e:haxe.Exception)
 			{
-				if!(OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
+				if(!OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
 				{
 					failedFiles.push('${getFile(file)} (${e.message})');
 					failedFilesStack.push('${getFile(file)} (${e.stack})');
