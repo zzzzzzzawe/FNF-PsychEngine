@@ -2,15 +2,11 @@ package mobile.states;
 
 #if mobile
 import states.TitleState;
-import flixel.addons.transition.FlxTransitionableState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
 import flixel.addons.util.FlxAsyncLoop;
 import openfl.utils.ByteArray;
 import haxe.io.Path;
-#if (target.threaded)
-import sys.thread.Thread;
-#end
 
 class CopyState extends MusicBeatState
 {
@@ -126,8 +122,11 @@ class CopyState extends MusicBeatState
 			}
 			catch (e:haxe.Exception)
 			{
-				failedFiles.push('${getFile(file)} ($e)');
-				failedFilesStack.push('${getFile(file)} (${e.stack})');
+				if!(OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
+				{
+					failedFiles.push('${getFile(file)} (${e.message})');
+					failedFilesStack.push('${getFile(file)} (${e.stack})');
+				}
 			}
 		}
 	}
@@ -147,8 +146,11 @@ class CopyState extends MusicBeatState
 		}
 		catch (e:haxe.Exception)
 		{
-			failedFiles.push('${getFile(file)} (${e.message})');
-			failedFilesStack.push('${getFile(file)} (${e.stack})');
+			if(!OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
+			{
+				failedFiles.push('${getFile(file)} (${e.message})');
+				failedFilesStack.push('${getFile(file)} (${e.stack})');
+			}
 		}
 	}
 
@@ -165,11 +167,14 @@ class CopyState extends MusicBeatState
 
 	public static function getFile(file:String):String
 	{
+		if(OpenFLAssets.exists(file)) return file;
+
 		@:privateAccess
 		for(library in LimeAssets.libraries.keys()){
 			if(OpenFLAssets.exists('$library:$file') && library != 'default')
 				return '$library:$file';
 		}
+
 		return file;
 	}
 
@@ -186,7 +191,7 @@ class CopyState extends MusicBeatState
 
 		for (file in locatedFiles)
 		{
-			if (FileSystem.exists(file) || OpenFLAssets.exists(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME])))
+			if (FileSystem.exists(file) || OpenFLAssets.exists(getFile(Path.join([Path.directory(getFile(file)), IGNORE_FOLDER_FILE_NAME]))))
 			{
 				filesToRemove.push(file);
 			}
