@@ -4,6 +4,10 @@ package mobile.backend;
 import flixel.FlxG;
 #end
 
+/**
+ * ...
+ * @author zacksgamerz
+ */
 class SwipeUtil
 {
   public static var swipedDown(get, never):Bool;
