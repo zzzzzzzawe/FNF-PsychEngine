@@ -21,6 +21,7 @@ import mobile.flixel.FlxVirtualPad;
 import mobile.flixel.input.FlxMobileInputID;
 import mobile.backend.MobileData;
 import mobile.backend.SUtil;
+import mobile.backend.SwipeUtil;
 
 //Android
 #if android

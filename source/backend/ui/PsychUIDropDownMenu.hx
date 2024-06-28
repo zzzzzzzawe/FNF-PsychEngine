@@ -106,8 +106,8 @@ class PsychUIDropDownMenu extends PsychUIInputText
 		else if(PsychUIInputText.focusOn == this)
 		{
 			var wheel:Int = FlxG.mouse.wheel;
-			if(FlxG.keys.justPressed.UP) wheel++;
-			if(FlxG.keys.justPressed.DOWN) wheel--;
+			if(FlxG.keys.justPressed.UP || SwipeUtil.swipedUp) wheel++;
+			if(FlxG.keys.justPressed.DOWN || SwipeUtil.swipedDown) wheel--;
 			if(wheel != 0) showDropDown(true, curScroll - wheel, _curFilter);
 		}
 	}
