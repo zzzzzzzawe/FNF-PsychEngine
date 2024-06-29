@@ -77,7 +77,7 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
-		#if (VIDEOS_ALLOWED)
+		#if VIDEOS_ALLOWED
 		hxvlc.util.Handle.init();
 		#end
 	}
@@ -104,6 +104,9 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
+		#else
+		if (game.zoom == -1.0)
+			game.zoom = 1.0;
 		#end
 
 		Controls.instance = new Controls();
@@ -129,14 +132,11 @@ class Main extends Sprite
 
 		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = #if mobile 30 #else 60 #end;
+
 		#if web
 		FlxG.keys.preventDefaultKeys.push(TAB);
 		#else
 		FlxG.keys.preventDefaultKeys = [TAB];
-		#end
-
-		#if mobile
-		FlxG.scaleMode = new MobileScaleMode();
 		#end
 		
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
@@ -150,7 +150,10 @@ class Main extends Sprite
 
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
-		#if mobile LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver; #end
+		#if mobile
+		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver; 		
+		FlxG.scaleMode = new MobileScaleMode();
+		#end
 		
 		FlxG.save.bind('funkin', CoolUtil.getSavePath());
 
