@@ -44,7 +44,7 @@
       "type": "git",
       "dir": null,
       "ref": "main",
-      "url": "https://github.com/PsychPorting/SScript-Base"
+      "url": "https://github.com/MobilePorting/SScript-Base"
     },
     {
       "name": "hxcpp-debug-server",
@@ -80,7 +80,7 @@
       "type": "git",
       "dir": null,
       "ref": "SAF",
-      "url": "https://github.com/PsychPorting/extension-androidtools-Base.git"
+      "url": "https://github.com/MobilePorting/extension-androidtools-Base.git"
     }
   ]
 }
