@@ -500,20 +500,19 @@ class Paths
 		#if MODS_ALLOWED
 		return FileSystem.readDirectory(directory);
 		#else
-		var dirsWithNoLibrary = Assets.list().filter(folder -> folder.startsWith(directory));
-		var dirsWithLibrary:Array<String> = [];
-		for(dir in dirsWithNoLibrary)
+		var dirs:Array<String> = [];
+		for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
 		{
 			@:privateAccess
 			for(library in lime.utils.Assets.libraries.keys())
 			{
-				if(Assets.exists('$library:$dir') && library != 'default' && (!dirsWithLibrary.contains('$library:$dir') || !dirsWithLibrary.contains(dir)))
-					dirsWithLibrary.push('$library:$dir');
-				else if(Assets.exists(dir) && !dirsWithLibrary.contains(dir))
-						dirsWithLibrary.push(dir);
+				if(library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
+					dirs.push('$library:$dir');
+				else if(Assets.exists(dir) && !dirs.contains(dir))
+					dirs.push(dir);
 			}
 		}
-		return dirsWithLibrary;
+		return dirs;
 		#end
 	}
 }
